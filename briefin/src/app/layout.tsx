@@ -4,20 +4,15 @@ import type { Viewport } from 'next';
 export const viewport: Viewport = {
   initialScale: 1,
   width: 'device-width',
-  maximumScale: 1,
   viewportFit: 'cover',
-  userScalable: false,
 };
-
-const viewportMetaContent = `width=${viewport.width}, initial-scale=${viewport.initialScale}, maximum-scale=${viewport.maximumScale}, viewport-fit=${viewport.viewportFit}, user-scalable=${viewport.userScalable ? 'yes' : 'no'}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <head>
         <title>pda</title>
         <link rel="icon" href="/favicon.ico" />
-        <meta name="viewport" content={viewportMetaContent} />
         <meta property="og:title" content="Briefin | 투자 정보를 한눈에" />
         <meta
           property="og:description"
