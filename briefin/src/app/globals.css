@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
+@import 'tailwindcss/preflight';
+@import 'tailwindcss/utilities';
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: 'Noto Sans KR';
+}
+
+body {
+  width: 100%;
+  min-width: 1024px;
+  height: 100dvh;
+  margin: 0 auto;
+  background-color: white;
+  -ms-overflow-style: none;
+  position: relative;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+input {
+  outline: none;
+}
+
+textarea {
+  outline: none;
+  resize: none;
+}
+
+/* 키보드 접근성 포커스 표시 */
+input:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #2c4a8f;
+  outline-offset: 2px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.children-container {
+  height: calc(100% - 67px);
+  overflow: scroll;
+}
+
+/* fonts */
+@layer components {
+  .fonts-display {
+    color: #1a1d1f;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 45px; /* 125% */
+    letter-spacing: -1px;
+  }
+
+  .fonts-heading1 {
+    color: #1a1d1f;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    letter-spacing: -1px;
+  }
+
+  .fonts-heading2 {
+    color: #1a1d1f;
+    font-family: 'Noto Sans KR';
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    letter-spacing: -0.5px;
+  }
+
+  .fonts-heading3 {
+    color: #1a1d1f;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    letter-spacing: -0.5px;
+  }
+
+  .fonts-sectionTitle {
+    color: #1a1d1f;
+    font-size: 19.2px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    letter-spacing: -0.5px;
+  }
+
+  .fonts-cardTitle {
+    color: #1a1d1f;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 25.5px; /* 150% */
+    letter-spacing: -0.3px;
+  }
+
+  .fonts-subTitle {
+    color: #1a1d1f;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  .fonts-body {
+    color: #4b5563;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 27px; /* 180% */
+  }
+
+  .fonts-bodySmall {
+    color: #4b5563;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22.4px; /* 160% */
+  }
+
+  .fonts-label {
+    color: #4b5563;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  .fonts-caption {
+    color: #9ca3af;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  .fonts-micro {
+    color: #9ca3af;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.5px;
+  }
+
+  .fonts-oveline {
+    color: #9ca3af;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+}
