@@ -1,6 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { LogoIcon, LogoTextIcon } from '../../public/icon';
 
 export default function Page() {
   const router = useRouter();
@@ -13,5 +14,10 @@ export default function Page() {
     return () => clearTimeout(timer);
   }, [router]);
 
-  return <main className="relative flex h-full w-full flex-col items-center pt-72"></main>;
+  return (
+    <main className="relative flex h-full w-full flex-col items-center pt-72">
+      <LogoIcon />
+      <LogoTextIcon />
+    </main>
+  );
 }
