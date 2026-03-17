@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="flex min-h-screen w-full min-w-0 flex-col">
           <Header />
           <main className="min-h-0 min-w-0 grow">
-            <div className="mx-auto h-full w-full min-w-0 max-w-[100rem] px-6">
+            <div className="max-w-1600pxr mx-auto h-full w-full min-w-0 px-24pxr">
               <section className="children-container">{children}</section>
             </div>
           </main>

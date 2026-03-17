@@ -33,9 +33,9 @@ export default function Header({ isLoggedIn = false, userEmail, onLogout }: Head
 
   return (
     <header className="w-full min-w-0 shrink-0 border-b border-[#E5E7EB] bg-white">
-      <div className="flex min-h-16 min-w-0 flex-wrap items-center justify-between gap-3 px-6 py-3">
+      <div className="flex min-h-16 min-w-0 flex-wrap items-center justify-between gap-3 px-24pxr py-12pxr">
         <div className="flex min-w-0 flex-wrap items-center gap-4 gap-y-2">
-          <Link href="/" className="flex shrink-0 items-center gap-[10px]">
+          <Link href="/" className="flex shrink-0 items-center gap-10pxr">
             <Image
               src="/icon/logo.svg"
               alt="BrieFin"
@@ -48,7 +48,7 @@ export default function Header({ isLoggedIn = false, userEmail, onLogout }: Head
               alt="BrieFin"
               width={71}
               height={28}
-              className="h-6 w-auto shrink-0 md:h-7"
+              className="h-24pxr w-auto shrink-0 md:h-7"
             />
           </Link>
 
@@ -60,7 +60,7 @@ export default function Header({ isLoggedIn = false, userEmail, onLogout }: Head
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`fonts-bodySmall flex h-9 shrink-0 items-center rounded-[8px] px-3 font-bold transition-colors ${
+                  className={`fonts-bodySmall flex h-36pxr shrink-0 items-center rounded-nav px-12pxr font-bold transition-colors ${
                     isActive
                       ? 'bg-[#F5F0E8] text-[#2C4A8F]'
                       : item.highlight
@@ -81,13 +81,13 @@ export default function Header({ isLoggedIn = false, userEmail, onLogout }: Head
 
               <Link
                 href="/mypage"
-                className="fonts-bodySmall flex h-[38px] min-w-[102px] items-center justify-center rounded-[10px] border border-[#E5E7EB] bg-white px-4 font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
+                className="fonts-bodySmall flex h-38pxr min-w-102pxr items-center justify-center rounded-button border border-[#E5E7EB] bg-white px-4 font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
                 마이페이지
               </Link>
 
               <button
                 onClick={onLogout}
-                className="fonts-bodySmall flex h-[38px] min-w-[90px] items-center justify-center rounded-[10px] border border-[#E5E7EB] bg-white px-4 font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
+                className="fonts-bodySmall px-16px16pxr flex h-38pxr min-w-90pxr items-center justify-center rounded-button border border-[#E5E7EB] bg-white font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
                 로그아웃
               </button>
             </>
@@ -95,7 +95,7 @@ export default function Header({ isLoggedIn = false, userEmail, onLogout }: Head
             <>
               <Link
                 href="/login"
-                className="fonts-label flex h-9 items-center justify-center rounded-[10px] border border-[#E5E7EB] px-[12px] text-[#4B5563]">
+                className="fonts-label flex h-9 items-center justify-center rounded-button border border-[#E5E7EB] px-12pxr text-[#4B5563]">
                 로그인
               </Link>
             </>
