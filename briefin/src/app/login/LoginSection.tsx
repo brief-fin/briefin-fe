@@ -74,10 +74,8 @@ export default function LoginSection() {
             />
           </div>
           <div className="auth-input-group">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-              <label className="auth-input-label" style={{ marginBottom: 0 }}>
-                비밀번호
-              </label>
+            <div className="auth-password-row">
+              <label className="auth-input-label">비밀번호</label>
               <Link href="#" className="text-xs font-semibold text-[var(--mint)] hover:underline">
                 비밀번호 찾기
               </Link>
