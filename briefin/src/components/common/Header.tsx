@@ -93,18 +93,10 @@ export default function Header({ isLoggedIn = false, userEmail, onLogout }: Head
             </>
           ) : (
             <>
-              {/* 로그인 */}
               <Link
                 href="/login"
                 className="fonts-label flex h-9 items-center justify-center rounded-[10px] border border-[#E5E7EB] px-[12px] text-[#4B5563]">
                 로그인
-              </Link>
-
-              {/* 무료로 시작하기 */}
-              <Link
-                href="/signup"
-                className="fonts-label flex h-9 items-center justify-center rounded-[10px] bg-[#2C4A8F] px-[12px] text-white">
-                무료로 시작하기
               </Link>
             </>
           )}

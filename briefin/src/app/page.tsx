@@ -1,11 +1,5 @@
-import { LogoIcon, LogoTextIcon } from '../../public/icon';
-import HomeBanner from '@/components/home/HomeBanner';
-
+import { redirect } from 'next/navigation';
 
 export default function Page() {
-  return (
-    <main className="flex w-full flex-col gap-8">
-      <HomeBanner />
-    </main>
-  );
+  redirect('/home');
 }
