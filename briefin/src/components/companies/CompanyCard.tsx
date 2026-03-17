@@ -2,12 +2,16 @@
 "use client";
 
 import { Company } from "@/mocks/mockCompanyData";
+import { useRouter } from "next/navigation";
 
 export function CompanyCard({ company }: { company: Company }) {
-  const isPositive = company.changeRate >= 0;
+const isPositive = company.changeRate >= 0;
+const router = useRouter();
 
   return (
-    <div className="flex items-center gap-16pxr bg-surface-white rounded-card px-20pxr py-16pxr border border-surface-border hover:shadow-news-hover transition-shadow cursor-pointer">
+    <div 
+    onClick={() => router.push(`/companies/${company.id}`)}
+    className="flex items-center gap-16pxr bg-surface-white rounded-card px-20pxr py-16pxr border border-surface-border hover:shadow-news-hover transition-shadow cursor-pointer">
       <div className="w-48pxr h-48pxr rounded-nav bg-primary-light flex items-center justify-center text-24pxr flex-shrink-0">
         {company.emoji}
       </div>
