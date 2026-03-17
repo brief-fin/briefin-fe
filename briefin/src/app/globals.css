@@ -12,13 +12,6 @@
     margin: 0;
     font-family: 'Noto Sans KR';
   }
-@layer base {
-  * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-    font-family: 'Noto Sans KR';
-  }
 
   body {
     width: 100%;
@@ -33,21 +26,11 @@
   ::-webkit-scrollbar {
     display: none;
   }
-  ::-webkit-scrollbar {
-    display: none;
-  }
 
   input {
     outline: none;
   }
-  input {
-    outline: none;
-  }
 
-  textarea {
-    outline: none;
-    resize: none;
-  }
   textarea {
     outline: none;
     resize: none;
@@ -57,17 +40,7 @@
     text-decoration: none;
     color: inherit;
   }
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
 
-  button {
-    border: none;
-    background: none;
-    font: inherit;
-    cursor: pointer;
-  }
   button {
     border: none;
     background: none;
@@ -76,11 +49,6 @@
   }
 }
 
-@layer components {
-  .children-container {
-    height: calc(100% - 67px);
-    overflow: scroll;
-  }
 @layer components {
   .children-container {
     height: calc(100% - 67px);
@@ -196,7 +164,6 @@
     letter-spacing: 0.5px;
   }
 
-  .fonts-overline {
   .fonts-overline {
     color: #9ca3af;
     font-size: 10px;
