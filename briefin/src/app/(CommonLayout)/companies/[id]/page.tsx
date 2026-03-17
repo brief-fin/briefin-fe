@@ -7,7 +7,9 @@ import CompanyHero from '@/components/companies/CompanyHero';
 import NewsCard from '@/components/common/NewsCard';
 import AlertBanner from '@/components/common/AlertBanner';
 import PopularCompanyList from '@/components/common/PopularCompanyList';
+import DisclosureList from '@/components/disclosure/DisclosureList';
 import { MOCK_COMPANY, MOCK_NEWS, MOCK_RELATED_COMPANIES } from '@/mocks/companyDetail';
+import { MOCK_COMPANY_DISCLOSURES } from '@/mocks/disclosureDetail';
 
 type CompanyDetailTab = '관련 뉴스' | '공시';
 const COMPANY_DETAIL_TABS: CompanyDetailTab[] = ['관련 뉴스', '공시'];
@@ -43,7 +45,9 @@ export default function CompanyDetailPage() {
               MOCK_NEWS.map((news) => (
                 <NewsCard key={news.id} news={news} />
               ))}
-            {activeTab === '공시' && <div>{/* TODO: 공시 컨텐츠 */}</div>}
+            {activeTab === '공시' && (
+              <DisclosureList items={MOCK_COMPANY_DISCLOSURES} />
+            )}
           </div>
         </div>
 
