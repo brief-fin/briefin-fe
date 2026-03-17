@@ -1,10 +1,11 @@
 import { LogoIcon, LogoTextIcon } from '../../public/icon';
+import HomeBanner from '@/components/home/HomeBanner';
+
 
 export default function Page() {
   return (
-    <main className="relative flex h-full w-full flex-col items-center pt-72">
-      <LogoIcon />
-      <LogoTextIcon />
+    <main className="flex w-full flex-col gap-8">
+      <HomeBanner />
     </main>
   );
 }
