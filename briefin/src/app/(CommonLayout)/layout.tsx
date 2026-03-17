@@ -6,8 +6,11 @@ export default function CommonLayout({ children }: { children: React.ReactNode }
     <div className="flex min-h-screen w-full min-w-0 flex-col">
       <Header />
       <main className="min-h-0 min-w-0 grow">
-        <div className="mx-auto h-full w-full min-w-0 max-w-[100rem] px-6">
-          <section className="children-container">{children}</section>
+        {/* 배경만 전체 가로(full-bleed), 뉴스/피드/공시 등 모든 페이지 동일 적용 */}
+        <div className="relative left-1/2 right-1/2 min-h-full w-screen -ml-[50vw] -mr-[50vw] bg-surface-bg">
+          <div className="mx-auto h-full w-full min-w-0 max-w-[100rem] px-6">
+            <section className="children-container">{children}</section>
+          </div>
         </div>
       </main>
       <Footer />

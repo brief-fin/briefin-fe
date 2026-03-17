@@ -7,11 +7,8 @@ export default function HomePage() {
   const overseasNews = mockNewsData.slice(0, 3).map(toNewsItem);
 
   return (
-    /* 배경만 전체 가로(full-bleed), 콘텐츠는 max-w+px-6 유지 */
-    <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen bg-surface-bg">
-      <div className="mx-auto max-w-[100rem] px-6">
-        <main className="flex h-full w-full flex-col gap-8 pb-10">
-          <HomeBanner />
+    <main className="flex h-full w-full flex-col gap-8 pb-10">
+      <HomeBanner />
 
       {/* 🇰🇷 국내 뉴스 (뉴스 페이지와 동일: gap-14pxr, NewsCard만 나열) */}
       <section className="flex flex-col gap-4">
@@ -36,8 +33,6 @@ export default function HomePage() {
           ))}
         </div>
       </section>
-        </main>
-      </div>
-    </div>
+    </main>
   );
 }
