@@ -31,10 +31,10 @@ export default function Header({ isLoggedIn = false, userEmail, onLogout }: Head
   };
 
   return (
-    <header className="w-full border-b border-[#E5E7EB] bg-white">
-      <div className="flex h-16 items-center justify-between px-24pxr">
-        <div className="flex items-center gap-10">
-          <Link href="/" className="flex items-center gap-[10px]">
+    <header className="w-full min-w-0 shrink-0 border-b border-[#E5E7EB] bg-white">
+      <div className="flex min-h-16 min-w-0 flex-wrap items-center justify-between gap-3 px-6 py-3">
+        <div className="flex min-w-0 flex-wrap items-center gap-4 gap-y-2">
+          <Link href="/" className="flex shrink-0 items-center gap-[10px]">
             <div className="flex h-8 w-8 items-center justify-center rounded-[12px] bg-[#1A2B48]">
               <svg width="24" height="24" viewBox="0 0 24 24">
                 <rect x="4.5" y="9" width="7" height="1.8" rx="0.9" stroke="#2EC49A" strokeWidth="1.8" fill="none" />
@@ -47,7 +47,7 @@ export default function Header({ isLoggedIn = false, userEmail, onLogout }: Head
             <span className="fonts-sectionTitle text-[#2C4A8F]">BrieFin</span>
           </Link>
 
-          <nav className="flex h-9 items-center gap-6">
+          <nav className="flex flex-wrap items-center gap-2 gap-y-2">
             {NAV_ITEMS.map((item) => {
               const isActive = isActivePath(item.href);
 
@@ -55,7 +55,7 @@ export default function Header({ isLoggedIn = false, userEmail, onLogout }: Head
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`fonts-bodySmall flex h-9 items-center rounded-[8px] px-[14px] font-bold transition-colors ${
+                  className={`fonts-bodySmall flex h-9 shrink-0 items-center rounded-[8px] px-3 font-bold transition-colors ${
                     isActive
                       ? 'bg-[#F5F0E8] text-[#2C4A8F]'
                       : item.highlight
@@ -69,7 +69,7 @@ export default function Header({ isLoggedIn = false, userEmail, onLogout }: Head
           </nav>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
           {isLoggedIn ? (
             <>
               <span className="fonts-label">{userEmail ?? 'user@example.com'}</span>
