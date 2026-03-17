@@ -11,7 +11,7 @@ const config: Config = {
   theme: {
     extend: {
       /* spacing */
-      spacing: Array.from({ length: 1000 }, (_, index) => {
+      spacing: Array.from({ length: 1300 }, (_, index) => {
         const value = pxToRem(index + 1);
         return { [`${index + 1}pxr`]: value };
       }).reduce((acc, obj) => ({ ...acc, ...obj }), {}),
@@ -33,6 +33,7 @@ const config: Config = {
 
         surface: {
           bg: '#F5F6F8',
+          muted: '#F3F4F6',
           border: '#E5E7EB',
           white: '#FFFFFF',
         },

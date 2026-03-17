@@ -13,7 +13,6 @@
 
   body {
     width: 100%;
-    min-width: 1024px;
     height: 100dvh;
     margin: 0 auto;
     background-color: #f7f8fa;
@@ -134,7 +133,7 @@
   }
 
   .fonts-label {
-    color: #4b5563;
+    /*color: #4b5563;*/
     font-size: 13px;
     font-style: normal;
     font-weight: 700;
