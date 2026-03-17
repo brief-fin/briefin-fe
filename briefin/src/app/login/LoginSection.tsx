@@ -1,17 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { LogoIcon } from '../../../public/icon';
 
 export default function LoginSection() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   return (
-    <section className="auth-scene">
+    <section className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden bg-primary-dark px-16pxr py-24pxr sm:px-24pxr sm:py-40pxr">
+      {/* 배경 장식 */}
       <div
-        className="auth-deco"
+        className="pointer-events-none absolute rounded-full"
         style={{
           width: 600,
           height: 600,
@@ -21,7 +22,7 @@ export default function LoginSection() {
         }}
       />
       <div
-        className="auth-deco"
+        className="pointer-events-none absolute rounded-full"
         style={{
           width: 350,
           height: 350,
@@ -31,7 +32,7 @@ export default function LoginSection() {
         }}
       />
       <div
-        className="auth-deco"
+        className="pointer-events-none absolute rounded-full"
         style={{
           width: 180,
           height: 180,
@@ -41,42 +42,48 @@ export default function LoginSection() {
         }}
       />
       <div
+        className="pointer-events-none absolute inset-0"
         style={{
-          position: 'absolute',
-          inset: 0,
           backgroundImage:
             'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
           backgroundSize: '40px 40px',
-          pointerEvents: 'none',
         }}
       />
 
-      <div className="auth-card">
-        <div className="auth-card-top">
-          <div className="auth-card-logo">
-            <span className="auth-card-logo-icon">
-              <LogoIcon />
-            </span>
-            <span>Brie<b>Fin</b></span>
+      {/* 카드 */}
+      <div className="relative z-10 w-full min-w-0 overflow-hidden rounded-[22px] bg-white shadow-[0_32px_80px_rgba(0,0,0,0.3)] sm:max-w-110 sm:rounded-[28px]">
+        {/* 카드 상단 */}
+        <div className="min-w-0 border-b border-surface-border px-20pxr pb-20pxr pt-28pxr sm:px-40pxr sm:pb-28pxr sm:pt-40pxr">
+          {/* 로고 */}
+          <div className="mb-28pxr flex items-center gap-10pxr">
+            <Image src="/icon/logo.svg" alt="BrieFin" width={32} height={32} className="h-32pxr w-32pxr shrink-0" />
+            <Image src="/icon/logoText.svg" alt="BrieFin" width={71} height={28} className="h-28pxr w-auto shrink-0" />
           </div>
-          <h2>다시 만나서 반가워요</h2>
-          <p>로그인하고 나만의 투자 피드를 확인하세요</p>
+          <h2 className="wrap-break-word mb-6pxr break-keep text-[22px] font-black tracking-[-0.5px] text-text-primary sm:text-2xl">
+            다시 만나서 반가워요
+          </h2>
+          <p className="break-keep text-sm leading-relaxed text-text-muted">로그인하고 나만의 투자 피드를 확인하세요</p>
         </div>
-        <div className="auth-card-body">
-          <div className="auth-input-group">
-            <label className="auth-input-label">이메일</label>
+
+        {/* 카드 본문 */}
+        <div className="min-w-0 px-20pxr py-20pxr sm:px-40pxr sm:py-32pxr">
+          {/* 이메일 */}
+          <div className="mb-14pxr">
+            <label className="mb-6pxr block text-xs font-bold tracking-[0.3px] text-text-secondary">이메일</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="name@example.com"
-              className="auth-input"
+              className="block w-full min-w-0 rounded-input border-[1.5px] border-transparent bg-surface-bg px-16pxr py-12pxr text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:bg-white sm:py-14pxr sm:text-[15px]"
             />
           </div>
-          <div className="auth-input-group">
-            <div className="auth-password-row">
-              <label className="auth-input-label">비밀번호</label>
-              <Link href="#" className="text-xs font-semibold text-[var(--mint)] hover:underline">
+
+          {/* 비밀번호 */}
+          <div className="mb-14pxr">
+            <div className="mb-6pxr flex flex-wrap items-center justify-between gap-8pxr">
+              <label className="text-xs font-bold tracking-[0.3px] text-text-secondary">비밀번호</label>
+              <Link href="#" className="text-xs font-semibold text-primary hover:underline">
                 비밀번호 찾기
               </Link>
             </div>
@@ -85,17 +92,28 @@ export default function LoginSection() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="비밀번호를 입력하세요"
-              className="auth-input"
+              className="block w-full min-w-0 rounded-input border-[1.5px] border-transparent bg-surface-bg px-16pxr py-12pxr text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:bg-white sm:py-14pxr sm:text-[15px]"
             />
           </div>
-          <button type="button" className="auth-btn-cta">
+
+          <button
+            type="button"
+            className="mt-20pxr w-full rounded-input bg-primary py-14pxr text-sm font-bold text-white sm:py-15pxr sm:text-[15px]">
             로그인
           </button>
-          <div className="auth-divider">
-            <span>또는</span>
+
+          {/* 구분선 */}
+          <div className="my-20pxr flex items-center gap-12pxr">
+            <span className="h-px flex-1 bg-surface-border" />
+            <span className="text-xs font-semibold text-text-muted">또는</span>
+            <span className="h-px flex-1 bg-surface-border" />
           </div>
-          <p className="auth-footer-text" style={{ marginTop: 0 }}>
-            아직 계정이 없으신가요? <Link href="/signup">무료 가입하기</Link>
+
+          <p className="break-keep text-center text-[13px] text-text-muted">
+            아직 계정이 없으신가요?{' '}
+            <Link href="/signup" className="font-bold text-primary hover:underline">
+              회원가입
+            </Link>
           </p>
         </div>
       </div>

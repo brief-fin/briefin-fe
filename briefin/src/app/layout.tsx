@@ -1,7 +1,5 @@
 import './globals.css';
 import type { Viewport } from 'next';
-import Footer from '@/components/common/Footer';
-import Header from '@/components/common/Header';
 
 export const viewport: Viewport = {
   initialScale: 1,
@@ -23,17 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://github.com/brief-fin" />
       </head>
-      <body>
-        <div className="flex min-h-full w-full min-w-0 flex-col">
-          <Header />
-          <main className="min-h-0 min-w-0 flex-1">
-            <div className="mx-auto h-full w-full min-w-0 max-w-[100rem] px-6">
-              <section className="children-container">{children}</section>
-            </div>
-          </main>
-          <Footer />
-        </div>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
