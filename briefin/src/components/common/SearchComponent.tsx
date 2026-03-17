@@ -22,7 +22,7 @@ export function SearchComponent() {
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
         </svg>
         <input
-          className="w-full focus:outline-none text-text-primary placeholder:text-text-muted bg-transparent p-10pxr"
+          className="w-full focus:outline-none text-text-primary placeholder:text-text-muted bg-transparent p-5pxr"
           type="text"
           placeholder="키워드, 기업명, 섹터를 입력하세요"
           onKeyDown={handleSearch}
