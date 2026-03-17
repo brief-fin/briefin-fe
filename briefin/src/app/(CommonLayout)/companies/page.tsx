@@ -9,7 +9,7 @@ export default function page() {
     <main className="relative flex h-full w-full flex-col px-40pxr pt-30pxr">
       <div className="fonts-heading3 mb-16pxr">기업</div>
       <div className="mb-20pxr">
-        <SearchComponent />
+      <SearchComponent searchPath="/companies/result" placeholder="기업명, 티커를 입력하세요" />
       </div>
       <div className="fonts-label mb-20pxr text-text-secondary">인기기업</div>
 

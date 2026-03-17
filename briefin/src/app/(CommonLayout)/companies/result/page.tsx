@@ -1,6 +1,5 @@
 "use client";
 
-import NewsList from "@/components/common/NewsList";
 import { SearchComponent } from "@/components/common/SearchComponent";
 import { useSearchParams } from "next/navigation";
 
@@ -10,14 +9,11 @@ export default function SearchPage() {
 
   return (
     <main className="pt-30pxr relative flex h-full w-full flex-col px-40pxr">
-      <div className="fonts-heading3 mb-16pxr">뉴스</div>
+      <div className="fonts-heading3 mb-16pxr">기업</div>
       <SearchComponent />
       <div className="fonts-bodySmall mt-20pxr">
         &quot;{query}&quot; 검색 결과
       </div>
-       <div className="mt-20pxr mb-30pxr">
-            <NewsList category="all" />
-            </div>
     
     </main>
   );
