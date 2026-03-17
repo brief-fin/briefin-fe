@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -35,16 +36,20 @@ export default function Header({ isLoggedIn = false, userEmail, onLogout }: Head
       <div className="flex min-h-16 min-w-0 flex-wrap items-center justify-between gap-3 px-6 py-3">
         <div className="flex min-w-0 flex-wrap items-center gap-4 gap-y-2">
           <Link href="/" className="flex shrink-0 items-center gap-[10px]">
-            <div className="flex h-8 w-8 items-center justify-center rounded-[12px] bg-[#1A2B48]">
-              <svg width="24" height="24" viewBox="0 0 24 24">
-                <rect x="4.5" y="9" width="7" height="1.8" rx="0.9" stroke="#2EC49A" strokeWidth="1.8" fill="none" />
-                <rect x="4.5" y="14" width="3" height="3" rx="1.5" fill="#2EC49A" />
-                <rect x="10" y="11" width="3" height="6" rx="1.5" fill="#2EC49A" />
-                <rect x="15.5" y="6" width="3" height="11" rx="1.5" fill="#2EC49A" />
-              </svg>
-            </div>
-
-            <span className="fonts-sectionTitle text-[#2C4A8F]">BrieFin</span>
+            <Image
+              src="/icon/logo.svg"
+              alt="BrieFin"
+              width={40}
+              height={40}
+              className="h-8 w-8 shrink-0 md:h-10 md:w-10"
+            />
+            <Image
+              src="/icon/logoText.svg"
+              alt="BrieFin"
+              width={71}
+              height={28}
+              className="h-6 w-auto shrink-0 md:h-7"
+            />
           </Link>
 
           <nav className="flex flex-wrap items-center gap-2 gap-y-2">
