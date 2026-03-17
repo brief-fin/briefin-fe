@@ -12,7 +12,7 @@ const FOOTER_LINKS = [
 export default function Footer() {
   return (
     <footer className="w-full border-t border-[#E5E7EB] bg-white px-6 py-10">
-      <div className="footer-inner mx-auto flex w-full max-w-[1200px] flex-col">
+      <div className="footer-inner mx-auto flex w-full max-w-[100rem] flex-col">
         <div className="footer-links mb-4 flex flex-wrap items-center gap-5">
           {FOOTER_LINKS.map((item) => (
             <Link
