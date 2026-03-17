@@ -1,0 +1,110 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+type HeaderProps = {
+  isLoggedIn?: boolean;
+  userEmail?: string;
+  onLogout?: () => void;
+};
+
+type NavItem = {
+  label: string;
+  href: string;
+  highlight?: boolean;
+};
+
+const NAV_ITEMS: NavItem[] = [
+  { label: '전체 뉴스', href: '/news' },
+  { label: '내 피드', href: '/feed' },
+  { label: '공시', href: '/disclosure' },
+  { label: '기업', href: '/companies' },
+  { label: '✦ 뉴스탐색', href: '/explore', highlight: true },
+];
+
+export default function Header({ isLoggedIn = false, userEmail, onLogout }: HeaderProps) {
+  const pathname = usePathname();
+
+  const isActivePath = (href: string) => {
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+
+  return (
+    <header className="w-full min-w-0 shrink-0 border-b border-[#E5E7EB] bg-white">
+      <div className="flex min-h-16 min-w-0 flex-wrap items-center justify-between gap-3 px-6 py-3">
+        <div className="flex min-w-0 flex-wrap items-center gap-4 gap-y-2">
+          <Link href="/" className="flex shrink-0 items-center gap-[10px]">
+            <div className="flex h-8 w-8 items-center justify-center rounded-[12px] bg-[#1A2B48]">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <rect x="4.5" y="9" width="7" height="1.8" rx="0.9" stroke="#2EC49A" strokeWidth="1.8" fill="none" />
+                <rect x="4.5" y="14" width="3" height="3" rx="1.5" fill="#2EC49A" />
+                <rect x="10" y="11" width="3" height="6" rx="1.5" fill="#2EC49A" />
+                <rect x="15.5" y="6" width="3" height="11" rx="1.5" fill="#2EC49A" />
+              </svg>
+            </div>
+
+            <span className="fonts-sectionTitle text-[#2C4A8F]">BrieFin</span>
+          </Link>
+
+          <nav className="flex flex-wrap items-center gap-2 gap-y-2">
+            {NAV_ITEMS.map((item) => {
+              const isActive = isActivePath(item.href);
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`fonts-bodySmall flex h-9 shrink-0 items-center rounded-[8px] px-3 font-bold transition-colors ${
+                    isActive
+                      ? 'bg-[#F5F0E8] text-[#2C4A8F]'
+                      : item.highlight
+                        ? 'text-[#2C4A8F] hover:bg-[#F8F5EF]'
+                        : 'text-[#4B5563] hover:bg-[#F8F5EF]'
+                  }`}>
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          {isLoggedIn ? (
+            <>
+              <span className="fonts-label">{userEmail ?? 'user@example.com'}</span>
+
+              <Link
+                href="/mypage"
+                className="fonts-bodySmall flex h-[38px] min-w-[102px] items-center justify-center rounded-[10px] border border-[#E5E7EB] bg-white px-4 font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
+                마이페이지
+              </Link>
+
+              <button
+                onClick={onLogout}
+                className="fonts-bodySmall flex h-[38px] min-w-[90px] items-center justify-center rounded-[10px] border border-[#E5E7EB] bg-white px-4 font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
+                로그아웃
+              </button>
+            </>
+          ) : (
+            <>
+              {/* 로그인 */}
+              <Link
+                href="/login"
+                className="fonts-label flex h-9 items-center justify-center rounded-[10px] border border-[#E5E7EB] px-[12px] text-[#4B5563]">
+                로그인
+              </Link>
+
+              {/* 무료로 시작하기 */}
+              <Link
+                href="/signup"
+                className="fonts-label flex h-9 items-center justify-center rounded-[10px] bg-[#2C4A8F] px-[12px] text-white">
+                무료로 시작하기
+              </Link>
+            </>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+}

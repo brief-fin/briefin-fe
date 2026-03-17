@@ -1,10 +1,5 @@
 import TickerNav from '@/components/news/TickerNav';
 import NewsList from '@/components/common/NewsList';
-interface NewsPageProps {
-  searchParams: {
-    category?: string;
-  };
-}
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
   const { category = 'all' } = await searchParams;

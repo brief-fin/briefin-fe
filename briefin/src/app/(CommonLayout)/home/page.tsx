@@ -1,5 +1,9 @@
-export default function page() {
+import HomeBanner from '@/components/home/HomeBanner';
+
+export default function HomePage() {
   return (
-    <main className="fonts-navBar pt-300pxr relative flex h-full w-full flex-col items-center">메인홈 페이지</main>
+    <main className="flex h-full w-full flex-col gap-8">
+      <HomeBanner />
+    </main>
   );
 }
