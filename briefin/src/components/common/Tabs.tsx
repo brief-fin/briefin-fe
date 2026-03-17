@@ -1,18 +1,15 @@
 'use client';
 
-export type MyPageTab = '관심 기업' | '스크랩 뉴스' | '최근 본 뉴스' | '계정 관리';
-
-const TABS: MyPageTab[] = ['관심 기업', '스크랩 뉴스', '최근 본 뉴스', '계정 관리'];
-
-interface MyPageTabsProps {
-  activeTab: MyPageTab;
-  onTabChange: (tab: MyPageTab) => void;
+interface TabsProps<T extends string> {
+  tabs: T[];
+  activeTab: T;
+  onTabChange: (tab: T) => void;
 }
 
-export default function MyPageTabs({ activeTab, onTabChange }: MyPageTabsProps) {
+export default function Tabs<T extends string>({ tabs, activeTab, onTabChange }: TabsProps<T>) {
   return (
     <div className="relative mx-24pxr flex border-b-2 border-surface-border">
-      {TABS.map((tab) => {
+      {tabs.map((tab) => {
         const isActive = tab === activeTab;
         return (
           <button
