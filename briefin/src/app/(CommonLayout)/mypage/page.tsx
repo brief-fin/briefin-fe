@@ -18,7 +18,7 @@ export default function MyPage() {
   return (
     <div className="min-h-screen bg-surface-bg">
       <MyPageHeader email="user@example.com" onLogout={handleLogout} />
-      <Tabs tabs={MY_PAGE_TABS} activeTab={activeTab} onTabChange={setActiveTab} />
+      <Tabs tabs={MY_PAGE_TABS} activeTab={activeTab} onTabChange={setActiveTab} className="mx-24pxr" />
 
       <div className="px-24pxr pt-28pxr">
         {activeTab === '관심 기업' && <div>{/* 관심 기업 컨텐츠 */}</div>}
