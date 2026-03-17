@@ -18,7 +18,7 @@ export default function SearchPage() {
   return (
     <main className="pt-30pxr relative flex h-full w-full flex-col px-40pxr">
       <div className="fonts-heading3 mb-16pxr">기업</div>
-      <SearchComponent searchPath="/companies/search" placeholder="기업명, 종목코드를 입력하세요" />
+      <SearchComponent searchPath="/companies/result" placeholder="기업명, 종목코드를 입력하세요" />
       
       <div className="fonts-caption text-text-muted mt-20pxr mb-20pxr">
         &quot;{query}&quot; 검색 결과 {filtered.length > 0 ? `${filtered.length}건` : "없음"}
