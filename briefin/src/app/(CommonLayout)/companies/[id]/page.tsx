@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Tabs from '@/components/common/Tabs';
 import CompanyHero from '@/components/companies/CompanyHero';
+import NewsCard from '@/components/common/NewsCard';
 import AlertBanner from '@/components/common/AlertBanner';
 import PopularCompanyList from '@/components/common/PopularCompanyList';
 import { MOCK_COMPANY, MOCK_NEWS, MOCK_RELATED_COMPANIES } from '@/mocks/companyDetail';
@@ -40,14 +41,14 @@ export default function CompanyDetailPage() {
           <div className="mt-16pxr flex flex-col gap-14pxr">
             {activeTab === '관련 뉴스' &&
               MOCK_NEWS.map((news) => (
-                <div key={news.id}>{/* TODO: NewsCard 컴포넌트 연결 예정 */}</div>
+                <NewsCard key={news.id} news={news} />
               ))}
             {activeTab === '공시' && <div>{/* TODO: 공시 컨텐츠 */}</div>}
           </div>
         </div>
 
         {/* 우: 사이드바 — 모바일에서는 탭 컨텐츠 아래 전체 너비 */}
-        <div className="flex w-full flex-col gap-14pxr lg:w-60">
+        <div className="flex w-full flex-col gap-14pxr lg:w-96">
 
           <AlertBanner
             title="🔔 공시 알림 받기"

@@ -1,3 +1,5 @@
+import { NewsItem } from '@/types/news';
+
 export interface CompanyInfo {
   industry: string;
   name: string;
@@ -10,12 +12,6 @@ export interface CompanyInfo {
   }[];
 }
 
-export interface NewsItem {
-  id: number;
-  source: string;
-  time: string;
-  title: string;
-}
 
 export interface RelatedCompany {
   id: number;
@@ -38,8 +34,8 @@ export const MOCK_COMPANY: CompanyInfo = {
 };
 
 export const MOCK_NEWS: NewsItem[] = [
-  { id: 1, source: '로이터', time: '오전 10:30', title: '삼성전자, 북미 최대 데이터센터와 NVMe SSD 공급 계약 체결' },
-  { id: 2, source: '한국경제', time: '2026.01.15', title: '삼성전자, CES 2026서 차세대 OLED 패널 공개' },
+  { id: 'company-news-1', source: '로이터', time: '오전 10:30', title: '삼성전자, 북미 최대 데이터센터와 NVMe SSD 공급 계약 체결', categories: ['관심기업'], companies: ['삼성전자'] },
+  { id: 'company-news-2', source: '한국경제', time: '2026.01.15', title: '삼성전자, CES 2026서 차세대 OLED 패널 공개', categories: ['관심기업'], companies: ['삼성전자'] },
 ];
 
 export const MOCK_RELATED_COMPANIES: RelatedCompany[] = [
