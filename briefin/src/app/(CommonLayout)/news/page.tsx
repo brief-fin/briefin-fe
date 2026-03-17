@@ -1,3 +1,13 @@
-export default function page() {
-  return <main className="fonts-navBar pt-300pxr relative flex h-full w-full flex-col items-center">뉴스 페이지</main>;
+import TickerNav from '@/components/news/TickerNav';
+import NewsList from '@/components/common/NewsList';
+
+export default async function Page({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
+  const { category = 'all' } = await searchParams;
+
+  return (
+    <main className="flex flex-col gap-22pxr bg-surface-bg">
+      <TickerNav />
+      <NewsList category={category} />
+    </main>
+  );
 }
