@@ -1,4 +1,6 @@
+import { LogoIcon, LogoTextIcon } from '../../public/icon';
 import HomeBanner from '@/components/home/HomeBanner';
+
 
 export default function Page() {
   return (
