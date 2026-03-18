@@ -9,6 +9,8 @@ import {
 } from '@/mocks/mock-companies';
 import type { Company } from '@/types/company';
 
+const NEXT_PAGE = '/feed';
+
 function loadSelectedIds(): string[] {
   if (typeof window === 'undefined') return [];
   try {
@@ -24,7 +26,11 @@ function loadSelectedIds(): string[] {
 function saveSelectedIds(ids: string[]) {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(STORAGE_KEY_SELECTED_COMPANIES, JSON.stringify(ids));
+    if (ids.length > 0) {
+      localStorage.setItem(STORAGE_KEY_SELECTED_COMPANIES, JSON.stringify(ids));
+    } else {
+      localStorage.removeItem(STORAGE_KEY_SELECTED_COMPANIES);
+    }
   } catch {
     // ignore
   }
@@ -33,7 +39,6 @@ function saveSelectedIds(ids: string[]) {
 export default function OnboardingPage() {
   const router = useRouter();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [touched, setTouched] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -41,13 +46,7 @@ export default function OnboardingPage() {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (!mounted) return;
-    saveSelectedIds(selectedIds);
-  }, [selectedIds, mounted]);
-
   const toggle = (company: Company) => {
-    setTouched(true);
     setSelectedIds((prev) =>
       prev.includes(company.id)
         ? prev.filter((id) => id !== company.id)
@@ -55,31 +54,31 @@ export default function OnboardingPage() {
     );
   };
 
-  const isValid = selectedIds.length >= 1;
-  const showError = !isValid;
-
-  const handleSubmit = () => {
-    if (!isValid) {
-      setTouched(true);
-      return;
+  const goNext = () => {
+    if (mounted && selectedIds.length > 0) {
+      saveSelectedIds(selectedIds);
     }
-    router.push('/feed');
+    router.push(NEXT_PAGE);
+  };
+
+  const handleLater = () => {
+    router.push(NEXT_PAGE);
   };
 
   return (
-    <main className="min-h-screen bg-surface-bg px-16pxr pb-32pxr pt-40pxr sm:px-24pxr sm:pb-40pxr sm:pt-56pxr md:pt-64pxr lg:px-32pxr lg:pt-71pxr">
-      <div className="mx-auto w-full max-w-[1220px]">
+    <main className="h-screen bg-surface-bg px-16pxr pb-32pxr  sm:px-24pxr sm:pb-40pxr sm:pt-44pxr md:pt-52pxr">
+      <div className="mx-auto w-full max-w-[680px]">
         <div className="text-center">
           <p className="text-[40px] leading-none text-text-primary sm:text-[48px]">🏢</p>
-          <h1 className="mt-16pxr text-[22px] font-black tracking-[-0.5px] text-text-primary sm:mt-23pxr sm:text-[28px]">
+          <h1 className="mt-14pxr text-[22px] font-black tracking-[-0.5px] text-text-primary sm:mt-18pxr sm:text-[26px]">
             관심 기업을 선택해 주세요
           </h1>
-          <p className="mt-6pxr text-[14px] font-normal leading-relaxed text-text-muted sm:mt-4pxr sm:text-[15px] sm:leading-[21px]">
-            최소 1개 이상 선택하면 맞춤 피드를 시작할 수 있어요
+          <p className="mt-6pxr text-[14px] font-normal leading-relaxed text-text-muted sm:text-[15px]">
+            선택한 기업의 뉴스·공시를 맞춤으로 보여드려요 (선택 사항)
           </p>
         </div>
 
-        <div className="mt-20pxr grid grid-cols-2 gap-8pxr sm:mt-24pxr sm:gap-12pxr md:gap-16pxr">
+        <div className="mt-20pxr grid grid-cols-2 gap-10pxr sm:mt-24pxr sm:grid-cols-3 sm:gap-12pxr">
           {MOCK_ONBOARDING_COMPANIES.map((company) => (
             <CompanyCard
               key={company.id}
@@ -90,25 +89,22 @@ export default function OnboardingPage() {
           ))}
         </div>
 
-        {showError && (
-          <div
-            role="alert"
-            className="mt-20pxr flex min-h-[45px] items-center justify-center rounded-button border-2 border-dashed border-primary/60 bg-[#fff5f5] px-12pxr py-10pxr sm:mt-24pxr sm:h-[45px] sm:py-0"
+        <div className="mt-24pxr flex flex-col gap-10pxr sm:mt-28pxr sm:gap-12pxr">
+          <button
+            type="button"
+            onClick={goNext}
+            className="flex h-48pxr w-full items-center justify-center rounded-button bg-primary text-[14px] font-bold text-white shadow-sm transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:h-[50px] sm:text-[15px]"
           >
-            <p className="text-center text-[12px] font-bold text-semantic-red sm:text-[13px]">
-              최소 1개 이상의 기업을 선택해 주세요.
-            </p>
-          </div>
-        )}
-
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={!isValid}
-          className="mt-20pxr flex h-48pxr w-full items-center justify-center rounded-button bg-primary text-[14px] font-bold leading-tight text-white shadow-sm transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none sm:mt-24pxr sm:h-[52px] sm:text-[15px]"
-        >
-          피드 시작하기 →
-        </button>
+            시작하기
+          </button>
+          <button
+            type="button"
+            onClick={handleLater}
+            className="text-[14px] font-bold text-text-muted transition-colors hover:text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-border sm:text-[15px]"
+          >
+            나중에 하기
+          </button>
+        </div>
       </div>
     </main>
   );
