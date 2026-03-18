@@ -3,7 +3,7 @@ import { ROWS } from '@/constants/disclosure';
 
 export default function DisclosureDetails({ details }: DisclosureDetailsProps) {
   return (
-    <div className="rounded-summary bg-surface-bg p-20pxr">
+    <div className="my-20pxr rounded-summary bg-surface-bg p-20pxr">
       <dl className="space-y-0">
         {ROWS.map(({ key, label, highlight }) => {
           const value = details[key as keyof typeof details];
