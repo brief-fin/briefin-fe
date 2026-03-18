@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function SignupSection() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -76,6 +78,7 @@ export default function SignupSection() {
 
           <button
             type="button"
+            onClick={() => router.push('/onboarding')}
             className="mt-20pxr w-full rounded-input bg-primary py-14pxr text-sm font-bold text-white sm:py-15pxr sm:text-[15px]">
             시작하기 →
           </button>
