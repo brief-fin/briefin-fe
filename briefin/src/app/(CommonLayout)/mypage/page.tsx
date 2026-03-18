@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import Tabs from '@/components/common/Tabs';
 import MyPageHeader from '@/components/mypage/mypageheader';
+import AccountSection from '@/components/mypage/AccountSection';
 import { MyPageTab } from '@/types/mypage';
 import { TAB_FROM_QUERY, TAB_TO_QUERY } from '@/constants/mypage';
 import { MY_PAGE_TABS } from '@/constants/mypage';
@@ -30,7 +31,7 @@ export default function MyPage() {
         {activeTab === '관심 기업' && <div>{/* 관심 기업 컨텐츠 */}</div>}
         {activeTab === '스크랩 뉴스' && <div>{/* 스크랩 뉴스 컨텐츠 */}</div>}
         {activeTab === '최근 본 뉴스' && <div>{/* 최근 본 뉴스 컨텐츠 */}</div>}
-        {activeTab === '계정 관리' && <div>{/* 계정 관리 컨텐츠 */}</div>}
+        {activeTab === '계정 관리' && <AccountSection />}
       </div>
     </div>
   );
