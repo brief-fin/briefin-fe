@@ -29,7 +29,7 @@ export default function DisclosureSidebar({
           {recentDisclosures.map((item) => (
             <li key={item.id}>
               <Link
-                href={`/disclosures/${item.id}`}
+                href={`/disclosure/${item.id}`}
                 className="block px-22pxr py-16pxr transition-colors hover:bg-surface-bg"
               >
                 <p className="line-clamp-2 text-[14px] font-bold text-text-primary">

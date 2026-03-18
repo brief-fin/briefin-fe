@@ -29,7 +29,7 @@ export default function DisclosureList({
         {items.map((item) => (
           <li key={item.id}>
             <Link
-              href={`/disclosures/${item.id}`}
+              href={`/disclosure/${item.id}`}
               className="flex items-center gap-12pxr px-22pxr py-20pxr transition-colors hover:bg-surface-bg"
             >
               <div className="min-w-0 flex-1">
