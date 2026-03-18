@@ -30,3 +30,7 @@ export type DisclosureListItem = {
   companyName?: string;
   summaryPoints?: string[];
 };
+
+export interface PageProps {
+  params: Promise<{ id: string }>;
+}

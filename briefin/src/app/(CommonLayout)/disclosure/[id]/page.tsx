@@ -6,10 +6,7 @@ import DisclosureSidebar from '@/components/disclosure/disclosure-sidebar';
 import { MOCK_DISCLOSURE_DETAIL, MOCK_RECENT_DISCLOSURES } from '@/mocks/disclosureDetail';
 import type { DisclosureDetail } from '@/types/disclosure';
 import BackButton from '@/components/common/BackButton';
-
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
+import { PageProps } from '@/types/disclosure';
 
 async function getDisclosure(id: string): Promise<DisclosureDetail | null> {
   // TODO: API 연동 시 fetch로 교체
