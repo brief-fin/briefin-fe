@@ -1,9 +1,6 @@
-interface DisclosureActionButtonsProps {
-  url: string;
-  documentUrl?: string | null;
-}
+import { DisclosureBtnProps } from '@/types/disclosure';
 
-export default function DisclosureBtn({ url, documentUrl }: DisclosureActionButtonsProps) {
+export default function DisclosureBtn({ url, documentUrl }: DisclosureBtnProps) {
   return (
     <div className="mt-24pxr flex flex-wrap items-center gap-12pxr border-t border-surface-border pt-20pxr">
       <a

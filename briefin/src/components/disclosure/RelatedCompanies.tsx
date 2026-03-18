@@ -1,8 +1,5 @@
 import Link from 'next/link';
-
-interface RelatedCompaniesProps {
-  relatedCompanyNames: string[];
-}
+import { RelatedCompaniesProps } from '@/types/disclosure';
 
 export default function RelatedCompanies({ relatedCompanyNames }: RelatedCompaniesProps) {
   if (relatedCompanyNames.length === 0) return null;
