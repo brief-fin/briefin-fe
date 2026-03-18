@@ -1,3 +1,5 @@
+'use client';
+
 interface Company {
   id: number;
   name: string;
