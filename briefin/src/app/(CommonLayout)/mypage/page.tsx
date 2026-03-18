@@ -18,7 +18,7 @@ export default function MyPage() {
   return (
     <div className="min-h-screen bg-surface-bg py-36pxr">
       <MyPageHeader email="user@example.com" onLogout={handleLogout} />
-      <Tabs tabs={MY_PAGE_TABS} activeTab={activeTab} onTabChange={setActiveTab} className="mx-24pxr" />
+      <Tabs tabs={MY_PAGE_TABS} activeTab={activeTab} onTabChange={setActiveTab} />
 
       <div className="pt-28pxr">
         {activeTab === '관심 기업' && <div>{/* 관심 기업 컨텐츠 */}</div>}
