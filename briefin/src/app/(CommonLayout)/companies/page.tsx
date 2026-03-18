@@ -6,7 +6,7 @@ import { mockCompanyData } from '@/mocks/mockCompanyData';
 
 export default function page() {
   return (
-    <main className="relative flex h-full w-full flex-col pt-30pxr">
+    <main className="relative flex h-full w-full flex-col py-36pxr">
       <div className="fonts-heading3 mb-16pxr">기업</div>
       <div className="mb-20pxr">
         <SearchComponent searchPath="/companies/result" placeholder="기업명, 티커를 입력하세요" />

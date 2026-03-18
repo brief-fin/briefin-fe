@@ -27,4 +27,6 @@ export type DisclosureListItem = {
   title: string;
   date: string;
   category: string;
+  companyName?: string;
+  summaryPoints?: string[];
 };

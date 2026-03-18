@@ -1,3 +1,5 @@
+'use client';
+
 import { Company, PopularCompanyListProps } from '@/types/common';
 
 export default function PopularCompanyList({ title, companies, onCompanyClick }: PopularCompanyListProps) {

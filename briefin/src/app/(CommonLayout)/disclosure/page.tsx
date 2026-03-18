@@ -1,4 +1,4 @@
-import DisclosureList from '@/components/disclosure/DisclosureList';
+import DisclosureCard from '@/components/disclosure/DisclosureCard';
 import AlertBanner from '@/components/common/AlertBanner';
 import { MOCK_COMPANY_DISCLOSURES } from '@/mocks/disclosureDetail';
 
@@ -7,8 +7,10 @@ export default function DisclosurePage() {
     <div className="min-h-screen bg-surface-bg py-36pxr">
       <h1 className="fonts-heading3 pb-16pxr text-text-primary">공시</h1>
       <div className="flex flex-col gap-16pxr lg:flex-row lg:items-start lg:gap-24pxr">
-        <div className="min-w-0 flex-1">
-          <DisclosureList items={MOCK_COMPANY_DISCLOSURES} />
+        <div className="flex min-w-0 flex-1 flex-col gap-14pxr">
+          {MOCK_COMPANY_DISCLOSURES.map((item) => (
+            <DisclosureCard key={item.id} item={item} />
+          ))}
         </div>
         <aside className="flex w-full flex-col gap-14pxr lg:w-96 lg:shrink-0">
           <AlertBanner
