@@ -1,7 +1,6 @@
 import TickerNav from '@/components/news/TickerNav';
 import NewsList from '@/components/common/NewsList';
 import AlertBanner from '@/components/common/AlertBanner';
-import BackButton from '@/components/common/BackButton';
 import { SearchComponent } from '@/components/common/SearchComponent';
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
@@ -9,8 +8,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ c
 
   return (
     <main className="min-h-screen bg-surface-bg py-36pxr">
-      <BackButton>← 홈으로</BackButton>
-      <h1 className="fonts-sectionTitle py-20pxr">전체 뉴스</h1>
+      <h1 className="fonts-heading3 pb-16pxr">뉴스</h1>
       <SearchComponent />
       <TickerNav />
       <div className="flex flex-col gap-16pxr lg:flex-row lg:items-start">

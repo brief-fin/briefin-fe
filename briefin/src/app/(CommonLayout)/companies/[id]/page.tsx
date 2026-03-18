@@ -18,9 +18,9 @@ export default function CompanyDetailPage() {
   const [activeTab, setActiveTab] = useState<CompanyDetailTab>('관련 뉴스');
 
   return (
-    <div className="min-h-screen bg-surface-bg pb-40pxr">
+    <div className="min-h-screen bg-surface-bg py-36pxr">
       {/* 뒤로가기 */}
-      <div className="pt-20pxr sm:pt-28pxr md:pt-36pxr">
+      <div className="pt-20pxr sm:pt-28pxr">
         <Link
           href="/companies"
           className="fonts-label inline-flex items-center gap-4pxr rounded-button border border-surface-border bg-surface-white px-12pxr py-8pxr font-bold text-text-secondary transition-colors hover:bg-surface-bg sm:px-14pxr sm:py-10pxr sm:text-[14px]">

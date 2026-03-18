@@ -10,7 +10,7 @@ export default function FeedPage() {
     <main className="min-h-screen bg-surface-bg py-36pxr">
       {/* Header */}
       <div className="pb-16pxr">
-        <h1 className="fonts-heading2">내 피드</h1>
+        <h1 className="fonts-heading3">내 피드</h1>
         <p className="mt-4pxr text-[14px] text-text-muted">관심 등록한 기업의 소식만 모았어요</p>
       </div>
 

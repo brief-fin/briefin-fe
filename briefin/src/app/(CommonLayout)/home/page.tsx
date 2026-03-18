@@ -12,7 +12,7 @@ export default function HomePage() {
 
       {/* 🇰🇷 국내 뉴스 (뉴스 페이지와 동일: gap-14pxr, NewsCard만 나열) */}
       <section className="flex flex-col gap-4">
-        <h2 className="fonts-sectionTitle flex items-center text-[19.2px] leading-[23px] tracking-[-0.5px] text-[#1A1D1F]">
+        <h2 className="fonts-heading3 flex items-center text-[19.2px] leading-[23px] tracking-[-0.5px] text-[#1A1D1F]">
           🇰🇷 국내 뉴스
         </h2>
         <div className="flex w-full flex-col gap-14pxr">
@@ -24,7 +24,7 @@ export default function HomePage() {
 
       {/* 🌐 해외 뉴스 */}
       <section className="flex flex-col gap-4">
-        <h2 className="fonts-sectionTitle flex items-center text-[19.2px] leading-[23px] tracking-[-0.5px] text-[#1A1D1F]">
+        <h2 className="fonts-heading3 flex items-center text-[19.2px] leading-[23px] tracking-[-0.5px] text-[#1A1D1F]">
           🌐 해외 뉴스
         </h2>
         <div className="flex w-full flex-col gap-14pxr">

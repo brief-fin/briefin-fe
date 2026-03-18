@@ -1,18 +1,13 @@
 import type { DisclosureDetail } from '@/types/disclosure';
 
 interface DisclosureHeaderProps {
-  data: Pick<
-    DisclosureDetail,
-    'category' | 'date' | 'source' | 'title' | 'companyName' | 'reportNumber'
-  >;
+  data: Pick<DisclosureDetail, 'category' | 'date' | 'source' | 'title' | 'companyName' | 'reportNumber'>;
 }
 
 export default function DisclosureHeader({
   data: { category, date, source, title, companyName, reportNumber },
 }: DisclosureHeaderProps) {
-  const subLine = [companyName, reportNumber && `공시번호 ${reportNumber}`]
-    .filter(Boolean)
-    .join(' · ');
+  const subLine = [companyName, reportNumber && `공시번호 ${reportNumber}`].filter(Boolean).join(' · ');
 
   return (
     <header className="space-y-12pxr">
@@ -24,14 +19,12 @@ export default function DisclosureHeader({
           {category}
         </span>
       </div>
-      <div className="flex flex-wrap items-center gap-16pxr fonts-caption text-text-muted">
+      <div className="fonts-caption flex flex-wrap items-center gap-16pxr text-text-muted">
         {source && <span>{source}</span>}
         <span>{date}</span>
       </div>
       <h1 className="fonts-heading3 text-text-primary">{title}</h1>
-      {subLine && (
-        <p className="text-[14px] font-normal text-text-muted">{subLine}</p>
-      )}
+      {subLine && <p className="text-[14px] font-normal text-text-muted">{subLine}</p>}
     </header>
   );
 }

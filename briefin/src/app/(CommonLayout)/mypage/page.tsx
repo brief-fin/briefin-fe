@@ -16,7 +16,7 @@ export default function MyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-bg">
+    <div className="min-h-screen bg-surface-bg py-36pxr">
       <MyPageHeader email="user@example.com" onLogout={handleLogout} />
       <Tabs tabs={MY_PAGE_TABS} activeTab={activeTab} onTabChange={setActiveTab} className="mx-24pxr" />
 
