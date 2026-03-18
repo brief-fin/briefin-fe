@@ -35,6 +35,15 @@
   a {
     text-decoration: none;
     color: inherit;
+    transition: opacity 150ms, transform 150ms;
+  }
+
+  a:hover {
+    opacity: 0.9;
+  }
+
+  a:active {
+    transform: scale(0.98);
   }
 
   button {
@@ -42,6 +51,15 @@
     background: none;
     font: inherit;
     cursor: pointer;
+    transition: opacity 150ms, transform 150ms;
+  }
+
+  button:hover {
+    opacity: 0.9;
+  }
+
+  button:active {
+    transform: scale(0.98);
   }
 }
 
