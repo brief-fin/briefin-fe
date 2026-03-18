@@ -157,7 +157,6 @@ export type MockNewsRaw = {
       id: raw.id,
       source: raw.source,
       time: raw.publishedAt,
-      isLive: raw.isLive,
       title: raw.title,
       summary: raw.summaries,
       categories: raw.category ? [raw.category] : raw.tags,
