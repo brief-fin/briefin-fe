@@ -11,47 +11,13 @@ export default function LoginSection() {
   return (
     <section className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden bg-primary-dark px-16pxr py-24pxr sm:px-24pxr sm:py-40pxr">
       {/* 배경 장식 */}
-      <div
-        className="pointer-events-none absolute rounded-full"
-        style={{
-          width: 600,
-          height: 600,
-          top: -250,
-          left: -200,
-          background: 'radial-gradient(circle, rgba(44,74,143,0.45) 0%, transparent 70%)',
-        }}
-      />
-      <div
-        className="pointer-events-none absolute rounded-full"
-        style={{
-          width: 350,
-          height: 350,
-          bottom: -120,
-          right: -80,
-          background: 'radial-gradient(circle, rgba(26,50,112,0.55) 0%, transparent 70%)',
-        }}
-      />
-      <div
-        className="pointer-events-none absolute rounded-full"
-        style={{
-          width: 180,
-          height: 180,
-          top: '20%',
-          right: '8%',
-          background: 'radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%)',
-        }}
-      />
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
+      <div className="size-r600pxr pointer-events-none absolute -left-200pxr -top-250pxr rounded-full bg-[radial-gradient(circle,rgba(44,74,143,0.45)_0%,transparent_70%)]" />
+      <div className="pointer-events-none absolute -bottom-120pxr -right-80pxr size-350pxr rounded-full bg-[radial-gradient(circle,rgba(26,50,112,0.55)_0%,transparent_70%)]" />
+      <div className="pointer-events-none absolute right-[8%] top-[20%] size-180pxr rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.05)_0%,transparent_70%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
 
       {/* 카드 */}
-      <div className="relative z-10 w-full min-w-0 overflow-hidden rounded-[22px] bg-white shadow-[0_32px_80px_rgba(0,0,0,0.3)] sm:max-w-110 sm:rounded-[28px]">
+      <div className="sm:max-w-110 relative z-10 w-full min-w-0 overflow-hidden rounded-[22px] bg-white shadow-[0_32px_80px_rgba(0,0,0,0.3)] sm:rounded-[28px]">
         {/* 카드 상단 */}
         <div className="min-w-0 border-b border-surface-border px-20pxr pb-20pxr pt-28pxr sm:px-40pxr sm:pb-28pxr sm:pt-40pxr">
           {/* 로고 */}
@@ -109,7 +75,7 @@ export default function LoginSection() {
             <span className="h-px flex-1 bg-surface-border" />
           </div>
 
-          <p className="break-keep text-center text-[13px] text-text-muted">
+          <p className="fonts-label break-keep text-center text-text-muted">
             아직 계정이 없으신가요?{' '}
             <Link href="/signup" className="font-bold text-primary hover:underline">
               회원가입

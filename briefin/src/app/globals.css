@@ -15,7 +15,7 @@
     height: 100dvh;
     min-height: 100dvh;
     margin: 0 auto;
-    background-color: white;
+    background-color: #f5f6f8;
     -ms-overflow-style: none;
     position: relative;
   }

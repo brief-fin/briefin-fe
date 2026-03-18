@@ -11,7 +11,7 @@ const config: Config = {
   theme: {
     extend: {
       /* spacing */
-      spacing: Array.from({ length: 1300 }, (_, index) => {
+      spacing: Array.from({ length: 1800 }, (_, index) => {
         const value = pxToRem(index + 1);
         return { [`${index + 1}pxr`]: value };
       }).reduce((acc, obj) => ({ ...acc, ...obj }), {}),
