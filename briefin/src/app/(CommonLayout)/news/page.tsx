@@ -8,7 +8,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ c
   const { category = 'all' } = await searchParams;
 
   return (
-    <main className="min-h-screen bg-surface-bg px-24pxr py-36pxr">
+    <main className="min-h-screen bg-surface-bg py-36pxr">
       <BackButton>← 홈으로</BackButton>
       <h1 className="fonts-sectionTitle py-20pxr">전체 뉴스</h1>
       <SearchComponent />
