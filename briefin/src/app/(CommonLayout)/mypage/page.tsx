@@ -1,15 +1,31 @@
 'use client';
 
-import { useState } from 'react';
-import MyPageHeader from '@/components/mypage/mypageheader';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Tabs from '@/components/common/Tabs';
+import MyPageHeader from '@/components/mypage/mypageheader';
 
 type MyPageTab = '관심 기업' | '스크랩 뉴스' | '최근 본 뉴스' | '계정 관리';
 
 const MY_PAGE_TABS: MyPageTab[] = ['관심 기업', '스크랩 뉴스', '최근 본 뉴스', '계정 관리'];
 
+const TAB_FROM_QUERY: Record<string, MyPageTab> = {
+  watchlist: '관심 기업',
+  scrap: '스크랩 뉴스',
+  recent: '최근 본 뉴스',
+  account: '계정 관리',
+};
+
 export default function MyPage() {
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<MyPageTab>('스크랩 뉴스');
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab && TAB_FROM_QUERY[tab]) {
+      setActiveTab(TAB_FROM_QUERY[tab]);
+    }
+  }, [searchParams]);
 
   const handleLogout = () => {
     console.log('로그아웃');
