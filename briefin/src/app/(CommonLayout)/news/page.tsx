@@ -1,14 +1,16 @@
 import TickerNav from '@/components/news/TickerNav';
 import NewsList from '@/components/common/NewsList';
 import AlertBanner from '@/components/common/AlertBanner';
+import HomeBanner from '@/components/home/HomeBanner';
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
   const { category = 'all' } = await searchParams;
 
   return (
     <main className="min-h-screen bg-surface-bg">
+      <HomeBanner />
       <TickerNav />
-      <div className="flex flex-col gap-16pxr px-24pxr pb-40pxr pt-22pxr lg:flex-row lg:items-start">
+      <div className="flex flex-col gap-16pxr px-24pxr pb-40pxr pt-24pxr lg:flex-row lg:items-start">
         {/* Left: news list */}
         <div className="flex flex-1 flex-col gap-14pxr">
           <NewsList category={category} />

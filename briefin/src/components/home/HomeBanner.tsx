@@ -13,7 +13,7 @@ export default function HomeBanner({
 }: HomeBannerProps) {
   return (
     <section
-      className="relative my-6 flex min-h-280pxr w-full flex-col overflow-hidden rounded-hero md:my-8 md:flex-row md:items-start md:justify-between"
+      className="relative my-24pxr flex min-h-280pxr w-full flex-col overflow-hidden rounded-hero md:my-8 md:flex-row md:items-start md:justify-between"
       style={{
         background: 'linear-gradient(106deg, #F5F0E8 0%, #E0D8C8 60%, #F5F0E8 100%)',
       }}>
