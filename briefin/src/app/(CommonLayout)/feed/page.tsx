@@ -1,6 +1,6 @@
 'use client';
 
-import NewsCard from '@/components/common/NewsCard';
+import NewsCard from '@/components/news/NewsCard';
 import AlertBanner from '@/components/common/AlertBanner';
 import PopularCompanyList from '@/components/common/PopularCompanyList';
 import { MOCK_FEED_NEWS, MOCK_WATCHLIST } from '@/mocks/feed';

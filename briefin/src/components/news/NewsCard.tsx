@@ -1,12 +1,8 @@
 'use client';
 
 import { CheckIcon } from '../../../public/icon';
-import Label from './Label';
-import { NewsItem } from '@/types/news';
-
-interface NewsCardProps {
-  news: NewsItem;
-}
+import Label from '../common/Label';
+import { NewsCardProps } from '@/types/news';
 
 export default function NewsCard({ news }: NewsCardProps) {
   const { source, time, isLive, title, summary, categories, companies } = news;

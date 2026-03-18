@@ -1,5 +1,5 @@
 import HomeBanner from '@/components/home/HomeBanner';
-import NewsCard from '@/components/common/NewsCard';
+import NewsCard from '@/components/news/NewsCard';
 import { mockDomesticNewsData, mockNewsData, toNewsItem } from '@/mocks/newsData';
 
 export default function HomePage() {

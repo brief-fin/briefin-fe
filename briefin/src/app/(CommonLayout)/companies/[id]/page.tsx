@@ -4,13 +4,13 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Tabs from '@/components/common/Tabs';
 import CompanyHero from '@/components/companies/CompanyHero';
-import NewsCard from '@/components/common/NewsCard';
+import NewsCard from '@/components/news/NewsCard';
 import AlertBanner from '@/components/common/AlertBanner';
 import PopularCompanyList from '@/components/common/PopularCompanyList';
 import DisclosureList from '@/components/disclosure/DisclosureList';
 import { MOCK_COMPANY, MOCK_NEWS, MOCK_RELATED_COMPANIES } from '@/mocks/companyDetail';
 import { MOCK_COMPANY_DISCLOSURES } from '@/mocks/disclosureDetail';
-import { COMPANY_DETAIL_TABS, type CompanyDetailTab } from '@/core/constants/companyDetail';
+import { COMPANY_DETAIL_TABS, type CompanyDetailTab } from '@/constants/companyDetail';
 
 export default function CompanyDetailPage() {
   const [activeTab, setActiveTab] = useState<CompanyDetailTab>('관련 뉴스');

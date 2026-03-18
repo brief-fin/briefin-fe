@@ -1,6 +1,6 @@
 'use client';
 
-import NewsList from '@/components/common/NewsList';
+import NewsList from '@/components/news/NewsList';
 import { SearchComponent } from '@/components/common/SearchComponent';
 import { useSearchParams } from 'next/navigation';
 import { NEWS_DUMMY } from '@/mocks/newsDummy';

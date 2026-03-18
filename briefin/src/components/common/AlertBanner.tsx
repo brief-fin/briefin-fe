@@ -1,9 +1,4 @@
-interface AlertBannerProps {
-  title: string;
-  description: string;
-  buttonLabel: string;
-  onButtonClick?: () => void;
-}
+import { AlertBannerProps } from '@/types/common';
 
 export default function AlertBanner({ title, description, buttonLabel, onButtonClick }: AlertBannerProps) {
   return (

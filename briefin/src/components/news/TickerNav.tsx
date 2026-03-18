@@ -1,8 +1,8 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { TICKER_CATEGORIES } from '@/core/constants/tickerCategories';
-import TickerBtn from '@/components/common/TickerBtn';
+import { TICKER_CATEGORIES } from '@/constants/tickerCategories';
+import TickerBtn from '@/components/news/TickerBtn';
 
 export default function TickerNav() {
   const router = useRouter();

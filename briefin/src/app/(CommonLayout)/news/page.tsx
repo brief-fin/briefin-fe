@@ -1,5 +1,5 @@
 import TickerNav from '@/components/news/TickerNav';
-import NewsList from '@/components/common/NewsList';
+import NewsList from '@/components/news/NewsList';
 import AlertBanner from '@/components/common/AlertBanner';
 import { SearchComponent } from '@/components/common/SearchComponent';
 

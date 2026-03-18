@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FOOTER_LINKS } from '@/core/constants/footer';
+import { FOOTER_LINKS } from '@/constants/footer';
 
 export default function Footer() {
   return (
