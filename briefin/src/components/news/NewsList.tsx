@@ -1,5 +1,5 @@
-import { NEWS_DUMMY } from '@/core/newsDummy';
-import NewsCard from '@/components/common/NewsCard';
+import { NEWS_DUMMY } from '@/mocks/newsDummy';
+import NewsCard from '@/components/news/NewsCard';
 
 interface NewsListProps {
   category: string;

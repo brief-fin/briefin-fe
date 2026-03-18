@@ -1,11 +1,6 @@
 'use client';
 
-interface TabsProps<T extends string> {
-  tabs: T[];
-  activeTab: T;
-  onTabChange: (tab: T) => void;
-  className?: string;
-}
+import { TabsProps } from '@/types/common';
 
 export default function Tabs<T extends string>({ tabs, activeTab, onTabChange, className = '' }: TabsProps<T>) {
   return (

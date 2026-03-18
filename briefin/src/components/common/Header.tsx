@@ -3,26 +3,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-type HeaderProps = {
-  isLoggedIn?: boolean;
-  userEmail?: string;
-  onLogout?: () => void;
-};
-
-type NavItem = {
-  label: string;
-  href: string;
-  highlight?: boolean;
-};
-
-const NAV_ITEMS: NavItem[] = [
-  { label: '전체 뉴스', href: '/news' },
-  { label: '내 피드', href: '/feed' },
-  { label: '공시', href: '/disclosure' },
-  { label: '기업', href: '/companies' },
-  { label: '✦ 뉴스탐색', href: '/explore', highlight: true },
-];
+import { HeaderProps } from '@/types/common';
+import { NAV_ITEMS } from '@/constants/header';
 
 export default function Header({ isLoggedIn = false, userEmail, onLogout }: HeaderProps) {
   const pathname = usePathname();

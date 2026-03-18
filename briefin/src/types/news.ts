@@ -32,3 +32,18 @@ export type NewsDetail = {
     publishedAt: string;
   }[];
 };
+
+export interface NewsCardProps {
+  news: NewsItem;
+}
+
+export interface NewsListProps {
+  category: string;
+}
+
+export interface TickerBtnProps {
+  isActive: boolean;
+  text: string;
+  onClick: () => void;
+}
+

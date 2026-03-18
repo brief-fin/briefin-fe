@@ -1,8 +1,8 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { TICKER_CATEGORIES } from '@/core/constants/tickerCategories';
-import TickerBtn from '@/components/common/TickerBtn';
+import { TICKER_CATEGORIES } from '@/constants/tickerCategories';
+import TickerBtn from '@/components/news/TickerBtn';
 
 export default function TickerNav() {
   const router = useRouter();
@@ -19,7 +19,7 @@ export default function TickerNav() {
   };
 
   return (
-    <nav className="flex gap-2">
+    <nav className="flex gap-2 py-24pxr">
       {TICKER_CATEGORIES.map((category) => (
         <TickerBtn
           key={category.id}
