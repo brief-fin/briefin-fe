@@ -6,7 +6,7 @@ import { CategoryButton } from '@/components/news/CategoryButton';
 
 export default function page() {
   return (
-    <main className="relative flex h-full w-full flex-col pt-30pxr">
+    <main className="relative flex h-full w-full flex-col pt-36pxr">
       <div className="fonts-heading3 mb-16pxr">뉴스</div>
       <div className="mb-20pxr">
         <SearchComponent searchPath="/news/search/result" placeholder="키워드, 기업명, 섹터를 입력하세요" />

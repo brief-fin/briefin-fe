@@ -16,7 +16,7 @@ export default function SearchPage() {
   );
 
   return (
-    <main className="pt-30pxr relative flex h-full w-full flex-col px-40pxr">
+    <main className="relative flex h-full w-full flex-col py-36pxr">
       <div className="fonts-heading3 mb-16pxr">기업</div>
       <SearchComponent searchPath="/companies/result" placeholder="기업명, 종목코드를 입력하세요" />
       
