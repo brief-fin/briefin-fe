@@ -3,7 +3,7 @@ interface MyPageHeaderProps {
   onLogout?: () => void;
 }
 
-export default function MyPageHeader({ email = 'user@example.com', onLogout }: MyPageHeaderProps) {
+export default function MyPageHeader({ email = 'user@example.com' }: MyPageHeaderProps) {
   return (
     <div className="flex items-start justify-between pb-16pxr">
       <div className="flex flex-col gap-4pxr">
