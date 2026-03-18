@@ -3,25 +3,16 @@
 import Link from 'next/link';
 import { CheckIcon } from '../../../public/icon';
 import Label from '@/components/common/Label';
-import type { DisclosureListItem } from '@/types/disclosure';
+import { DisclosureCardProps } from '@/types/disclosure';
 
-interface DisclosureCardProps {
-  item: DisclosureListItem;
-  sourceLabel?: string;
-}
-
-export default function DisclosureCard({
-  item,
-  sourceLabel = 'DART 공시',
-}: DisclosureCardProps) {
+export default function DisclosureCard({ item, sourceLabel = 'DART 공시' }: DisclosureCardProps) {
   const { title, date, category, companyName, summaryPoints } = item;
   const hasLabels = category || companyName;
 
   return (
     <Link
       href={`/disclosure/${item.id}`}
-      className="flex max-w-1028pxr cursor-pointer flex-col gap-14pxr rounded-card border border-surface-border bg-white px-25pxr py-28pxr last:border-b-0"
-    >
+      className="flex max-w-1028pxr cursor-pointer flex-col gap-14pxr rounded-card border border-surface-border bg-white px-25pxr py-28pxr last:border-b-0">
       {/* 출처 + 날짜 */}
       <p className="fonts-label flex items-center gap-6pxr text-text-muted">
         <span>{sourceLabel}</span>

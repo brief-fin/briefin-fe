@@ -1,8 +1,4 @@
-import type { DisclosureDetail } from '@/types/disclosure';
-
-interface DisclosureHeaderProps {
-  data: Pick<DisclosureDetail, 'category' | 'date' | 'source' | 'title' | 'companyName' | 'reportNumber'>;
-}
+import { DisclosureHeaderProps } from '@/types/disclosure';
 
 export default function DisclosureHeader({
   data: { category, date, source, title, companyName, reportNumber },

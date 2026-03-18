@@ -1,12 +1,6 @@
 import Link from 'next/link';
 import AlertBanner from '@/components/common/AlertBanner';
-import type { DisclosureListItem } from '@/types/disclosure';
-
-interface DisclosureSidebarProps {
-  recentDisclosures: DisclosureListItem[];
-  companyName?: string;
-  onAlertClick?: () => void;
-}
+import { DisclosureSidebarProps } from '@/types/disclosure';
 
 export default function DisclosureSidebar({
   recentDisclosures,

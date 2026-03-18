@@ -1,10 +1,5 @@
 import Link from 'next/link';
-import type { DisclosureListItem } from '@/types/disclosure';
-
-interface DisclosureListProps {
-  items: DisclosureListItem[];
-  sourceLabel?: string;
-}
+import { DisclosureListProps } from '@/types/disclosure';
 
 function CategoryBadge({ category }: { category: string }) {
   const isHighlight = category === '공급계약';

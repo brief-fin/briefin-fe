@@ -1,8 +1,4 @@
-import type { DisclosureDetail } from '@/types/disclosure';
-
-interface DisclosureSummaryProps {
-  summaryPoints: DisclosureDetail['summaryPoints'];
-}
+import { DisclosureSummaryProps } from '@/types/disclosure';
 
 export default function DisclosureSummary({ summaryPoints }: DisclosureSummaryProps) {
   return (

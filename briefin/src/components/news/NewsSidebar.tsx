@@ -1,22 +1,5 @@
 import Link from 'next/link';
-
-interface RelatedNews {
-  id: string;
-  title: string;
-  source: string;
-  publishedAt: string;
-}
-
-interface Company {
-  id: string;
-  name: string;
-  emoji: string;
-}
-
-interface NewsSidebarProps {
-  relatedNews: RelatedNews[];
-  relatedCompanies: Company[];
-}
+import { NewsSidebarProps } from '@/types/news';
 
 export default function NewsSidebar({ relatedNews, relatedCompanies }: NewsSidebarProps) {
   return (
@@ -29,8 +12,7 @@ export default function NewsSidebar({ relatedNews, relatedCompanies }: NewsSideb
               <Link
                 key={news.id}
                 href={`/news/${news.id}`}
-                className="group flex flex-col gap-4pxr border-b border-surface-border pb-12pxr last:border-none last:pb-0"
-              >
+                className="group flex flex-col gap-4pxr border-b border-surface-border pb-12pxr last:border-none last:pb-0">
                 <p className="fonts-cardTitle transition-colors group-hover:text-primary">{news.title}</p>
                 <p className="fonts-caption text-text-muted">
                   {news.source} · {news.publishedAt}
@@ -42,16 +24,13 @@ export default function NewsSidebar({ relatedNews, relatedCompanies }: NewsSideb
       )}
 
       <div className="rounded-card bg-primary p-20pxr shadow-hero-card">
-        <p className="fonts-label mb-8pxr text-white">
-          🔔 {relatedCompanies[0]?.name ?? '기업'} 소식 받기
-        </p>
+        <p className="fonts-label mb-8pxr text-white">🔔 {relatedCompanies[0]?.name ?? '기업'} 소식 받기</p>
         <p className="fonts-bodySmall mb-16pxr text-white opacity-80">
           이 기업의 새 공시·뉴스를 실시간으로 받아보세요.
         </p>
         <Link
           href="/companies"
-          className="block rounded-button bg-surface-white px-16pxr py-12pxr text-center text-[13px] font-bold text-primary transition-colors hover:bg-primary-light"
-        >
+          className="block rounded-button bg-surface-white px-16pxr py-12pxr text-center text-[13px] font-bold text-primary transition-colors hover:bg-primary-light">
           관심 기업 등록
         </Link>
       </div>

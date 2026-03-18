@@ -34,3 +34,40 @@ export type DisclosureListItem = {
 export interface PageProps {
   params: Promise<{ id: string }>;
 }
+
+export interface DisclosureBtnProps {
+  url: string;
+  documentUrl?: string | null;
+}
+
+export interface DisclosureCardProps {
+  item: DisclosureListItem;
+  sourceLabel?: string;
+}
+
+export interface DisclosureDetailsProps {
+  details: DisclosureDetail['details'];
+}
+
+export interface DisclosureHeaderProps {
+  data: Pick<DisclosureDetail, 'category' | 'date' | 'source' | 'title' | 'companyName' | 'reportNumber'>;
+}
+
+export interface DisclosureListProps {
+  items: DisclosureListItem[];
+  sourceLabel?: string;
+}
+
+export interface DisclosureSidebarProps {
+  recentDisclosures: DisclosureListItem[];
+  companyName?: string;
+  onAlertClick?: () => void;
+}
+
+export interface DisclosureSummaryProps {
+  summaryPoints: DisclosureDetail['summaryPoints'];
+}
+
+export interface RelatedCompaniesProps {
+  relatedCompanyNames: string[];
+}
