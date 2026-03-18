@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import HomeBanner from '@/components/home/HomeBanner';
 import AlertBanner from '@/components/common/AlertBanner';
 import NewsCard from '@/components/news/NewsCard';
@@ -29,7 +30,7 @@ export default function HomePage() {
             </div>
             {/* 🌐 해외 뉴스 */}
             <section className="flex flex-col gap-4">
-              <h2 className="fonts-heading3 flex items-center gap-2 text-[19.2px] leading-[23px] tracking-[-0.5px] text-[#1A1D1F]">
+              <h2 className="fonts-heading3 leading-23pxr flex items-center gap-2 text-[19.2px] tracking-[-0.5px] text-[#1A1D1F]">
                 <Image src="/icon/noto-v1_world-map.svg" alt="" width={24} height={24} className="h-6 w-6 shrink-0" />
                 해외 뉴스
               </h2>
@@ -49,7 +50,11 @@ export default function HomePage() {
               buttonLabel="🏢 관련 기업 추가하기"
             />
             <PopularCompanyList title="👀 내 관심 기업" companies={MOCK_WATCHLIST} />
-            <button className="text-[13px] font-bold text-text-muted hover:text-text-primary">관심 기업 관리 →</button>
+            <Link
+              href="/mypage?tab=watchlist"
+              className="block text-center text-[13px] font-bold text-text-muted hover:text-text-primary">
+              관심 기업 관리 →
+            </Link>
           </div>
         </div>
       </section>
