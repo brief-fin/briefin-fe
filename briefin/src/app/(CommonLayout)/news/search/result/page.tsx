@@ -11,7 +11,7 @@ export default function SearchPage() {
 
   const filtered = NEWS_DUMMY.filter((news) => news.companies.includes(query) || news.categories.includes(query));
   return (
-    <main className="relative flex h-full w-full flex-col px-40pxr pt-30pxr">
+    <main className="relative flex h-full w-full flex-col pt-30pxr">
       <div className="fonts-heading3 mb-16pxr">뉴스</div>
       <SearchComponent searchPath="/news/search" />
       <div className="fonts-caption mt-20pxr text-text-muted">
