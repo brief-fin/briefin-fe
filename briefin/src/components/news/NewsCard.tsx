@@ -5,7 +5,7 @@ import Label from '../common/Label';
 import { NewsCardProps } from '@/types/news';
 
 export default function NewsCard({ news }: NewsCardProps) {
-  const { source, time, isLive, title, summary, categories, companies } = news;
+  const { source, time, title, summary, categories, companies } = news;
 
   const hasLabels = categories.length > 0 || companies.length > 0;
 
@@ -13,9 +13,6 @@ export default function NewsCard({ news }: NewsCardProps) {
     <div className="flex max-w-1028pxr flex-col gap-14pxr rounded-card border border-surface-border bg-white px-25pxr py-28pxr last:border-b-0">
       {/* 언론사 + 시간 */}
       <p className="fonts-label flex items-center gap-6pxr text-text-muted">
-        {isLive && (
-          <span className="fonts-label rounded-badge bg-[#FFF1F1] px-6pxr py-1pxr text-semantic-red">● LIVE</span>
-        )}
         <span>{source}</span>
         <span>{time}</span>
       </p>

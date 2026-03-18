@@ -1,5 +1,3 @@
-import { NewsItem } from '@/types/news';
-
 export interface AlertBannerProps {
   title: string;
   description: string;

@@ -82,7 +82,7 @@ export default function Header({ isLoggedIn = false, userEmail, onLogout }: Head
               </Link>
               <Link
                 href="/signup"
-                className="fonts-label flex h-9 items-center justify-center rounded-[10px] bg-[#2C4A8F] px-[12px] text-white">
+                className="fonts-label flex h-9 items-center justify-center rounded-[10px] bg-[#2C4A8F] px-12pxr text-white">
                 회원가입
               </Link>
             </>
