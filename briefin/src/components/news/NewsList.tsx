@@ -1,9 +1,6 @@
 import { NEWS_DUMMY } from '@/mocks/newsDummy';
 import NewsCard from '@/components/news/NewsCard';
-
-interface NewsListProps {
-  category: string;
-}
+import { NewsListProps } from '@/types/news';
 
 export default function NewsList({ category }: NewsListProps) {
   const filtered =

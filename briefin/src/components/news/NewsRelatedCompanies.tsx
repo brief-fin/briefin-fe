@@ -1,14 +1,5 @@
 import Link from 'next/link';
-
-interface Company {
-  id: string;
-  name: string;
-  emoji: string;
-}
-
-interface NewsRelatedCompaniesProps {
-  relatedCompanies: Company[];
-}
+import { NewsRelatedCompaniesProps } from '@/types/news';
 
 export default function NewsRelatedCompanies({ relatedCompanies }: NewsRelatedCompaniesProps) {
   if (!relatedCompanies || relatedCompanies.length === 0) return null;
@@ -21,8 +12,7 @@ export default function NewsRelatedCompanies({ relatedCompanies }: NewsRelatedCo
           <Link
             key={company.id}
             href={`/companies/${company.id}`}
-            className="rounded-badge border border-surface-border bg-surface-white px-14pxr py-8pxr text-[13px] font-bold text-text-secondary transition-colors hover:bg-surface-bg"
-          >
+            className="rounded-badge border border-surface-border bg-surface-white px-14pxr py-8pxr text-[13px] font-bold text-text-secondary transition-colors hover:bg-surface-bg">
             {company.emoji} {company.name}
           </Link>
         ))}

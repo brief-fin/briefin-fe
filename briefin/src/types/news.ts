@@ -1,3 +1,5 @@
+import type { MockNewsDetailRaw } from '@/mocks/newsDetail';
+
 export interface NewsItem {
   id: string;
   source: string; // 언론사
@@ -44,4 +46,49 @@ export interface TickerBtnProps {
   isActive: boolean;
   text: string;
   onClick: () => void;
+}
+
+export interface CategoryButtonProps {
+  label: string;
+  isSelected?: boolean;
+  onClick?: () => void;
+}
+
+export interface NewsActionsProps {
+  originalUrl: string;
+  isScrapped: boolean;
+}
+
+export interface NewsDetailProps {
+  content: string;
+}
+
+export interface NewsHeaderProps {
+  data: Pick<MockNewsDetailRaw, 'category' | 'publishedAt' | 'source' | 'title' | 'isLive'>;
+}
+
+export interface Company {
+  id: string;
+  name: string;
+  emoji: string;
+}
+
+export interface NewsRelatedCompaniesProps {
+  relatedCompanies: Company[];
+}
+
+export interface RelatedNews {
+  id: string;
+  title: string;
+  source: string;
+  publishedAt: string;
+}
+
+export interface NewsSidebarProps {
+  relatedNews: RelatedNews[];
+  relatedCompanies: Company[];
+}
+
+export interface NewsSummaryProps {
+  summaries: NewsDetail['summaries'];
 }

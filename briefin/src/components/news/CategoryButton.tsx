@@ -1,10 +1,6 @@
 'use client';
 
-interface CategoryButtonProps {
-  label: string;
-  isSelected?: boolean;
-  onClick?: () => void;
-}
+import { CategoryButtonProps } from '@/types/news';
 
 export function CategoryButton({ label, isSelected = false, onClick }: CategoryButtonProps) {
   return (
