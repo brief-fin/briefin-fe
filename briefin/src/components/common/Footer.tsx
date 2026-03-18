@@ -3,7 +3,7 @@ import { FOOTER_LINKS } from '@/constants/footer';
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-[#E5E7EB] bg-white px-24pxr py-40pxr">
+    <footer className="w-full border-t border-[#E5E7EB] bg-white px-24pxr py-36pxr">
       <div className="footer-inner max-w-1600pxr mx-auto flex w-full flex-col">
         <div className="footer-links mb-4 flex flex-wrap items-center gap-5">
           {FOOTER_LINKS.map((item) => (
