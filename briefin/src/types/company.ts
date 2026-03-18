@@ -6,3 +6,9 @@ export type Company = {
   /** 로고 원형 배경 Tailwind 클래스 (선택) */
   logoBg?: string;
 };
+
+export type SearchPageProps = {
+  searchParams: Promise<{
+    q?: string;
+  }>;
+};
