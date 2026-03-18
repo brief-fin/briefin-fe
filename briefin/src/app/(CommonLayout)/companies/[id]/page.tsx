@@ -10,9 +10,7 @@ import PopularCompanyList from '@/components/common/PopularCompanyList';
 import DisclosureList from '@/components/disclosure/DisclosureList';
 import { MOCK_COMPANY, MOCK_NEWS, MOCK_RELATED_COMPANIES } from '@/mocks/companyDetail';
 import { MOCK_COMPANY_DISCLOSURES } from '@/mocks/disclosureDetail';
-
-type CompanyDetailTab = '관련 뉴스' | '공시';
-const COMPANY_DETAIL_TABS: CompanyDetailTab[] = ['관련 뉴스', '공시'];
+import { COMPANY_DETAIL_TABS, type CompanyDetailTab } from '@/core/constants/companyDetail';
 
 export default function CompanyDetailPage() {
   const [activeTab, setActiveTab] = useState<CompanyDetailTab>('관련 뉴스');
