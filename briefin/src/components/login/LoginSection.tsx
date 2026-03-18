@@ -9,7 +9,7 @@ export default function LoginSection() {
   const [password, setPassword] = useState('');
 
   return (
-    <section className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden bg-primary-dark px-16pxr py-24pxr sm:px-24pxr sm:py-40pxr">
+    <section className="relative flex h-dvh w-full items-center justify-center overflow-hidden bg-primary-dark px-16pxr py-24pxr sm:px-24pxr sm:py-40pxr">
       {/* 배경 장식 */}
       <div className="size-r600pxr pointer-events-none absolute -left-200pxr -top-250pxr rounded-full bg-[radial-gradient(circle,rgba(44,74,143,0.45)_0%,transparent_70%)]" />
       <div className="pointer-events-none absolute -bottom-120pxr -right-80pxr size-350pxr rounded-full bg-[radial-gradient(circle,rgba(26,50,112,0.55)_0%,transparent_70%)]" />
