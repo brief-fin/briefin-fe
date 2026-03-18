@@ -12,7 +12,7 @@ export default function SignupSection() {
   const [passwordConfirm, setPasswordConfirm] = useState('');
 
   return (
-    <section className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden bg-primary-dark px-16pxr py-24pxr sm:px-24pxr sm:py-40pxr">
+    <section className="relative flex h-dvh w-full items-center justify-center overflow-hidden bg-primary-dark px-16pxr py-24pxr sm:px-24pxr sm:py-40pxr">
       {/* 배경 장식 */}
       <div className="pointer-events-none absolute -right-150pxr -top-200pxr size-500pxr rounded-full bg-[radial-gradient(circle,rgba(44,74,143,0.5)_0%,transparent_70%)]" />
       <div className="pointer-events-none absolute -bottom-180pxr -left-100pxr size-400pxr rounded-full bg-[radial-gradient(circle,rgba(26,50,112,0.6)_0%,transparent_70%)]" />
