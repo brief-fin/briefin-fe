@@ -2,6 +2,8 @@ export interface AlertBannerProps {
   title: string;
   description: string;
   buttonLabel: string;
+  /** 있으면 버튼 대신 Link로 렌더(호버 색 변경 없음), 없으면 button + onButtonClick */
+  buttonHref?: string;
   onButtonClick?: () => void;
 }
 
