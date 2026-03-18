@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import HomeBanner from '@/components/home/HomeBanner';
 import AlertBanner from '@/components/common/AlertBanner';
 import NewsCard from '@/components/news/NewsCard';
@@ -49,7 +50,11 @@ export default function HomePage() {
               buttonLabel="🏢 관련 기업 추가하기"
             />
             <PopularCompanyList title="👀 내 관심 기업" companies={MOCK_WATCHLIST} />
-            <button className="text-[13px] font-bold text-text-muted hover:text-text-primary">관심 기업 관리 →</button>
+            <Link
+              href="/mypage?tab=watchlist"
+              className="block text-center text-[13px] font-bold text-text-muted hover:text-text-primary">
+              관심 기업 관리 →
+            </Link>
           </div>
         </div>
       </section>
