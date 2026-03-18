@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import CompanyCard from '@/components/onboarding/company-card';
 import { MOCK_ONBOARDING_COMPANIES, STORAGE_KEY_SELECTED_COMPANIES } from '@/mocks/mock-companies';
@@ -33,13 +33,15 @@ function saveSelectedIds(ids: string[]) {
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  useEffect(() => {
-    setSelectedIds(loadSelectedIds());
-    setIsHydrated(true);
-  }, []);
+  const [selectedIds, setSelectedIds] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return [];
+    return loadSelectedIds();
+  });
+  const isHydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   const toggle = (company: Company) => {
     setSelectedIds((prev) =>
