@@ -31,15 +31,17 @@ export default function CompanyDetailPage() {
         <CompanyHero {...MOCK_COMPANY} />
       </div>
 
+      {/* 탭 */}
+      <div className="mt-20pxr">
+        <Tabs tabs={COMPANY_DETAIL_TABS} activeTab={activeTab} onTabChange={setActiveTab} />
+      </div>
+
       {/* 컨텐츠 — 모바일: 단일 컬럼 / 데스크톱: 좌우 2컬럼 */}
-      <div className="mt-20pxr flex flex-col gap-16pxr lg:flex-row lg:items-start lg:gap-24pxr">
-        {/* 좌: 탭 + 뉴스 목록 */}
-        <div className="min-w-0 flex-1">
-          <Tabs tabs={COMPANY_DETAIL_TABS} activeTab={activeTab} onTabChange={setActiveTab} />
-          <div className="mt-16pxr flex flex-col gap-14pxr">
-            {activeTab === '관련 뉴스' && MOCK_NEWS.map((news) => <NewsCard key={news.id} news={news} />)}
-            {activeTab === '공시' && <DisclosureList items={MOCK_COMPANY_DISCLOSURES} />}
-          </div>
+      <div className="mt-16pxr flex flex-col gap-16pxr lg:flex-row lg:items-start lg:gap-24pxr">
+        {/* 좌: 뉴스 목록 */}
+        <div className="min-w-0 flex-1 flex flex-col gap-14pxr">
+          {activeTab === '관련 뉴스' && MOCK_NEWS.map((news) => <NewsCard key={news.id} news={news} />)}
+          {activeTab === '공시' && <DisclosureList items={MOCK_COMPANY_DISCLOSURES} />}
         </div>
 
         {/* 우: 사이드바 — 모바일에서는 탭 컨텐츠 아래 전체 너비 */}
