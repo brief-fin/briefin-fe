@@ -9,6 +9,30 @@ export interface NewsItem {
   companies: string[]; // 관련기업 태그
 }
 
+export type NewsDetail = {
+  id: string;
+  title: string;
+  category: string;
+  publishedAt: string;
+  source: string;
+  isLive: boolean;
+  isScrapped: boolean;
+  summaries: string[];
+  content: string;
+  originalUrl: string;
+  relatedCompanies: {
+    id: string;
+    name: string;
+    emoji: string;
+  }[];
+  relatedNews: {
+    id: string;
+    title: string;
+    source: string;
+    publishedAt: string;
+  }[];
+};
+
 export interface NewsCardProps {
   news: NewsItem;
 }
@@ -22,3 +46,4 @@ export interface TickerBtnProps {
   text: string;
   onClick: () => void;
 }
+
