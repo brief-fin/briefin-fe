@@ -46,7 +46,7 @@ export default function SignupSection() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="name@example.com"
-              className="block w-full min-w-0 rounded-input border-[1.5px] border-transparent bg-surface-bg px-16pxr py-12pxr text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:bg-white sm:py-14pxr sm:text-[15px]"
+              className="block w-full min-w-0 rounded-input border-[1.5px] border-transparent bg-surface-bg px-16pxr py-12pxr text-sm text-text-primary transition-colors duration-150 placeholder:text-text-muted focus:border-primary focus:bg-white sm:py-14pxr sm:text-[15px]"
             />
           </div>
 
@@ -58,7 +58,7 @@ export default function SignupSection() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="8자 이상 입력"
-              className="block w-full min-w-0 rounded-input border-[1.5px] border-transparent bg-surface-bg px-16pxr py-12pxr text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:bg-white sm:py-14pxr sm:text-[15px]"
+              className="block w-full min-w-0 rounded-input border-[1.5px] border-transparent bg-surface-bg px-16pxr py-12pxr text-sm text-text-primary transition-colors duration-150 placeholder:text-text-muted focus:border-primary focus:bg-white sm:py-14pxr sm:text-[15px]"
             />
           </div>
 
@@ -72,14 +72,14 @@ export default function SignupSection() {
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
               placeholder="비밀번호를 다시 입력"
-              className="block w-full min-w-0 rounded-input border-[1.5px] border-transparent bg-surface-bg px-16pxr py-12pxr text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:bg-white sm:py-14pxr sm:text-[15px]"
+              className="block w-full min-w-0 rounded-input border-[1.5px] border-transparent bg-surface-bg px-16pxr py-12pxr text-sm text-text-primary transition-colors duration-150 placeholder:text-text-muted focus:border-primary focus:bg-white sm:py-14pxr sm:text-[15px]"
             />
           </div>
 
           <button
             type="button"
             onClick={() => router.push('/onboarding')}
-            className="mt-20pxr w-full rounded-input bg-primary py-14pxr text-sm font-bold text-white sm:py-15pxr sm:text-[15px]">
+            className="mt-20pxr w-full rounded-input bg-primary py-14pxr text-sm font-bold text-white transition-all duration-150 hover:opacity-90 active:scale-[0.98] sm:py-15pxr sm:text-[15px]">
             시작하기 →
           </button>
 

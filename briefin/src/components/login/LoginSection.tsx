@@ -41,7 +41,7 @@ export default function LoginSection() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="name@example.com"
-              className="block w-full min-w-0 rounded-input border-[1.5px] border-transparent bg-surface-bg px-16pxr py-12pxr text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:bg-white sm:py-14pxr sm:text-[15px]"
+              className="block w-full min-w-0 rounded-input border-[1.5px] border-transparent bg-surface-bg px-16pxr py-12pxr text-sm text-text-primary transition-colors duration-150 placeholder:text-text-muted focus:border-primary focus:bg-white sm:py-14pxr sm:text-[15px]"
             />
           </div>
 
@@ -49,7 +49,7 @@ export default function LoginSection() {
           <div className="mb-14pxr">
             <div className="mb-6pxr flex flex-wrap items-center justify-between gap-8pxr">
               <label className="text-xs font-bold tracking-[0.3px] text-text-secondary">비밀번호</label>
-              <Link href="#" className="text-xs font-semibold text-primary hover:underline">
+              <Link href="#" className="text-xs font-semibold text-primary transition-opacity duration-150 hover:opacity-70">
                 비밀번호 찾기
               </Link>
             </div>
@@ -58,13 +58,13 @@ export default function LoginSection() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="비밀번호를 입력하세요"
-              className="block w-full min-w-0 rounded-input border-[1.5px] border-transparent bg-surface-bg px-16pxr py-12pxr text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:bg-white sm:py-14pxr sm:text-[15px]"
+              className="block w-full min-w-0 rounded-input border-[1.5px] border-transparent bg-surface-bg px-16pxr py-12pxr text-sm text-text-primary transition-colors duration-150 placeholder:text-text-muted focus:border-primary focus:bg-white sm:py-14pxr sm:text-[15px]"
             />
           </div>
 
           <button
             type="button"
-            className="mt-20pxr w-full rounded-input bg-primary py-14pxr text-sm font-bold text-white sm:py-15pxr sm:text-[15px]">
+            className="mt-20pxr w-full rounded-input bg-primary py-14pxr text-sm font-bold text-white transition-all duration-150 hover:opacity-90 active:scale-[0.98] sm:py-15pxr sm:text-[15px]">
             로그인
           </button>
 
