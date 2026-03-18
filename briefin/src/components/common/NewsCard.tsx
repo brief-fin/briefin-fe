@@ -14,7 +14,7 @@ export default function NewsCard({ news }: NewsCardProps) {
   const hasLabels = categories.length > 0 || companies.length > 0;
 
   return (
-    <div className="max-w-1028pxr flex flex-col gap-14pxr rounded-card border border-surface-border bg-white px-25pxr py-28pxr last:border-b-0">
+    <div className="flex max-w-1028pxr flex-col gap-14pxr rounded-card border border-surface-border bg-white px-25pxr py-28pxr last:border-b-0">
       {/* 언론사 + 시간 */}
       <p className="fonts-label flex items-center gap-6pxr text-text-muted">
         {isLive && (

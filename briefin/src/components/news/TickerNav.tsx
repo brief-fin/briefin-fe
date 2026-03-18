@@ -19,7 +19,7 @@ export default function TickerNav() {
   };
 
   return (
-    <nav className="flex gap-2">
+    <nav className="flex gap-2 py-24pxr">
       {TICKER_CATEGORIES.map((category) => (
         <TickerBtn
           key={category.id}
