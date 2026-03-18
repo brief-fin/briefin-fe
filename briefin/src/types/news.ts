@@ -8,3 +8,17 @@ export interface NewsItem {
   categories: string[]; // 카테고리 태그
   companies: string[]; // 관련기업 태그
 }
+
+export interface NewsCardProps {
+  news: NewsItem;
+}
+
+export interface NewsListProps {
+  category: string;
+}
+
+export interface TickerBtnProps {
+  isActive: boolean;
+  text: string;
+  onClick: () => void;
+}

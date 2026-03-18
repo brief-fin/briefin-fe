@@ -1,10 +1,6 @@
 'use client';
 
-interface TickerBtnProps {
-  isActive: boolean;
-  text: string;
-  onClick: () => void;
-}
+import { TickerBtnProps } from '@/types/news';
 
 export default function TickerBtn({ isActive, text, onClick }: TickerBtnProps) {
   return (

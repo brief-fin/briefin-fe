@@ -1,20 +1,6 @@
 'use client';
 
-interface Company {
-  id: number;
-  name: string;
-  sector: string;
-  change: string;
-  isRise: boolean;
-  emoji: string;
-  bgColor: string;
-}
-
-interface PopularCompanyListProps {
-  title: string;
-  companies: Company[];
-  onCompanyClick?: (id: number) => void;
-}
+import { Company, PopularCompanyListProps } from '@/types/common';
 
 export default function PopularCompanyList({ title, companies, onCompanyClick }: PopularCompanyListProps) {
   return (
@@ -26,14 +12,16 @@ export default function PopularCompanyList({ title, companies, onCompanyClick }:
             key={company.id}
             onClick={() => onCompanyClick?.(company.id)}
             className={`flex items-center gap-12pxr py-12pxr ${onCompanyClick ? 'cursor-pointer hover:opacity-70' : ''}`}>
-            <div className={`flex h-40pxr w-40pxr shrink-0 items-center justify-center rounded-button text-[18px] ${company.bgColor}`}>
+            <div
+              className={`flex h-40pxr w-40pxr shrink-0 items-center justify-center rounded-button text-[18px] ${company.bgColor}`}>
               {company.emoji}
             </div>
             <div className="min-w-0 flex-1">
               <p className="truncate text-[14px] font-bold text-text-primary">{company.name}</p>
               <p className="fonts-caption">{company.sector}</p>
             </div>
-            <p className={`shrink-0 text-[13px] font-bold ${company.isRise ? 'text-semantic-red' : 'text-semantic-neutral'}`}>
+            <p
+              className={`shrink-0 text-[13px] font-bold ${company.isRise ? 'text-semantic-red' : 'text-semantic-neutral'}`}>
               {company.change}
             </p>
           </li>

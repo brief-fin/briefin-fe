@@ -16,11 +16,11 @@ export default function MyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-bg">
+    <div className="min-h-screen bg-surface-bg py-36pxr">
       <MyPageHeader email="user@example.com" onLogout={handleLogout} />
       <Tabs tabs={MY_PAGE_TABS} activeTab={activeTab} onTabChange={setActiveTab} className="mx-24pxr" />
 
-      <div className="px-24pxr pt-28pxr">
+      <div className="pt-28pxr">
         {activeTab === '관심 기업' && <div>{/* 관심 기업 컨텐츠 */}</div>}
         {activeTab === '스크랩 뉴스' && <div>{/* 스크랩 뉴스 컨텐츠 */}</div>}
         {activeTab === '최근 본 뉴스' && <div>{/* 최근 본 뉴스 컨텐츠 */}</div>}

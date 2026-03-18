@@ -1,21 +1,21 @@
 'use client';
 
-import NewsCard from '@/components/common/NewsCard';
+import NewsCard from '@/components/news/NewsCard';
 import AlertBanner from '@/components/common/AlertBanner';
 import PopularCompanyList from '@/components/common/PopularCompanyList';
 import { MOCK_FEED_NEWS, MOCK_WATCHLIST } from '@/mocks/feed';
 
 export default function FeedPage() {
   return (
-    <main className="min-h-screen bg-surface-bg">
+    <main className="min-h-screen bg-surface-bg py-36pxr">
       {/* Header */}
-      <div className="px-24pxr pb-16pxr pt-36pxr">
-        <h1 className="fonts-heading2">내 피드</h1>
+      <div className="pb-16pxr">
+        <h1 className="fonts-heading3">내 피드</h1>
         <p className="mt-4pxr text-[14px] text-text-muted">관심 등록한 기업의 소식만 모았어요</p>
       </div>
 
       {/* Body */}
-      <div className="flex flex-col gap-16pxr px-24pxr pb-40pxr lg:flex-row lg:items-start">
+      <div className="flex flex-col gap-16pxr lg:flex-row lg:items-start">
         {/* Left: news list */}
         <div className="flex flex-1 flex-col gap-14pxr">
           {MOCK_FEED_NEWS.map((news) => (

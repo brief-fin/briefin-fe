@@ -1,7 +1,4 @@
-interface LabelProps {
-  text: string;
-  variant: 'category' | 'company';
-}
+import { LabelProps } from '@/types/common';
 
 export default function Label({ text, variant }: LabelProps) {
   return (

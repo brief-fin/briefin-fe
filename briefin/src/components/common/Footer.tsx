@@ -1,17 +1,9 @@
 import Link from 'next/link';
-
-const FOOTER_LINKS = [
-  { label: 'BrieFin', href: '/', bold: true },
-  { label: '서비스 소개', href: '/about' },
-  { label: '이용약관', href: '/terms' },
-  { label: '개인정보처리방침', href: '/privacy' },
-  { label: '고객센터', href: '/support' },
-  { label: '공지사항', href: '/notice' },
-];
+import { FOOTER_LINKS } from '@/constants/footer';
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-[#E5E7EB] bg-white px-24pxr py-40pxr">
+    <footer className="w-full border-t border-[#E5E7EB] bg-white px-24pxr py-36pxr">
       <div className="footer-inner max-w-1600pxr mx-auto flex w-full flex-col">
         <div className="footer-links mb-4 flex flex-wrap items-center gap-5">
           {FOOTER_LINKS.map((item) => (
