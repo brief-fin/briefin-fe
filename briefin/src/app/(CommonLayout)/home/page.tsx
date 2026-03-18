@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import HomeBanner from '@/components/home/HomeBanner';
 import AlertBanner from '@/components/common/AlertBanner';
 import NewsCard from '@/components/common/NewsCard';
@@ -15,8 +16,15 @@ export default function HomePage() {
 
       {/* 국내 뉴스 제목만 먼저(전체 너비), 그 아래에서 카드와 사이드바 y축 맞춤 */}
       <section className="flex flex-col gap-4">
-        <h2 className="fonts-sectionTitle flex items-center text-[19.2px] leading-[23px] tracking-[-0.5px] text-[#1A1D1F]">
-          🇰🇷 국내 뉴스
+        <h2 className="fonts-sectionTitle flex items-center gap-2 text-[19.2px] leading-[23px] tracking-[-0.5px] text-[#1A1D1F]">
+          <Image
+            src="/icon/twemoji_flag-south-korea.svg"
+            alt=""
+            width={24}
+            height={24}
+            className="h-6 w-6 shrink-0"
+          />
+          국내 뉴스
         </h2>
         <div className="flex flex-col gap-16pxr lg:flex-row lg:items-start">
           {/* Left: 국내 뉴스 카드 + 해외 뉴스 섹션 */}
@@ -28,8 +36,15 @@ export default function HomePage() {
             </div>
             {/* 🌐 해외 뉴스 */}
             <section className="flex flex-col gap-4">
-              <h2 className="fonts-sectionTitle flex items-center text-[19.2px] leading-[23px] tracking-[-0.5px] text-[#1A1D1F]">
-                🌐 해외 뉴스
+              <h2 className="fonts-sectionTitle flex items-center gap-2 text-[19.2px] leading-[23px] tracking-[-0.5px] text-[#1A1D1F]">
+                <Image
+                  src="/icon/noto-v1_world-map.svg"
+                  alt=""
+                  width={24}
+                  height={24}
+                  className="h-6 w-6 shrink-0"
+                />
+                해외 뉴스
               </h2>
               <div className="flex w-full flex-col gap-14pxr">
                 {overseasNews.map((news) => (
