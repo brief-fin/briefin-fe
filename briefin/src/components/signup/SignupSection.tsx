@@ -3,13 +3,13 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useSignup } from '@/hooks/useAuth';
 
 export default function SignupSection() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const { mutate: signup, isPending, error } = useSignup();
 
   return (
     <section className="relative flex h-dvh w-full items-center justify-center overflow-hidden bg-primary-dark px-16pxr py-24pxr sm:px-24pxr sm:py-40pxr">
@@ -76,11 +76,18 @@ export default function SignupSection() {
             />
           </div>
 
+          {error && (
+            <p className="mb-10pxr text-center text-xs font-semibold text-red-500">
+              회원가입에 실패했습니다. 입력 정보를 확인해주세요
+            </p>
+          )}
+
           <button
             type="button"
-            onClick={() => router.push('/onboarding')}
-            className="mt-20pxr w-full rounded-input bg-primary py-14pxr text-sm font-bold text-white transition-all duration-150 hover:opacity-90 active:scale-[0.98] sm:py-15pxr sm:text-[15px]">
-            시작하기 →
+            disabled={isPending}
+            onClick={() => signup({ email, password, passwordConfirm })}
+            className="mt-20pxr w-full rounded-input bg-primary py-14pxr text-sm font-bold text-white transition-all duration-150 hover:opacity-90 active:scale-[0.98] disabled:opacity-50 sm:py-15pxr sm:text-[15px]">
+            {isPending ? '처리 중...' : '시작하기 →'}
           </button>
 
           <p className="mt-20pxr break-keep text-center text-[13px] text-text-muted">

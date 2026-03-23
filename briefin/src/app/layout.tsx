@@ -1,5 +1,6 @@
 import './globals.css';
 import type { Viewport } from 'next';
+import QueryProvider from '@/providers/QueryProvider';
 
 export const viewport: Viewport = {
   initialScale: 1,
@@ -21,7 +22,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://github.com/brief-fin" />
       </head>
-      <body>{children}</body>
+      <body>
+        <QueryProvider>{children}</QueryProvider>
+      </body>
     </html>
   );
 }
