@@ -10,10 +10,20 @@ import type { DisclosureListItem, PageProps } from '@/types/disclosure';
 export default async function DisclosureDetailPage({ params }: PageProps) {
   const { id } = await params;
 
+  const numericId = Number(id);
+  if (!Number.isInteger(numericId) || numericId <= 0) {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-16pxr">
+        <p className="fonts-body text-text-secondary">해당 공시를 찾을 수 없습니다.</p>
+        <BackButton>← 공시 목록으로</BackButton>
+      </div>
+    );
+  }
+
   let data;
   let notFound = false;
   try {
-    data = await fetchDisclosureDetail(Number(id));
+    data = await fetchDisclosureDetail(numericId);
   } catch (err) {
     if (err instanceof ApiError && err.status === 404) {
       notFound = true;

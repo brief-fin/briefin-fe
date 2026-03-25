@@ -30,7 +30,8 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     ...options,
   });
 
-  const body = await res.json();
+  const text = await res.text();
+  const body = text ? (() => { try { return JSON.parse(text); } catch { return null; } })() : null;
 
   if (!res.ok) {
     throw new ApiError(body?.message ?? `API 오류: ${res.status} ${res.statusText}`, res.status);
