@@ -16,9 +16,8 @@ export default function HomeNewsSection() {
     return <p className="fonts-label py-10 text-center text-text-muted">뉴스를 불러오지 못했습니다.</p>;
   }
 
-  const newsList = data.map(toNewsItem);
-  const first3 = newsList.slice(0, 3);
-  const next3 = newsList.slice(3, 6);
+  const domestic = data.filter((item) => item.region === '국내').slice(0, 3).map(toNewsItem);
+  const overseas = data.filter((item) => item.region === '해외').slice(0, 3).map(toNewsItem);
 
   return (
     <>
@@ -29,7 +28,7 @@ export default function HomeNewsSection() {
           국내 뉴스
         </h2>
         <div className="flex w-full flex-col gap-14pxr">
-          {first3.map((news) => (
+          {domestic.map((news) => (
             <NewsCard key={news.id} news={news} />
           ))}
         </div>
@@ -42,7 +41,7 @@ export default function HomeNewsSection() {
           해외 뉴스
         </h2>
         <div className="flex w-full flex-col gap-14pxr">
-          {next3.map((news) => (
+          {overseas.map((news) => (
             <NewsCard key={news.id} news={news} />
           ))}
         </div>

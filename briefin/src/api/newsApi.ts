@@ -5,6 +5,7 @@ export interface NewsListItem {
   title: string;
   summary: string;
   category: string;
+  region: string;
   press: string;
   publishedAt: string;
   relatedCompanies: string[];
