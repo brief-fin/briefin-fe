@@ -1,5 +1,35 @@
 import type { MockNewsDetailRaw } from '@/mocks/newsDetail';
 
+// API 응답 타입
+export interface NewsListItem {
+  newsId: string;
+  title: string;
+  summary: string;
+  category: string;
+  region: string;
+  press: string;
+  publishedAt: string;
+  relatedCompanies: string[];
+}
+
+export interface NewsDetailResponse {
+  newsId: string;
+  title: string;
+  content: string;
+  summary: string;
+  category: string;
+  press: string;
+  publishedAt: string;
+  relatedCompanies: string[];
+  relatedNews: string[];
+}
+
+export interface ScrapResponse {
+  newsId: number;
+  isScraped: boolean;
+  scrapedAt: string;
+}
+
 export interface NewsItem {
   id: string;
   source: string; // 언론사
