@@ -50,6 +50,20 @@ export const fetchDisclosureDetail = (disclosureId: number) =>
 export const fetchSubscriptionStatus = (companyId: number) =>
   apiClient.get<ApiResponse<boolean>>(`/api/push/status?companyId=${companyId}`).then((res) => res.result);
 
+export interface DisclosureRecentItem {
+  disclosureId: number;
+  dartId: string;
+  title: string;
+  disclosedAt: string;
+  summary: string;
+}
+
+// 최근 공시 3건 (사이드바용)
+export const fetchDisclosureRecent = (companyId: number) =>
+  apiClient
+    .get<ApiResponse<DisclosureRecentItem[]>>(`/api/disclosures/recent?companyId=${companyId}`)
+    .then((res) => res.result);
+
 // VAPID 공개키 조회
 export const fetchVapidPublicKey = () =>
   apiClient.get<ApiResponse<string>>('/api/push/vapid-public-key').then((res) => res.result);
