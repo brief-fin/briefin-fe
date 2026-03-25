@@ -1,7 +1,7 @@
 export const TICKER_CATEGORIES = [
   { id: 'all', label: '전체' },
   { id: '기업실적', label: '기업실적' },
-  { id: '기업 이벤트', label: '기업 이벤트' },
+  { id: '기업이벤트', label: '기업 이벤트' },
   { id: '산업섹터', label: '산업섹터' },
   { id: '금융시장', label: '금융시장' },
   { id: '거시경제', label: '거시경제' },
