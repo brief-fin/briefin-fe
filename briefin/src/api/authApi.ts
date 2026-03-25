@@ -1,19 +1,7 @@
 import { apiClient, type ApiResponse } from './client';
+import type { LoginRequest, SignupRequest, LoginResponse } from '@/types/auth';
 
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface SignupRequest {
-  email: string;
-  password: string;
-  passwordConfirm: string;
-}
-
-export interface LoginResponse {
-  accessToken: string;
-}
+export type { LoginRequest, SignupRequest, LoginResponse };
 
 export const login = (body: LoginRequest) =>
   apiClient.post<ApiResponse<LoginResponse>>('/api/auth/login', body).then((res) => res.result);
