@@ -2,12 +2,37 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { HeaderProps } from '@/types/common';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { NAV_ITEMS } from '@/constants/header';
+import { tokenStorage } from '@/lib/token';
 
-export default function Header({ isLoggedIn = false, userEmail, onLogout }: HeaderProps) {
+function getEmailFromToken(token: string): string | null {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.email ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = tokenStorage.get();
+    if (token) setUserEmail(getEmailFromToken(token));
+  }, [pathname]); // 페이지 이동할 때마다 재확인
+
+  const isLoggedIn = !!userEmail;
+
+  const handleLogout = () => {
+    tokenStorage.remove();
+    setUserEmail(null);
+    router.push('/login');
+  };
 
   const isActivePath = (href: string) => {
     return pathname === href || pathname.startsWith(`${href}/`);
@@ -68,8 +93,8 @@ export default function Header({ isLoggedIn = false, userEmail, onLogout }: Head
               </Link>
 
               <button
-                onClick={onLogout}
-                className="fonts-bodySmall px-16px16pxr flex h-38pxr min-w-90pxr items-center justify-center rounded-button border border-[#E5E7EB] bg-white font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
+                onClick={handleLogout}
+                className="fonts-bodySmall px-16pxr flex h-38pxr min-w-90pxr items-center justify-center rounded-button border border-[#E5E7EB] bg-white font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
                 로그아웃
               </button>
             </>

@@ -1,16 +1,17 @@
 'use client';
 
+import Link from 'next/link';
 import { CheckIcon } from '../../../public/icon';
 import Label from '../common/Label';
 import { NewsCardProps } from '@/types/news';
 
 export default function NewsCard({ news }: NewsCardProps) {
-  const { source, time, title, summary, categories, companies } = news;
+  const { id, source, time, title, summary, categories, companies } = news;
 
   const hasLabels = categories.length > 0 || companies.length > 0;
 
   return (
-    <div className="flex max-w-1028pxr flex-col gap-14pxr rounded-card border border-surface-border bg-white px-25pxr py-28pxr last:border-b-0">
+    <Link href={`/news/${id}`} className="flex max-w-1028pxr flex-col gap-14pxr rounded-card border border-surface-border bg-white px-25pxr py-28pxr transition-colors hover:bg-surface-bg last:border-b-0">
       {/* 언론사 + 시간 */}
       <p className="fonts-label flex items-center gap-6pxr text-text-muted">
         <span>{source}</span>
@@ -43,6 +44,6 @@ export default function NewsCard({ news }: NewsCardProps) {
           ))}
         </section>
       )}
-    </div>
+    </Link>
   );
 }

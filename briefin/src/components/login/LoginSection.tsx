@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useLogin } from '@/hooks/useAuth';
 
 export default function LoginSection() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { mutate: login, isPending, error } = useLogin();
 
   return (
     <section className="relative flex h-dvh w-full items-center justify-center overflow-hidden bg-primary-dark px-16pxr py-24pxr sm:px-24pxr sm:py-40pxr">
@@ -62,10 +64,18 @@ export default function LoginSection() {
             />
           </div>
 
+          {error && (
+            <p className="mb-10pxr text-center text-xs font-semibold text-red-500">
+              이메일 또는 비밀번호를 확인해주세요
+            </p>
+          )}
+
           <button
             type="button"
-            className="mt-20pxr w-full rounded-input bg-primary py-14pxr text-sm font-bold text-white transition-all duration-150 hover:opacity-90 active:scale-[0.98] sm:py-15pxr sm:text-[15px]">
-            로그인
+            disabled={isPending}
+            onClick={() => login({ email, password })}
+            className="mt-20pxr w-full rounded-input bg-primary py-14pxr text-sm font-bold text-white transition-all duration-150 hover:opacity-90 active:scale-[0.98] disabled:opacity-50 sm:py-15pxr sm:text-[15px]">
+            {isPending ? '로그인 중...' : '로그인'}
           </button>
 
           {/* 구분선 */}
