@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { NAV_ITEMS } from '@/constants/header';
 import { tokenStorage } from '@/lib/token';
 
@@ -19,18 +18,13 @@ function getEmailFromToken(token: string): string | null {
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
-  const [userEmail, setUserEmail] = useState<string | null>(null);
 
-  useEffect(() => {
-    const token = tokenStorage.get();
-    if (token) setUserEmail(getEmailFromToken(token));
-  }, [pathname]); // 페이지 이동할 때마다 재확인
-
+  const token = tokenStorage.get();
+  const userEmail = token ? getEmailFromToken(token) : null;
   const isLoggedIn = !!userEmail;
 
   const handleLogout = () => {
     tokenStorage.remove();
-    setUserEmail(null);
     router.push('/login');
   };
 
@@ -62,7 +56,6 @@ export default function Header() {
           <nav className="flex flex-wrap items-center gap-2 gap-y-2">
             {NAV_ITEMS.map((item) => {
               const isActive = isActivePath(item.href);
-
               return (
                 <Link
                   key={item.href}
@@ -84,17 +77,15 @@ export default function Header() {
         <div className="flex shrink-0 flex-wrap items-center gap-2">
           {isLoggedIn ? (
             <>
-              <span className="fonts-label">{userEmail ?? 'user@example.com'}</span>
-
+              <span className="fonts-label">{userEmail}</span>
               <Link
                 href="/mypage"
                 className="fonts-bodySmall flex h-38pxr min-w-102pxr items-center justify-center rounded-button border border-[#E5E7EB] bg-white px-4 font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
                 마이페이지
               </Link>
-
               <button
                 onClick={handleLogout}
-                className="fonts-bodySmall px-16pxr flex h-38pxr min-w-90pxr items-center justify-center rounded-button border border-[#E5E7EB] bg-white font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
+                className="fonts-bodySmall flex h-38pxr min-w-90pxr items-center justify-center rounded-button border border-[#E5E7EB] bg-white px-16pxr font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
                 로그아웃
               </button>
             </>

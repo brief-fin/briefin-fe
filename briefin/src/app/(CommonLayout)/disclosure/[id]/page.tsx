@@ -10,7 +10,6 @@ import BackButton from '@/components/common/BackButton';
 import { PageProps } from '@/types/disclosure';
 
 async function getDisclosure(id: string): Promise<DisclosureDetail | null> {
-  // TODO: API 연동 시 fetch로 교체
   if (id === MOCK_DISCLOSURE_DETAIL.id || id === '2026-03-00412') {
     return MOCK_DISCLOSURE_DETAIL;
   }
@@ -52,21 +51,27 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-surface-bg py-36pxr">
       <BackButton>← 공시 목록으로</BackButton>
+
       <div className="mt-16pxr flex flex-col gap-16pxr lg:flex-row lg:items-start lg:gap-24pxr">
-        <article className="min-w-0 flex-1 rounded-card border border-surface-border bg-surface-white p-24pxr shadow-hero-card sm:p-32pxr">
-          <DisclosureHeader data={{ category, date, source, title, companyName, reportNumber }} />
-          <DisclosureSummary summaryPoints={summaryPoints} />
-          <p className="fonts-body text-text-secondary">{description}</p>
-          <DisclosureDetails details={details} />
-          {descriptionAfterTable && <p className="fonts-body text-text-secondary">{descriptionAfterTable}</p>}
-          <DisclosureActionButtons url={url} documentUrl={documentUrl} />
-          {relatedCompanyNames && <RelatedCompanies relatedCompanyNames={relatedCompanyNames} />}
-        </article>
-        <DisclosureSidebar
-          companyId={companyId}
-          recentDisclosures={MOCK_RECENT_DISCLOSURES}
-          companyName={cleanCompanyName}
-        />
+        <div className="flex min-w-0 flex-1 flex-col gap-14pxr">
+          <article className="rounded-card border border-surface-border bg-surface-white p-24pxr shadow-hero-card sm:p-32pxr">
+            <DisclosureHeader data={{ category, date, source, title, companyName, reportNumber }} />
+            <DisclosureSummary summaryPoints={summaryPoints} />
+            <p className="fonts-body text-text-secondary">{description}</p>
+            <DisclosureDetails details={details} />
+            {descriptionAfterTable && <p className="fonts-body text-text-secondary">{descriptionAfterTable}</p>}
+            <DisclosureActionButtons url={url} documentUrl={documentUrl} />
+            {relatedCompanyNames && <RelatedCompanies relatedCompanyNames={relatedCompanyNames} />}
+          </article>
+        </div>
+
+        <aside className="flex w-full flex-col gap-14pxr lg:w-96 lg:shrink-0">
+          <DisclosureSidebar
+            companyId={companyId}
+            recentDisclosures={MOCK_RECENT_DISCLOSURES}
+            companyName={cleanCompanyName}
+          />
+        </aside>
       </div>
     </div>
   );
