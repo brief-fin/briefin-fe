@@ -8,7 +8,9 @@ import { MOCK_WATCHLIST } from '@/mocks/feed';
 export default function HomePage() {
   return (
     <main className="flex h-full w-full flex-col gap-8 pb-10">
-      <HomeBanner />
+      <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
+        <HomeBanner />
+      </div>
       <div className="flex flex-col gap-16pxr lg:flex-row lg:items-start">
         {/* Left: 뉴스 섹션 */}
         <div className="flex flex-1 flex-col gap-8">
