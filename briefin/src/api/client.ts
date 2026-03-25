@@ -2,6 +2,16 @@ import { tokenStorage } from '@/lib/token';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
 
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public readonly status: number,
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
 // 백엔드 공통 응답 wrapper
 export interface ApiResponse<T> {
   isSuccess: boolean;
@@ -20,10 +30,11 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     ...options,
   });
 
-  const body = await res.json();
+  const text = await res.text();
+  const body = text ? (() => { try { return JSON.parse(text); } catch { return null; } })() : null;
 
   if (!res.ok) {
-    throw new Error(body?.message ?? `API 오류: ${res.status} ${res.statusText}`);
+    throw new ApiError(body?.message ?? `API 오류: ${res.status} ${res.statusText}`, res.status);
   }
 
   if (body?.isSuccess === false) {

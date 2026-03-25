@@ -49,3 +49,17 @@ export const fetchDisclosureDetail = (disclosureId: number) =>
   apiClient
     .get<ApiResponse<DisclosureDetailResponse>>(`/api/disclosures/${disclosureId}`)
     .then((res) => res.result);
+
+export interface DisclosureRecentItem {
+  disclosureId: number;
+  dartId: string;
+  title: string;
+  disclosedAt: string;
+  summary: string;
+}
+
+// 최근 공시 3건 (사이드바용)
+export const fetchDisclosureRecent = (companyId: number) =>
+  apiClient
+    .get<ApiResponse<DisclosureRecentItem[]>>(`/api/disclosures/recent?companyId=${companyId}`)
+    .then((res) => res.result);
