@@ -4,8 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { logout as logoutApi } from '@/api/authApi';
 import { NAV_ITEMS } from '@/constants/header';
-import { tokenStorage } from '@/lib/token';
+import { useAuthSessionVersion } from '@/providers/AuthSessionProvider';
+import { authStore } from '@/store/authStore';
 
 function getEmailFromToken(token: string): string | null {
   try {
@@ -19,19 +21,28 @@ function getEmailFromToken(token: string): string | null {
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
+  const authSessionVersion = useAuthSessionVersion();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = tokenStorage.get();
-    if (token) setUserEmail(getEmailFromToken(token));
-  }, [pathname]); // 페이지 이동할 때마다 재확인
+    const authed = authStore.isAuthenticated();
+    setIsLoggedIn(authed);
+    const token = authStore.getAccessToken();
+    setUserEmail(authed && token ? getEmailFromToken(token) : null);
+  }, [pathname, authSessionVersion]);
 
-  const isLoggedIn = !!userEmail;
-
-  const handleLogout = () => {
-    tokenStorage.remove();
-    setUserEmail(null);
-    router.push('/login');
+  const handleLogout = async () => {
+    try {
+      await logoutApi();
+    } catch {
+      /* 서버 오류여도 클라이언트 세션은 종료 */
+    } finally {
+      authStore.clear();
+      setIsLoggedIn(false);
+      setUserEmail(null);
+      router.push('/login');
+    }
   };
 
   const isActivePath = (href: string) => {
