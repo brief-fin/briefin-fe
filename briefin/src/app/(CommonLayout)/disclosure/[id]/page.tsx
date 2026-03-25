@@ -36,6 +36,7 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
     source,
     title,
     companyName,
+    companyId,
     reportNumber,
     summaryPoints,
     description,
@@ -61,7 +62,11 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
           <DisclosureActionButtons url={url} documentUrl={documentUrl} />
           {relatedCompanyNames && <RelatedCompanies relatedCompanyNames={relatedCompanyNames} />}
         </article>
-        <DisclosureSidebar recentDisclosures={MOCK_RECENT_DISCLOSURES} companyName={cleanCompanyName} />
+        <DisclosureSidebar
+          companyId={companyId}
+          recentDisclosures={MOCK_RECENT_DISCLOSURES}
+          companyName={cleanCompanyName}
+        />
       </div>
     </div>
   );

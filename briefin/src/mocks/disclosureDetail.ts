@@ -8,6 +8,7 @@ export const MOCK_DISCLOSURE_DETAIL: DisclosureDetail = {
   source: '금융감독원 전자공시',
   reportNumber: '2026-03-00412',
   companyName: '삼성전자 주식회사',
+  companyId: 1,
   summaryPoints: [
     '북미 최대 데이터센터 운영사와 NVMe SSD 대규모 공급 계약 체결',
     '계약 기간 2년, 총 계약 금액 약 1조 2,400억 원 규모',
