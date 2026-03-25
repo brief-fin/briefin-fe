@@ -20,11 +20,17 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     ...options,
   });
 
+  const body = await res.json();
+
   if (!res.ok) {
-    throw new Error(`API 오류: ${res.status} ${res.statusText}`);
+    throw new Error(body?.message ?? `API 오류: ${res.status} ${res.statusText}`);
   }
 
-  return res.json() as Promise<T>;
+  if (body?.isSuccess === false) {
+    throw new Error(body.message ?? '알 수 없는 오류가 발생했습니다.');
+  }
+
+  return body as T;
 }
 
 export const apiClient = {

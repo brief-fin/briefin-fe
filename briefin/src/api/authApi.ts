@@ -1,4 +1,4 @@
-import { apiClient } from './client';
+import { apiClient, type ApiResponse } from './client';
 
 export interface LoginRequest {
   email: string;
@@ -16,7 +16,9 @@ export interface LoginResponse {
 }
 
 export const login = (body: LoginRequest) =>
-  apiClient.post<LoginResponse>('/api/auth/login', body);
+  apiClient.post<ApiResponse<LoginResponse>>('/api/auth/login', body).then((res) => res.result);
 
 export const signup = (body: SignupRequest) =>
-  apiClient.post<{ id: string; email: string; createdAt: string }>('/api/auth/signup', body);
+  apiClient
+    .post<ApiResponse<{ id: string; email: string; createdAt: string }>>('/api/auth/signup', body)
+    .then((res) => res.result);
