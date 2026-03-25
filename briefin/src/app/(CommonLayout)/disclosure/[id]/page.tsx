@@ -5,6 +5,7 @@ import DisclosureActionButtons from '@/components/disclosure/DisclosureBtn';
 import BackButton from '@/components/common/BackButton';
 import { fetchDisclosureDetail, fetchDisclosureRecent } from '@/api/disclosureApi';
 import { ApiError } from '@/api/client';
+import { notFound } from 'next/navigation';
 import type { DisclosureListItem, PageProps } from '@/types/disclosure';
 
 export default async function DisclosureDetailPage({ params }: PageProps) {
@@ -12,33 +13,17 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
 
   const numericId = Number(id);
   if (!Number.isInteger(numericId) || numericId <= 0) {
-    return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-16pxr">
-        <p className="fonts-body text-text-secondary">해당 공시를 찾을 수 없습니다.</p>
-        <BackButton>← 공시 목록으로</BackButton>
-      </div>
-    );
+    notFound();
   }
 
   let data;
-  let notFound = false;
   try {
     data = await fetchDisclosureDetail(numericId);
   } catch (err) {
     if (err instanceof ApiError && err.status === 404) {
-      notFound = true;
-    } else {
-      throw err;
+      notFound();
     }
-  }
-
-  if (notFound || !data) {
-    return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-16pxr">
-        <p className="fonts-body text-text-secondary">해당 공시를 찾을 수 없습니다.</p>
-        <BackButton>← 공시 목록으로</BackButton>
-      </div>
-    );
+    throw err;
   }
 
   const summaryPoints = data.summary ? data.summary.split('\n').filter(Boolean) : [];
