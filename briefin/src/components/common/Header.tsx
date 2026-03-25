@@ -94,7 +94,7 @@ export default function Header() {
 
               <button
                 onClick={handleLogout}
-                className="fonts-bodySmall px-16px16pxr flex h-38pxr min-w-90pxr items-center justify-center rounded-button border border-[#E5E7EB] bg-white font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
+                className="fonts-bodySmall px-16pxr flex h-38pxr min-w-90pxr items-center justify-center rounded-button border border-[#E5E7EB] bg-white font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
                 로그아웃
               </button>
             </>

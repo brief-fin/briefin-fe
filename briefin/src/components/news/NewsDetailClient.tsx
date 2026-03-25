@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useNewsDetail } from '@/hooks/useNews';
+import type { NewsDetailResponse } from '@/api/newsApi';
 import NewsHeader from '@/components/news/NewsHeader';
 import NewsSummary from '@/components/news/NewsSummary';
 import NewsDetail from '@/components/news/NewsDetail';
@@ -9,30 +9,7 @@ import NewsSidebar from '@/components/news/NewsSidebar';
 import NewsRelatedCompanies from '@/components/news/NewsRelatedCompanies';
 import NewsActions from '@/components/news/NewsActions';
 
-export default function NewsDetailClient({ id }: { id: string }) {
-  const { data, isLoading, isError } = useNewsDetail(id);
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <p className="fonts-label text-text-muted">뉴스를 불러오는 중...</p>
-      </div>
-    );
-  }
-
-  if (isError || !data) {
-    return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-16pxr">
-        <p className="fonts-body text-text-secondary">해당 뉴스를 찾을 수 없습니다.</p>
-        <Link
-          href="/news"
-          className="rounded-button border border-surface-border bg-surface-white px-14pxr py-10pxr text-[14px] font-bold text-text-secondary transition-colors hover:bg-surface-bg">
-          ← 뉴스 목록으로
-        </Link>
-      </div>
-    );
-  }
-
+export default function NewsDetailClient({ data }: { data: NewsDetailResponse }) {
   // 백엔드 데이터 → 컴포넌트 형식으로 변환
   const relatedCompanies = (data.relatedCompanies ?? []).map((name, i) => ({
     id: String(i),
