@@ -27,3 +27,15 @@ export interface ReelNews {
   company: ReelNewsCompany;
   relatedNews: ReelNewsRelatedItem[];
 }
+
+export interface ReelsActionRailProps {
+  newsId: number;
+  isScrapped: boolean;
+  onToggleScrap: () => void;
+}
+
+export interface ShareOption {
+  label: string;
+  icon: string;
+  action: () => void;
+}
