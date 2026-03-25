@@ -4,19 +4,25 @@ import DisclosureSidebar from '@/components/disclosure/DisclosureSideBar';
 import DisclosureActionButtons from '@/components/disclosure/DisclosureBtn';
 import BackButton from '@/components/common/BackButton';
 import { fetchDisclosureDetail, fetchDisclosureRecent } from '@/api/disclosureApi';
+import { ApiError } from '@/api/client';
 import type { DisclosureListItem, PageProps } from '@/types/disclosure';
 
 export default async function DisclosureDetailPage({ params }: PageProps) {
   const { id } = await params;
 
   let data;
+  let notFound = false;
   try {
     data = await fetchDisclosureDetail(Number(id));
-  } catch {
-    // not found
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 404) {
+      notFound = true;
+    } else {
+      throw err;
+    }
   }
 
-  if (!data) {
+  if (notFound || !data) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-16pxr">
         <p className="fonts-body text-text-secondary">해당 공시를 찾을 수 없습니다.</p>
