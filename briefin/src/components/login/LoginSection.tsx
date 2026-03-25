@@ -3,12 +3,16 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useLogin } from '@/hooks/useAuth';
 
 export default function LoginSection() {
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect');
+  const safeRedirect = redirect && redirect.startsWith('/') ? redirect : '/';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { mutate: login, isPending, error } = useLogin();
+  const { mutate: login, isPending, error } = useLogin(safeRedirect);
 
   return (
     <section className="relative flex h-dvh w-full items-center justify-center overflow-hidden bg-primary-dark px-16pxr py-24pxr sm:px-24pxr sm:py-40pxr">
