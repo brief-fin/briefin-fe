@@ -1,4 +1,4 @@
-import { tokenStorage } from '@/lib/token';
+import { authStore } from '@/store/authStore';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
 
@@ -21,11 +21,12 @@ export interface ApiResponse<T> {
 }
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const token = tokenStorage.get();
+  const token = authStore.getAccessToken();
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
   const res = await fetch(`${BASE_URL}${path}`, {
+    credentials: 'include',
     headers,
     ...options,
   });
