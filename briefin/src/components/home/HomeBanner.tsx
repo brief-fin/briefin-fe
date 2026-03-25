@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 
 const SLIDES = [
   {
@@ -37,29 +37,40 @@ const SLIDES = [
 
 const INTERVAL = 4000;
 
-const fadeUpStyle = (delay: number): React.CSSProperties => ({
+const fadeUpStyle = (delay: number): CSSProperties => ({
   animation: `bannerFadeUp 0.5s ease both`,
   animationDelay: `${delay}ms`,
 });
 
 export default function HomeBanner() {
   const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
+    if (paused) return;
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % SLIDES.length);
     }, INTERVAL);
     return () => clearInterval(timer);
-  }, []);
+  }, [paused, tick]);
 
-  const prev = () => setCurrent((c) => (c - 1 + SLIDES.length) % SLIDES.length);
-  const next = () => setCurrent((c) => (c + 1) % SLIDES.length);
+  const prev = () => {
+    setCurrent((c) => (c - 1 + SLIDES.length) % SLIDES.length);
+    setTick((t) => t + 1);
+  };
+  const next = () => {
+    setCurrent((c) => (c + 1) % SLIDES.length);
+    setTick((t) => t + 1);
+  };
 
   const slide = SLIDES[current];
 
   return (
     <section
       className="relative min-h-400pxr w-full overflow-hidden"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
       style={{
         background: 'linear-gradient(106deg, #F5F0E8 0%, #E0D8C8 60%, #F5F0E8 100%)',
       }}>
@@ -71,14 +82,15 @@ export default function HomeBanner() {
       `}</style>
 
       <div className="mx-auto flex h-full min-h-400pxr w-full max-w-1600pxr flex-row items-center">
-        {/* 왼쪽 텍스트 블럭 — key 변경 시 리마운트로 애니메이션 재실행 */}
-        <div key={current} className="ml-8 flex shrink-0 flex-col gap-6 px-48pxr py-16">
+        {/* 왼쪽 텍스트 블럭 */}
+        <div className="ml-8 flex shrink-0 flex-col gap-6 px-48pxr py-16">
           <h1
+            key={`title-${current}`}
             className="fonts-display whitespace-pre-line text-[#1A1D1F]"
             style={fadeUpStyle(0)}>
             {slide.title}
           </h1>
-          <ul className="flex flex-col gap-2">
+          <ul key={`bullets-${current}`} className="flex flex-col gap-2">
             {slide.bullets.map((b, i) => (
               <li
                 key={b}
@@ -89,7 +101,7 @@ export default function HomeBanner() {
             ))}
           </ul>
 
-          <div className="flex items-center gap-6" style={fadeUpStyle(240)}>
+          <div className="flex items-center gap-6">
             <div className="flex items-center overflow-hidden rounded-full border border-[#C4B49A] bg-[#C4B49A]">
               <button
                 onClick={prev}
@@ -111,6 +123,7 @@ export default function HomeBanner() {
         {/* 오른쪽 이미지 */}
         {slide.imageSrc && (
           <div
+            key={`image-${current}`}
             className="relative ml-auto mr-48 flex items-end justify-end self-stretch"
             style={fadeUpStyle(100)}>
             <img
