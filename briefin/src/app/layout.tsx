@@ -1,5 +1,6 @@
 import './globals.css';
 import type { Viewport } from 'next';
+import AuthSessionProvider from '@/providers/AuthSessionProvider';
 import QueryProvider from '@/providers/QueryProvider';
 
 export const viewport: Viewport = {
@@ -23,7 +24,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta property="og:url" content="https://github.com/brief-fin" />
       </head>
       <body>
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <AuthSessionProvider>{children}</AuthSessionProvider>
+        </QueryProvider>
       </body>
     </html>
   );

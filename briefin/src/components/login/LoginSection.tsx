@@ -49,11 +49,8 @@ export default function LoginSection() {
 
           {/* 비밀번호 */}
           <div className="mb-14pxr">
-            <div className="mb-6pxr flex flex-wrap items-center justify-between gap-8pxr">
+            <div className="mb-6pxr flex flex-wrap items-center gap-8pxr">
               <label className="text-xs font-bold tracking-[0.3px] text-text-secondary">비밀번호</label>
-              <Link href="#" className="text-xs font-semibold text-primary transition-opacity duration-150 hover:opacity-70">
-                비밀번호 찾기
-              </Link>
             </div>
             <input
               type="password"
