@@ -40,7 +40,7 @@ export function toNewsItem(item: NewsListItem): NewsItem {
     source: item.press,
     time: item.publishedAt,
     title: item.title,
-    summary: item.summary ? [item.summary] : [],
+    summary: item.summary ? item.summary.split('\n').filter(Boolean) : [],
     categories: item.category ? [item.category] : [],
     companies: item.relatedCompanies ?? [],
   };
