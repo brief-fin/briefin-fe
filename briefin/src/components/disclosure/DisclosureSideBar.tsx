@@ -12,12 +12,30 @@ export default function DisclosureSidebar({
   companyId,
 }: DisclosureSidebarProps) {
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // 초기 구독 상태 조회
   useEffect(() => {
-    if (!companyId) return;
-    getSubscriptionStatus(companyId).then(setIsSubscribed);
+    let cancelled = false;
+    if (!companyId) {
+      setLoading(false);
+      return;
+    }
+
+    getSubscriptionStatus(companyId)
+      .then((value) => {
+        if (!cancelled) setIsSubscribed(value);
+      })
+      .catch(() => {
+        if (!cancelled) setIsSubscribed(false);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [companyId]);
 
   const handleAlertClick = async () => {
