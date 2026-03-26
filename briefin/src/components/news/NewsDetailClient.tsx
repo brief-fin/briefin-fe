@@ -47,7 +47,7 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
           />
 
           <div className="mt-20pxr">
-            <NewsSummary summaries={data.summary ? [data.summary] : []} />
+            <NewsSummary summaries={data.summary ? data.summary.split('\n').filter(Boolean) : []} />
           </div>
 
           <NewsDetail content={data.content} />
