@@ -10,7 +10,7 @@ export interface CompanyDetail {
   changeRate: number;
   marketCap: number;
   isOverseas: boolean;
-  relatedCompanies: { id: number; name: string; ticker: string }[];
+  relatedCompanies: { id: number; name: string; ticker: string; logoUrl?: string }[];
 }
 
 // 기업 상세 조회
