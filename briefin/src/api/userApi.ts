@@ -7,6 +7,9 @@ export type { UserInfo, ScrapedNews, WatchlistCompany };
 export const fetchMyInfo = () =>
   apiClient.get<ApiResponse<UserInfo>>('/api/users/me').then((res) => res.result);
 
+// 회원 탈퇴
+export const deleteMyAccount = () => apiClient.delete<ApiResponse<unknown>>('/api/users/me');
+
 // 스크랩한 뉴스 목록
 export const fetchScrappedNews = (page = 1, size = 10) =>
   apiClient

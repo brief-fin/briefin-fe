@@ -4,18 +4,21 @@ interface WithdrawConfirmModalProps {
   open: boolean;
   onClose: () => void;
   onConfirm?: () => void;
+  isDeleting?: boolean;
+  errorMessage?: string | null;
 }
 
 export default function WithdrawConfirmModal({
   open,
   onClose,
   onConfirm,
+  isDeleting = false,
+  errorMessage,
 }: WithdrawConfirmModalProps) {
   if (!open) return null;
 
   const handleConfirm = () => {
     onConfirm?.();
-    onClose();
   };
 
   return (
@@ -48,14 +51,20 @@ export default function WithdrawConfirmModal({
         <button
           type="button"
           onClick={handleConfirm}
+          disabled={isDeleting}
           className="mt-24pxr flex h-49pxr w-full items-center justify-center rounded-button bg-semantic-red text-[15px] font-bold text-white shadow-modal transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-semantic-red"
         >
-          탈퇴하기
+          {isDeleting ? '탈퇴 처리 중...' : '탈퇴하기'}
         </button>
+
+        {errorMessage && (
+          <p className="mt-12pxr text-center text-[13px] font-semibold text-semantic-red">{errorMessage}</p>
+        )}
 
         <button
           type="button"
           onClick={onClose}
+          disabled={isDeleting}
           className="mt-16pxr w-full text-center text-[14px] font-normal text-text-muted transition-colors hover:text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-border"
         >
           취소
