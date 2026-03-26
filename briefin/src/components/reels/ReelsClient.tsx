@@ -6,21 +6,10 @@ import { useReelsFeed } from '@/hooks/useReelsFeed';
 import { MOCK_REELS } from '@/mocks/reelNews';
 
 export default function ReelsClient() {
-  const {
-    feedRef,
-    current,
-    progress,
-    goTo,
-    reel,
-    scrapped,
-    alerted,
-    toggleScrap,
-    toggleAlert,
-    reels,
-  } = useReelsFeed(MOCK_REELS);
+  const { feedRef, current, progress, goTo, reel, scrapped, toggleScrap, reels } = useReelsFeed(MOCK_REELS);
 
   return (
-    <div className="flex h-[min(640px,calc(100dvh-240px))] w-full min-h-[min(640px,calc(100dvh-240px))] overflow-hidden rounded-card border border-surface-border bg-surface-white shadow-hero-card lg:h-[min(720px,calc(100dvh-200px))] lg:min-h-[min(720px,calc(100dvh-200px))]">
+    <div className="flex h-[min(640px,calc(100dvh-240px))] min-h-[min(640px,calc(100dvh-240px))] w-full overflow-hidden rounded-card border border-surface-border bg-surface-white shadow-hero-card lg:h-[min(720px,calc(100dvh-200px))] lg:min-h-[min(720px,calc(100dvh-200px))]">
       <div className="flex h-full w-full min-w-0 items-stretch">
         <ReelFeedPanel
           feedRef={feedRef}
@@ -29,9 +18,7 @@ export default function ReelsClient() {
           progress={progress}
           goTo={goTo}
           scrapped={scrapped}
-          alerted={alerted}
           onToggleScrap={toggleScrap}
-          onToggleAlert={toggleAlert}
         />
         <ReelsRelatedPanel reel={reel} reels={reels} onGoTo={goTo} />
       </div>

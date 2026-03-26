@@ -9,7 +9,7 @@ export interface ReelsRelatedPanelProps {
 
 export default function ReelsRelatedPanel({ reel, reels, onGoTo }: ReelsRelatedPanelProps) {
   return (
-    <div className="hidden min-h-0 w-full shrink-0 flex-col gap-16pxr overflow-y-auto bg-surface-muted/50 px-24pxr py-28pxr lg:flex lg:w-[min(100%,520px)] lg:min-w-[400px] xl:min-w-[460px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+    <div className="hidden min-h-0 w-full shrink-0 flex-col gap-16pxr overflow-y-auto bg-surface-muted/50 px-24pxr py-28pxr [-ms-overflow-style:none] [scrollbar-width:none] lg:flex lg:w-[min(100%,520px)] lg:min-w-400pxr xl:min-w-460pxr [&::-webkit-scrollbar]:hidden">
       <p className="fonts-overline text-[11px] tracking-wide">관련 기업</p>
       <div className="cursor-pointer rounded-hero border border-surface-border bg-surface-white p-20pxr shadow-hero-card transition-colors hover:bg-primary-light/40">
         <p className="text-[17px] font-bold leading-snug text-text-primary">{reel.company.name}</p>
