@@ -34,9 +34,17 @@ export async function subscribePush(companyId: number): Promise<boolean> {
     throw new Error('구독 키 정보를 가져올 수 없습니다.');
   }
 
+  if (!keys?.p256dh || !keys?.auth) {
+    throw new Error('구독 키 정보를 가져올 수 없습니다.');
+  }
+
+  if (!subscriptionJson.endpoint) {
+    throw new Error('구독 endpoint를 가져올 수 없습니다.');
+  }
+
   await postSubscribe({
     companyId,
-    endpoint: subscriptionJson.endpoint ?? '',
+    endpoint: subscriptionJson.endpoint,
     p256dh: keys.p256dh,
     auth: keys.auth,
   });
