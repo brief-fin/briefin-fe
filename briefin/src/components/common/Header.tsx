@@ -52,7 +52,7 @@ export default function Header() {
   return (
     <header className="w-full min-w-0 shrink-0 border-b border-[#E5E7EB] bg-white">
       <div className="mx-auto max-w-1600pxr">
-        <div className="flex min-h-16 min-w-0 flex-wrap items-center justify-between gap-3 px-48pxr py-12pxr">
+        <div className="flex min-h-16 min-w-0 flex-wrap items-center justify-between gap-3 px-130pxr py-20pxr">
           <div className="flex min-w-0 flex-wrap items-center gap-4 gap-y-2">
             <Link href="/" className="flex shrink-0 items-center gap-10pxr">
               <Image

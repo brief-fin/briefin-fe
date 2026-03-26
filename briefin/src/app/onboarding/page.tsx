@@ -90,7 +90,7 @@ export default function OnboardingPage() {
           <button
             type="button"
             onClick={goNext}
-            className="flex h-48pxr w-full items-center justify-center rounded-button bg-primary text-[14px] font-bold text-white shadow-sm transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-primary sm:h-50pxr sm:text-[15px]">
+            className="flex h-130pxr w-full items-center justify-center rounded-button bg-primary text-[14px] font-bold text-white shadow-sm transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-primary sm:h-50pxr sm:text-[15px]">
             시작하기
           </button>
           <button

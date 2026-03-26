@@ -83,7 +83,7 @@ export default function HomeBanner() {
 
       <div className="mx-auto flex h-full min-h-400pxr w-full max-w-1600pxr flex-row items-center">
         {/* 왼쪽 텍스트 블럭 */}
-        <div className="ml-8 flex shrink-0 flex-col gap-6 px-48pxr py-16">
+        <div className="ml-8 flex shrink-0 flex-col gap-6 px-130pxr py-16">
           <h1
             key={`title-${current}`}
             className="fonts-display whitespace-pre-line text-[#1A1D1F]"
@@ -103,17 +103,13 @@ export default function HomeBanner() {
 
           <div className="flex items-center gap-6">
             <div className="flex items-center overflow-hidden rounded-full border border-[#C4B49A] bg-[#C4B49A]">
-              <button
-                onClick={prev}
-                className="flex h-8 w-8 items-center justify-center text-white hover:bg-[#B8A88E]">
+              <button onClick={prev} className="flex h-8 w-8 items-center justify-center text-white hover:bg-[#B8A88E]">
                 ‹
               </button>
               <span className="border-x border-[#B8A88E] px-3 text-[13px] font-bold text-white">
                 {current + 1} / {SLIDES.length}
               </span>
-              <button
-                onClick={next}
-                className="flex h-8 w-8 items-center justify-center text-white hover:bg-[#B8A88E]">
+              <button onClick={next} className="flex h-8 w-8 items-center justify-center text-white hover:bg-[#B8A88E]">
                 ›
               </button>
             </div>
@@ -129,7 +125,7 @@ export default function HomeBanner() {
             <img
               src={slide.imageSrc}
               alt="BrieFin 서비스 소개"
-              className="h-auto max-h-320pxr w-auto object-contain object-bottom-right"
+              className="object-bottom-right h-auto max-h-320pxr w-auto object-contain"
             />
           </div>
         )}
