@@ -1,49 +1,135 @@
-import Link from 'next/link';
+'use client';
 
-type HomeBannerProps = {
-  /** 우측 이미지 경로 (public 기준). 없으면 빈 영역 */
-  imageSrc?: string;
-  /** 서비스 소개 버튼 링크 */
-  serviceIntroHref?: string;
-};
+import { useEffect, useState, type CSSProperties } from 'react';
 
-export default function HomeBanner({
-  imageSrc = '/images/hero-banner.svg',
-  serviceIntroHref = '/about',
-}: HomeBannerProps) {
+const SLIDES = [
+  {
+    title: '투자뉴스, 핵심만\n골라드려요',
+    bullets: ['공시·뉴스·실적을 AI가 요약해', '내 관심 종목 소식만 골라 알려드려요'],
+    href: '/about',
+    imageSrc: '/images/hero-banner.svg',
+  },
+  {
+    title: '어렵고 긴 뉴스,\n핵심만 남겼어요',
+    bullets: ['주요 뉴스를 3줄로 요약', '관심 종목 뉴스만 골라서 보여드려요'],
+    href: '/news',
+    imageSrc: '/images/banner-news.svg',
+  },
+  {
+    title: '복잡한 공시,\n3줄로 끝냅니다',
+    bullets: ['DART 공시를 쉬운 말로 바꿔드려요', '계약·실적·지분 변동 핵심만 추려드려요'],
+    href: '/disclosure',
+    imageSrc: '/images/banner-disclosure.svg',
+  },
+  {
+    title: '오늘 내 종목\n이슈는?',
+    bullets: ['관심 기업 뉴스를 한곳에서', '매일 아침 맞춤 브리핑을 받아보세요'],
+    href: '/feed',
+    imageSrc: '/images/banner-feed.svg',
+  },
+  {
+    title: '스크롤 한 번에\n오늘의 시장 흐름',
+    bullets: ['숏폼으로 빠르게 읽는 투자 뉴스', '출퇴근길 3분, 오늘의 브리핑 완료'],
+    href: '/reels',
+    imageSrc: '/images/banner-reels.svg',
+  },
+];
+
+const INTERVAL = 4000;
+
+const fadeUpStyle = (delay: number): CSSProperties => ({
+  animation: `bannerFadeUp 0.5s ease both`,
+  animationDelay: `${delay}ms`,
+});
+
+export default function HomeBanner() {
+  const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [tick, setTick] = useState(0);
+
+  useEffect(() => {
+    if (paused) return;
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % SLIDES.length);
+    }, INTERVAL);
+    return () => clearInterval(timer);
+  }, [paused, tick]);
+
+  const prev = () => {
+    setCurrent((c) => (c - 1 + SLIDES.length) % SLIDES.length);
+    setTick((t) => t + 1);
+  };
+  const next = () => {
+    setCurrent((c) => (c + 1) % SLIDES.length);
+    setTick((t) => t + 1);
+  };
+
+  const slide = SLIDES[current];
+
   return (
     <section
-      className="relative my-24pxr flex min-h-280pxr w-full flex-col overflow-hidden rounded-hero md:my-8 md:flex-row md:items-start md:justify-between"
+      className="relative min-h-400pxr w-full overflow-hidden"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
       style={{
         background: 'linear-gradient(106deg, #F5F0E8 0%, #E0D8C8 60%, #F5F0E8 100%)',
       }}>
-      <div className="flex flex-col justify-center gap-6 px-8 py-10 md:px-12 md:py-12">
-        <h1 className="fonts-display max-w-320pxr text-[#1A1D1F]">
-          투자뉴스, 핵심만
-          <br />
-          골라드려요
-        </h1>
-        <p className="leading-26pxr max-w-248pxr text-[16px] font-normal text-[#4B5563]">
-          공시·뉴스·실적을 AI가 요약해
-          <br />내 관심 종목 소식만 골라 알려드려요.
-        </p>
-        <Link
-          href={serviceIntroHref}
-          className="leading-18pxr flex h-49pxr w-full max-w-300pxr items-center justify-center rounded-button border border-[#E5E7EB] bg-white text-[15px] font-bold text-[#4B5563] transition-colors hover:bg-[#F9FAFB]">
-          서비스 소개
-        </Link>
-      </div>
+      <style>{`
+        @keyframes bannerFadeUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
 
-      {imageSrc && (
-        <div className="relative mt-6 flex h-200pxr shrink-0 items-end justify-end overflow-hidden md:mt-0 md:h-280pxr md:max-w-[55%] md:flex-1 md:self-end lg:h-320pxr">
-          {/* 이미지는 높이를 채우지 않고, items-end로 컨테이너 맨 아래에 붙음 */}
-          <img
-            src={imageSrc}
-            alt="BrieFin 서비스 소개"
-            className="max-h-full w-auto max-w-full object-contain object-[right_bottom]"
-          />
+      <div className="mx-auto flex h-full min-h-400pxr w-full max-w-1600pxr flex-row items-center">
+        {/* 왼쪽 텍스트 블럭 */}
+        <div className="ml-8 flex shrink-0 flex-col gap-6 px-130pxr py-16">
+          <h1
+            key={`title-${current}`}
+            className="fonts-display whitespace-pre-line text-[#1A1D1F]"
+            style={fadeUpStyle(0)}>
+            {slide.title}
+          </h1>
+          <ul key={`bullets-${current}`} className="flex flex-col gap-2">
+            {slide.bullets.map((b, i) => (
+              <li
+                key={b}
+                className="text-[16px] font-normal leading-relaxed text-[#4B5563]"
+                style={fadeUpStyle(80 + i * 80)}>
+                {b}
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex items-center gap-6">
+            <div className="flex items-center overflow-hidden rounded-full border border-[#C4B49A] bg-[#C4B49A]">
+              <button onClick={prev} className="flex h-8 w-8 items-center justify-center text-white hover:bg-[#B8A88E]">
+                ‹
+              </button>
+              <span className="border-x border-[#B8A88E] px-3 text-[13px] font-bold text-white">
+                {current + 1} / {SLIDES.length}
+              </span>
+              <button onClick={next} className="flex h-8 w-8 items-center justify-center text-white hover:bg-[#B8A88E]">
+                ›
+              </button>
+            </div>
+          </div>
         </div>
-      )}
+
+        {/* 오른쪽 이미지 */}
+        {slide.imageSrc && (
+          <div
+            key={`image-${current}`}
+            className="relative ml-auto mr-48 flex items-end justify-end self-stretch"
+            style={fadeUpStyle(100)}>
+            <img
+              src={slide.imageSrc}
+              alt="BrieFin 서비스 소개"
+              className="object-bottom-right h-auto max-h-320pxr w-auto object-contain"
+            />
+          </div>
+        )}
+      </div>
     </section>
   );
 }

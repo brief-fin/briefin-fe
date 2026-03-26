@@ -1,30 +1,14 @@
 import { apiClient, type ApiResponse } from './client';
+import type { UserInfo, ScrapedNews, WatchlistCompany } from '@/types/mypage';
 
-export interface UserInfo {
-  userId: string;
-  email: string;
-  createdAt: string;
-}
-
-export interface ScrapedNews {
-  newsId: number;
-  title: string;
-  summary: string;
-  source: string;
-  scrapedAt: string;
-}
-
-export interface WatchlistCompany {
-  companyId: number;
-  companyName: string;
-  ticker: string;
-  logoUrl: string;
-  addedAt: string;
-}
+export type { UserInfo, ScrapedNews, WatchlistCompany };
 
 // 내 정보 조회
 export const fetchMyInfo = () =>
   apiClient.get<ApiResponse<UserInfo>>('/api/users/me').then((res) => res.result);
+
+// 회원 탈퇴
+export const deleteMyAccount = () => apiClient.delete<ApiResponse<unknown>>('/api/users/me');
 
 // 스크랩한 뉴스 목록
 export const fetchScrappedNews = (page = 1, size = 10) =>

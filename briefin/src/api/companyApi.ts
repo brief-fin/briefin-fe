@@ -1,17 +1,7 @@
 import { apiClient, type ApiResponse } from './client';
+import type { CompanyDetail } from '@/types/company';
 
-export interface CompanyDetail {
-  id: number;
-  name: string;
-  ticker: string;
-  sector: string;
-  logoUrl: string;
-  currentPrice: number;
-  changeRate: number;
-  marketCap: number;
-  isOverseas: boolean;
-  relatedCompanies: { id: number; name: string; ticker: string; logoUrl?: string }[];
-}
+export type { CompanyDetail };
 
 // 기업 상세 조회
 export const fetchCompanyDetail = (id: number) =>
