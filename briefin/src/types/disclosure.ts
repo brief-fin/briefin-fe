@@ -6,6 +6,7 @@ export type DisclosureDetail = {
   source?: string;
   reportNumber?: string;
   companyName?: string;
+  companyId: number;
   summaryPoints: string[];
   description: string;
   details: {
@@ -61,6 +62,7 @@ export interface DisclosureListProps {
 export interface DisclosureSidebarProps {
   recentDisclosures: DisclosureListItem[];
   companyName?: string;
+  companyId: number;
   onAlertClick?: () => void;
 }
 
