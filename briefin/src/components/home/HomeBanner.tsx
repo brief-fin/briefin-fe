@@ -8,30 +8,49 @@ const SLIDES = [
     bullets: ['공시·뉴스·실적을 AI가 요약해', '내 관심 종목 소식만 골라 알려드려요'],
     href: '/about',
     imageSrc: '/images/hero-banner.svg',
+    imageStyle: { maxHeight: '320px' },
+    background: 'linear-gradient(106deg, #EFF6FF 0%, #BFDBFE 60%, #EFF6FF 100%)',
+    navColor: '#1E3A8A',
+    navHoverColor: '#1E40AF',
   },
   {
     title: '어렵고 긴 뉴스,\n핵심만 남겼어요',
     bullets: ['주요 뉴스를 3줄로 요약', '관심 종목 뉴스만 골라서 보여드려요'],
     href: '/news',
-    imageSrc: '/images/banner-news.svg',
+    imageSrc: '/images/disclo.svg',
+    imageStyle: { maxHeight: '450px' },
+    imageContainerClass: 'absolute bottom-0 right-16 flex items-end justify-end',
+    background: 'linear-gradient(106deg, #F0FDF4 0%, #DCFCE7 60%, #F0FDF4 100%)',
+    navColor: '#166534',
+    navHoverColor: '#15803D',
   },
   {
     title: '복잡한 공시,\n3줄로 끝냅니다',
     bullets: ['DART 공시를 쉬운 말로 바꿔드려요', '계약·실적·지분 변동 핵심만 추려드려요'],
     href: '/disclosure',
-    imageSrc: '/images/banner-disclosure.svg',
+    background: 'linear-gradient(106deg, #FAF5FF 0%, #EDE9FE 60%, #FAF5FF 100%)',
+    navColor: '#6B21A8',
+    navHoverColor: '#7E22CE',
   },
   {
     title: '오늘 내 종목\n이슈는?',
     bullets: ['관심 기업 뉴스를 한곳에서', '매일 아침 맞춤 브리핑을 받아보세요'],
     href: '/feed',
-    imageSrc: '/images/banner-feed.svg',
+    imageSrc: '/images/news.svg',
+    imageStyle: { maxHeight: '450px', transform: 'translateY(40px)' },
+    background: 'linear-gradient(106deg, #FFFBEB 0%, #FEF3C7 60%, #FFFBEB 100%)',
+    navColor: '#92400E',
+    navHoverColor: '#B45309',
   },
   {
     title: '스크롤 한 번에\n오늘의 시장 흐름',
     bullets: ['숏폼으로 빠르게 읽는 투자 뉴스', '출퇴근길 3분, 오늘의 브리핑 완료'],
     href: '/reels',
-    imageSrc: '/images/banner-reels.svg',
+    imageSrc: '/images/graph.svg',
+    imageStyle: { maxHeight: '450px', transform: 'translateY(40px)' },
+    background: 'linear-gradient(106deg, #F0FDFA 0%, #CCFBF1 60%, #F0FDFA 100%)',
+    navColor: '#134E4A',
+    navHoverColor: '#0F766E',
   },
 ];
 
@@ -71,9 +90,7 @@ export default function HomeBanner() {
       className="relative min-h-400pxr w-full overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      style={{
-        background: 'linear-gradient(106deg, #F5F0E8 0%, #E0D8C8 60%, #F5F0E8 100%)',
-      }}>
+      style={{ background: slide.background }}>
       <style>{`
         @keyframes bannerFadeUp {
           from { opacity: 0; transform: translateY(20px); }
@@ -86,7 +103,7 @@ export default function HomeBanner() {
         <div className="ml-8 flex shrink-0 flex-col gap-6 px-130pxr py-16">
           <h1
             key={`title-${current}`}
-            className="fonts-display whitespace-pre-line text-[#1A1D1F]"
+            className="fonts-display whitespace-pre-line text-[#111827]"
             style={fadeUpStyle(0)}>
             {slide.title}
           </h1>
@@ -102,14 +119,27 @@ export default function HomeBanner() {
           </ul>
 
           <div className="flex items-center gap-6">
-            <div className="flex items-center overflow-hidden rounded-full border border-[#C4B49A] bg-[#C4B49A]">
-              <button onClick={prev} className="flex h-8 w-8 items-center justify-center text-white hover:bg-[#B8A88E]">
+            <div
+              className="flex items-center overflow-hidden rounded-full"
+              style={{ border: `1px solid ${slide.navColor}`, background: slide.navColor }}>
+              <button
+                onClick={prev}
+                className="flex h-8 w-8 items-center justify-center text-white transition-colors"
+                style={{ ['--hover-bg' as string]: slide.navHoverColor }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = slide.navHoverColor)}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}>
                 ‹
               </button>
-              <span className="border-x border-[#B8A88E] px-3 text-[13px] font-bold text-white">
+              <span
+                className="px-3 text-[13px] font-bold text-white"
+                style={{ borderLeft: `1px solid ${slide.navHoverColor}`, borderRight: `1px solid ${slide.navHoverColor}` }}>
                 {current + 1} / {SLIDES.length}
               </span>
-              <button onClick={next} className="flex h-8 w-8 items-center justify-center text-white hover:bg-[#B8A88E]">
+              <button
+                onClick={next}
+                className="flex h-8 w-8 items-center justify-center text-white transition-colors"
+                onMouseEnter={(e) => (e.currentTarget.style.background = slide.navHoverColor)}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}>
                 ›
               </button>
             </div>
@@ -120,12 +150,13 @@ export default function HomeBanner() {
         {slide.imageSrc && (
           <div
             key={`image-${current}`}
-            className="relative ml-auto mr-48 flex items-end justify-end self-stretch"
+            className={slide.imageContainerClass ?? 'absolute bottom-0 right-48 flex items-end justify-end'}
             style={fadeUpStyle(100)}>
             <img
               src={slide.imageSrc}
               alt="BrieFin 서비스 소개"
-              className="object-bottom-right h-auto max-h-320pxr w-auto object-contain"
+              className="h-auto w-auto object-contain"
+              style={slide.imageStyle}
             />
           </div>
         )}

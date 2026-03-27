@@ -22,6 +22,6 @@ export const MOCK_FEED_NEWS: NewsItem[] = [
 ];
 
 export const MOCK_WATCHLIST: Company[] = [
-  { id: 1, name: '삼성전자', sector: '반도체 · 전자', change: '+1.3%', isRise: true, emoji: '📱', bgColor: 'bg-[#eff6ff]' },
-  { id: 2, name: '현대자동차', sector: '자동차', change: '+0.8%', isRise: true, emoji: '🚗', bgColor: 'bg-[#fff7ed]' },
+  { id: 1, name: '삼성전자', sector: '반도체 · 전자', change: '+1.3%', isRise: true, emoji: '📱', bgColor: 'bg-[#EFF6FF]' },
+  { id: 2, name: '현대자동차', sector: '자동차', change: '+0.8%', isRise: true, emoji: '🚗', bgColor: 'bg-[#DBEAFE]' },
 ];

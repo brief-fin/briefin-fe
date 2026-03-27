@@ -39,6 +39,6 @@ export const MOCK_NEWS: NewsItem[] = [
 ];
 
 export const MOCK_RELATED_COMPANIES: RelatedCompany[] = [
-  { id: 1, name: 'SK하이닉스', sector: '반도체', change: '-0.4%', isRise: false, emoji: '💾', bgColor: 'bg-[#f0fdf4]' },
-  { id: 2, name: '삼성SDI', sector: '배터리', change: '+0.6%', isRise: true, emoji: '🔵', bgColor: 'bg-[#eff6ff]' },
+  { id: 1, name: 'SK하이닉스', sector: '반도체', change: '-0.4%', isRise: false, emoji: '💾', bgColor: 'bg-[#DBEAFE]' },
+  { id: 2, name: '삼성SDI', sector: '배터리', change: '+0.6%', isRise: true, emoji: '🔵', bgColor: 'bg-[#EFF6FF]' },
 ];

@@ -18,7 +18,7 @@ export default function CompanyHero({ industry, name, stats, isWatchlisted = fal
   return (
     <div
       className="rounded-hero p-16pxr md:px-40pxr md:py-36pxr"
-      style={{ background: 'linear-gradient(135deg, #F5F0E8 0%, #E0D8C8 100%)' }}>
+      style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #EFF6FF 100%)' }}>
 
       {/* 업종 + 관심 등록 */}
       <div className="flex items-center justify-between gap-8pxr">
