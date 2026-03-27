@@ -8,7 +8,7 @@ export default function AlertBanner({ title, description, buttonLabel, buttonHre
   return (
     <div
       className="rounded-card p-24pxr md:p-28pxr"
-      style={{ background: 'linear-gradient(135deg, #2C4A8F 0%, #1A3270 100%)' }}>
+      style={{ background: 'linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%)' }}>
       <p className="text-[15px] font-black text-white">{title}</p>
       <p className="mt-10pxr text-[13px] leading-relaxed text-white/85">{description}</p>
       {buttonHref ? (

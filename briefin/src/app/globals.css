@@ -2,6 +2,39 @@
 @import 'tailwindcss';
 @config '../../tailwind.config.ts';
 
+:root {
+  /* Primary (브랜드 블루) */
+  --color-primary: #1E3A8A;
+  --color-primary-hover: #1E40AF;
+  --color-primary-light: #DBEAFE;
+  --color-primary-accent: #BFDBFE;
+  --color-primary-subtle: #EFF6FF;
+
+  /* Sidebar */
+  --color-sidebar-emphasis: #93C5FD;
+  --color-sidebar-text: #DBEAFE;
+  --color-sidebar-deco: rgba(255, 255, 255, 0.05);
+
+  /* Surface / Background */
+  --color-surface-cream: #FDFBF7;
+  --color-surface-white: #FFFFFF;
+  --color-surface-page: #F3F4F6;
+  --color-surface-border: #F1F5F9;
+
+  /* Text */
+  --color-text-title: #111827;
+  --color-text-section: #1F2937;
+  --color-text-body: #4B5563;
+  --color-text-sub: #6B7280;
+  --color-text-label: #9CA3AF;
+  --color-text-divider: #D1D5DB;
+
+  /* Shadow / Border */
+  --shadow-slide: rgba(0, 0, 0, 0.10);
+  --shadow-card-border: rgba(0, 0, 0, 0.03);
+  --shadow-card: rgba(0, 0, 0, 0.05);
+}
+
 @layer base {
   * {
     box-sizing: border-box;
@@ -14,7 +47,7 @@
     width: 100%;
     height: 100dvh;
     margin: 0 auto;
-    background-color: #f5f6f8;
+    background-color: var(--color-surface-page);
     -ms-overflow-style: none;
     position: relative;
   }
@@ -69,7 +102,7 @@
 
 @layer components {
   .fonts-display {
-    color: #1a1d1f;
+    color: var(--color-text-title);
     font-size: 36px;
     font-style: normal;
     font-weight: 900;
@@ -78,7 +111,7 @@
   }
 
   .fonts-heading1 {
-    color: #1a1d1f;
+    color: var(--color-text-title);
     font-size: 32px;
     font-style: normal;
     font-weight: 900;
@@ -87,7 +120,7 @@
   }
 
   .fonts-heading2 {
-    color: #1a1d1f;
+    color: var(--color-text-title);
     font-size: 28px;
     font-style: normal;
     font-weight: 900;
@@ -96,7 +129,7 @@
   }
 
   .fonts-heading3 {
-    color: #1a1d1f;
+    color: var(--color-text-title);
     font-size: 22px;
     font-style: normal;
     font-weight: 900;
@@ -105,7 +138,7 @@
   }
 
   .fonts-cardTitle {
-    color: #1a1d1f;
+    color: var(--color-text-section);
     font-size: 17px;
     font-style: normal;
     font-weight: 700;
@@ -114,7 +147,7 @@
   }
 
   .fonts-subTitle {
-    color: #1a1d1f;
+    color: var(--color-text-section);
     font-size: 15px;
     font-style: normal;
     font-weight: 700;
@@ -122,7 +155,7 @@
   }
 
   .fonts-body {
-    color: #4b5563;
+    color: var(--color-text-body);
     font-size: 15px;
     font-style: normal;
     font-weight: 400;
@@ -130,7 +163,7 @@
   }
 
   .fonts-bodySmall {
-    color: #4b5563;
+    color: var(--color-text-body);
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -145,7 +178,7 @@
   }
 
   .fonts-caption {
-    color: #9ca3af;
+    color: var(--color-text-label);
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
@@ -153,7 +186,7 @@
   }
 
   .fonts-micro {
-    color: #9ca3af;
+    color: var(--color-text-label);
     font-size: 11px;
     font-style: normal;
     font-weight: 700;
@@ -162,7 +195,7 @@
   }
 
   .fonts-overline {
-    color: #9ca3af;
+    color: var(--color-text-label);
     font-size: 10px;
     font-style: normal;
     font-weight: 900;
