@@ -27,7 +27,7 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
     throw err;
   }
 
-  const summaryPoints = data.summary ? data.summary.split('\n').filter(Boolean) : [];
+  const summaryPoints = data.summary ? data.summary.split(/\\n|\n/).filter(Boolean) : [];
 
   let recentDisclosures: DisclosureListItem[] = [];
   try {

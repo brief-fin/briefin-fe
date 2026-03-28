@@ -42,6 +42,7 @@ export default async function DisclosurePage() {
             title="🔔 공시 알림 받기"
             description="관심 기업의 새 공시를 실시간으로 받아보세요."
             buttonLabel="알림 설정하기"
+            buttonHref="/mypage?tab=watchlist"
           />
         </aside>
       </div>

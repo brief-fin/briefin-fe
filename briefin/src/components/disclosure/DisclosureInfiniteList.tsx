@@ -13,7 +13,7 @@ function toCardItem(item: DisclosureApiItem): DisclosureListItem {
     date: item.disclosedAt,
     category: item.companyName ?? '',
     companyName: item.companyName,
-    summaryPoints: item.summary ? item.summary.split('\n').filter(Boolean) : [],
+    summaryPoints: item.summary ? item.summary.split(/\\n|\n/).filter(Boolean) : [],
   };
 }
 
