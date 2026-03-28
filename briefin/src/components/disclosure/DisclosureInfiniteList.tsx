@@ -3,25 +3,9 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import DisclosureCard from '@/components/disclosure/DisclosureCard';
 import { fetchDisclosureList } from '@/api/disclosureApi';
-import type { DisclosureApiItem } from '@/types/disclosure';
+import type { DisclosureApiItem, DisclosureInfiniteListProps, DisclosureListItem } from '@/types/disclosure';
 
-interface Props {
-  initialItems: DisclosureCardItem[];
-  initialPage: number;
-  totalPages: number;
-  companyId?: number;
-}
-
-interface DisclosureCardItem {
-  id: string;
-  title: string;
-  date: string;
-  category: string;
-  companyName: string;
-  summaryPoints: string[];
-}
-
-function toCardItem(item: DisclosureApiItem): DisclosureCardItem {
+function toCardItem(item: DisclosureApiItem): DisclosureListItem {
   return {
     id: String(item.disclosureId),
     title: item.title,
@@ -32,10 +16,9 @@ function toCardItem(item: DisclosureApiItem): DisclosureCardItem {
   };
 }
 
-export default function DisclosureInfiniteList({ initialItems, initialPage, totalPages, companyId }: Props) {
-  const [items, setItems] = useState<DisclosureCardItem[]>(initialItems);
+export default function DisclosureInfiniteList({ initialItems, initialPage, totalPages, companyId }: DisclosureInfiniteListProps) {
+  const [items, setItems] = useState<DisclosureListItem[]>(initialItems);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(initialPage < totalPages - 1);
   const isFetchingRef = useRef(false);
   const pageRef = useRef(initialPage);
   const hasMoreRef = useRef(initialPage < totalPages - 1);
@@ -49,9 +32,7 @@ export default function DisclosureInfiniteList({ initialItems, initialPage, tota
       const nextPage = pageRef.current + 1;
       const data = await fetchDisclosureList({ companyId, page: nextPage, size: 10 });
       pageRef.current = nextPage;
-      const more = nextPage < data.totalPages - 1;
-      hasMoreRef.current = more;
-      setHasMore(more);
+      hasMoreRef.current = nextPage < data.totalPages - 1;
       setItems((prev) => {
         const existingIds = new Set(prev.map((i) => i.id));
         const newItems = data.content.map(toCardItem).filter((i) => !existingIds.has(i.id));
@@ -59,7 +40,6 @@ export default function DisclosureInfiniteList({ initialItems, initialPage, tota
       });
     } catch {
       hasMoreRef.current = false;
-      setHasMore(false);
     } finally {
       isFetchingRef.current = false;
       setIsLoading(false);
@@ -96,9 +76,6 @@ export default function DisclosureInfiniteList({ initialItems, initialPage, tota
         </div>
       )}
 
-      {!hasMore && items.length > 0 && (
-        <p className="py-8 text-center text-sm text-text-secondary">모든 공시를 불러왔습니다.</p>
-      )}
     </div>
   );
 }

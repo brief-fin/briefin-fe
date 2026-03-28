@@ -99,3 +99,10 @@ export interface DisclosureSidebarProps {
 export interface DisclosureSummaryProps {
   summaryPoints: string[];
 }
+
+export interface DisclosureInfiniteListProps {
+  initialItems: DisclosureListItem[];
+  initialPage: number;
+  totalPages: number;
+  companyId?: number;
+}

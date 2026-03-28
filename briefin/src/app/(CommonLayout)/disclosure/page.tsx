@@ -1,17 +1,10 @@
 import AlertBanner from '@/components/common/AlertBanner';
 import DisclosureInfiniteList from '@/components/disclosure/DisclosureInfiniteList';
 import { fetchDisclosureList } from '@/api/disclosureApi';
-import type { DisclosureApiItem } from '@/types/disclosure';
+import type { DisclosureApiItem, DisclosureListItem } from '@/types/disclosure';
 
 export default async function DisclosurePage() {
-  let initialItems: {
-    id: string;
-    title: string;
-    date: string;
-    category: string;
-    companyName: string;
-    summaryPoints: string[];
-  }[] = [];
+  let initialItems: DisclosureListItem[] = [];
   let totalPages = 1;
 
   try {
