@@ -46,31 +46,6 @@ export type DisclosureRecentApiItem = {
 // View Types
 // ========================
 
-export type DisclosureDetail = {
-  id: string;
-  title: string;
-  category: string;
-  date: string;
-  source?: string;
-  reportNumber?: string;
-  companyName?: string;
-  companyId: number;
-  summaryPoints: string[];
-  description: string;
-  details: {
-    partner: string;
-    content: string;
-    amount: string;
-    period: string;
-    ratio: string;
-    reportType?: string;
-  };
-  descriptionAfterTable?: string;
-  url: string;
-  documentUrl?: string;
-  relatedCompanyNames?: string[];
-};
-
 export type DisclosureListItem = {
   id: string;
   title: string;
@@ -98,12 +73,15 @@ export interface DisclosureCardProps {
   sourceLabel?: string;
 }
 
-export interface DisclosureDetailsProps {
-  details: DisclosureDetail['details'];
-}
-
 export interface DisclosureHeaderProps {
-  data: Pick<DisclosureDetail, 'category' | 'date' | 'source' | 'title' | 'companyName' | 'reportNumber'>;
+  data: {
+    category: string;
+    date: string;
+    source?: string;
+    title: string;
+    companyName?: string;
+    reportNumber?: string;
+  };
 }
 
 export interface DisclosureListProps {
@@ -119,9 +97,5 @@ export interface DisclosureSidebarProps {
 }
 
 export interface DisclosureSummaryProps {
-  summaryPoints: DisclosureDetail['summaryPoints'];
-}
-
-export interface RelatedCompaniesProps {
-  relatedCompanyNames: string[];
+  summaryPoints: string[];
 }

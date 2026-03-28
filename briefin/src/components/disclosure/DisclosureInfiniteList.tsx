@@ -34,27 +34,37 @@ function toCardItem(item: DisclosureApiItem): DisclosureCardItem {
 
 export default function DisclosureInfiniteList({ initialItems, initialPage, totalPages, companyId }: Props) {
   const [items, setItems] = useState<DisclosureCardItem[]>(initialItems);
-  const [page, setPage] = useState(initialPage);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(initialPage < totalPages - 1);
+  const isFetchingRef = useRef(false);
+  const pageRef = useRef(initialPage);
+  const hasMoreRef = useRef(initialPage < totalPages - 1);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   const loadMore = useCallback(async () => {
-    if (isLoading || !hasMore) return;
+    if (isFetchingRef.current || !hasMoreRef.current) return;
+    isFetchingRef.current = true;
     setIsLoading(true);
     try {
-      const nextPage = page + 1;
-      const data = await fetchDisclosureList({ companyId, page: nextPage, size: 20 });
-      setItems((prev) => [...prev, ...data.content.map(toCardItem)]);
-      setPage(nextPage);
-      setHasMore(nextPage < data.totalPages - 1);
+      const nextPage = pageRef.current + 1;
+      const data = await fetchDisclosureList({ companyId, page: nextPage, size: 10 });
+      pageRef.current = nextPage;
+      const more = nextPage < data.totalPages - 1;
+      hasMoreRef.current = more;
+      setHasMore(more);
+      setItems((prev) => {
+        const existingIds = new Set(prev.map((i) => i.id));
+        const newItems = data.content.map(toCardItem).filter((i) => !existingIds.has(i.id));
+        return [...prev, ...newItems];
+      });
     } catch {
-      // 에러 시 무한스크롤 중단
+      hasMoreRef.current = false;
       setHasMore(false);
     } finally {
+      isFetchingRef.current = false;
       setIsLoading(false);
     }
-  }, [isLoading, hasMore, page, companyId]);
+  }, [companyId]);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
