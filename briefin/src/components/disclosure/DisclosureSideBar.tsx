@@ -82,7 +82,7 @@ export default function DisclosureSidebar({
                 className="block px-22pxr py-16pxr transition-colors hover:bg-surface-bg">
                 <p className="line-clamp-2 text-[14px] font-bold text-text-primary">{item.title}</p>
                 <p className="fonts-caption mt-4pxr">
-                  {item.date} · {item.category}
+                  {[item.date, item.category].filter(Boolean).join(' · ')}
                 </p>
               </Link>
             </li>

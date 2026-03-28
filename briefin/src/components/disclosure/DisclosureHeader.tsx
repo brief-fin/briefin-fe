@@ -11,9 +11,11 @@ export default function DisclosureHeader({
         <span className="rounded-badge bg-primary-light px-10pxr py-4pxr text-[10px] font-black tracking-wider text-primary-dark">
           📋 DART 공시
         </span>
-        <span className="rounded-badge bg-primary-light px-10pxr py-4pxr text-[11px] font-bold text-primary-dark">
-          {category}
-        </span>
+        {category && (
+          <span className="rounded-badge bg-primary-light px-10pxr py-4pxr text-[11px] font-bold text-primary-dark">
+            {category}
+          </span>
+        )}
       </div>
       <div className="fonts-caption flex flex-wrap items-center gap-16pxr text-text-muted">
         {source && <span>{source}</span>}
