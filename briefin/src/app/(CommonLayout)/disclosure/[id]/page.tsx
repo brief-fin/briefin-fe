@@ -6,7 +6,7 @@ import BackButton from '@/components/common/BackButton';
 import { fetchDisclosureDetail, fetchDisclosureRecent } from '@/api/disclosureApi';
 import { ApiError } from '@/api/client';
 import { notFound } from 'next/navigation';
-import type { DisclosureListItem, PageProps } from '@/types/disclosure';
+import type { DisclosureListItem, DisclosureRecentApiItem, PageProps } from '@/types/disclosure';
 import ReactMarkdown from 'react-markdown';
 
 export default async function DisclosureDetailPage({ params }: PageProps) {
@@ -34,9 +34,9 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
     const recent = await fetchDisclosureRecent(data.companyId);
 
     recentDisclosures = recent
-      .filter((r: { disclosureId: number }) => r.disclosureId !== data.disclosureId)
+      .filter((r: DisclosureRecentApiItem) => r.disclosureId !== data.disclosureId)
       .map(
-        (r: { disclosureId: number; title: string; disclosedAt: string }): DisclosureListItem => ({
+        (r: DisclosureRecentApiItem): DisclosureListItem => ({
           id: String(r.disclosureId),
           title: r.title,
           date: r.disclosedAt,

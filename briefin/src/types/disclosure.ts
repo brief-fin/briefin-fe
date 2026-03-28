@@ -1,3 +1,51 @@
+// ========================
+// API Response Types
+// ========================
+
+export type DisclosureApiItem = {
+  disclosureId: number;
+  dartId: string;
+  title: string;
+  disclosedAt: string;
+  companyId: number;
+  companyName: string;
+  ticker: string;
+  summary: string;
+};
+
+export type DisclosureDetailApiItem = {
+  disclosureId: number;
+  dartId: string;
+  title: string;
+  disclosedAt: string;
+  url: string;
+  companyId: number;
+  companyName: string;
+  ticker: string;
+  summary: string;
+  summaryDetail: string;
+};
+
+export type DisclosureListResult = {
+  content: DisclosureApiItem[];
+  totalElements: number;
+  totalPages: number;
+  currentPage: number;
+  size: number;
+};
+
+export type DisclosureRecentApiItem = {
+  disclosureId: number;
+  dartId: string;
+  title: string;
+  disclosedAt: string;
+  summary: string;
+};
+
+// ========================
+// View Types
+// ========================
+
 export type DisclosureDetail = {
   id: string;
   title: string;
@@ -31,6 +79,10 @@ export type DisclosureListItem = {
   companyName?: string;
   summaryPoints?: string[];
 };
+
+// ========================
+// Component Props
+// ========================
 
 export interface PageProps {
   params: Promise<{ id: string }>;

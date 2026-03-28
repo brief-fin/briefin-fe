@@ -1,13 +1,13 @@
 import DisclosureCard from '@/components/disclosure/DisclosureCard';
 import AlertBanner from '@/components/common/AlertBanner';
 import { fetchDisclosureList } from '@/api/disclosureApi';
-import type { DisclosureListItem } from '@/types/disclosure';
+import type { DisclosureListItem, DisclosureApiItem } from '@/types/disclosure';
 
 export default async function DisclosurePage() {
   let items: DisclosureListItem[] = [];
   try {
     const data = await fetchDisclosureList({ size: 20 });
-    items = data.content.map((item) => ({
+    items = data.content.map((item: DisclosureApiItem) => ({
       id: String(item.disclosureId),
       title: item.title,
       date: item.disclosedAt,
