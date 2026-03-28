@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from 'react';
 import DisclosureCard from '@/components/disclosure/DisclosureCard';
+import DisclosureCardSkeleton from '@/components/disclosure/DisclosureCardSkeleton';
 import { fetchDisclosureList } from '@/api/disclosureApi';
 import type { DisclosureApiItem, DisclosureInfiniteListProps, DisclosureListItem } from '@/types/disclosure';
 
@@ -71,9 +72,11 @@ export default function DisclosureInfiniteList({ initialItems, initialPage, tota
       <div ref={sentinelRef} className="h-1" />
 
       {isLoading && (
-        <div className="flex justify-center py-8">
-          <span className="text-sm text-text-secondary">불러오는 중...</span>
-        </div>
+        <>
+          <DisclosureCardSkeleton />
+          <DisclosureCardSkeleton />
+          <DisclosureCardSkeleton />
+        </>
       )}
 
     </div>

@@ -44,8 +44,8 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
           companyName: data.companyName,
         }),
       );
-  } catch {
-    // sidebar gracefully empty
+  } catch (e) {
+    console.error('fetchDisclosureRecent 실패:', e);
   }
 
   const cleanCompanyName = data.companyName?.replace(/\s*주식회사\s*$/, '');
