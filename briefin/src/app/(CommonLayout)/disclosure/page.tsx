@@ -1,13 +1,15 @@
-import DisclosureCard from '@/components/disclosure/DisclosureCard';
 import AlertBanner from '@/components/common/AlertBanner';
+import DisclosureInfiniteList from '@/components/disclosure/DisclosureInfiniteList';
 import { fetchDisclosureList } from '@/api/disclosureApi';
-import type { DisclosureListItem } from '@/types/disclosure';
+import type { DisclosureApiItem, DisclosureListItem } from '@/types/disclosure';
 
 export default async function DisclosurePage() {
-  let items: DisclosureListItem[] = [];
+  let initialItems: DisclosureListItem[] = [];
+  let totalPages = 1;
+
   try {
-    const data = await fetchDisclosureList({ size: 20 });
-    items = data.content.map((item) => ({
+    const data = await fetchDisclosureList({ page: 0, size: 10 });
+    initialItems = data.content.map((item: DisclosureApiItem) => ({
       id: String(item.disclosureId),
       title: item.title,
       date: item.disclosedAt,
@@ -15,6 +17,7 @@ export default async function DisclosurePage() {
       companyName: item.companyName,
       summaryPoints: item.summary ? item.summary.split('\n').filter(Boolean) : [],
     }));
+    totalPages = data.totalPages;
   } catch {
     // fallback: empty list
   }
@@ -23,11 +26,15 @@ export default async function DisclosurePage() {
     <div className="min-h-screen bg-surface-bg py-36pxr">
       <h1 className="fonts-heading3 pb-16pxr text-text-primary">공시</h1>
       <div className="flex flex-col gap-16pxr lg:flex-row lg:items-start lg:gap-24pxr">
-        <div className="flex min-w-0 flex-1 flex-col gap-14pxr">
-          {items.length === 0 ? (
+        <div className="min-w-0 flex-1">
+          {initialItems.length === 0 ? (
             <p className="text-text-secondary">공시 데이터가 없습니다.</p>
           ) : (
-            items.map((item) => <DisclosureCard key={item.id} item={item} />)
+            <DisclosureInfiniteList
+              initialItems={initialItems}
+              initialPage={0}
+              totalPages={totalPages}
+            />
           )}
         </div>
         <aside className="flex w-full flex-col gap-14pxr lg:w-96 lg:shrink-0">
