@@ -11,6 +11,7 @@ export type DisclosureApiItem = {
   companyName: string;
   ticker: string;
   summary: string;
+  category?: string;
 };
 
 export type DisclosureDetailApiItem = {
@@ -24,6 +25,7 @@ export type DisclosureDetailApiItem = {
   ticker: string;
   summary: string;
   summaryDetail: string;
+  category?: string;
 };
 
 export type DisclosureListResult = {
@@ -40,6 +42,7 @@ export type DisclosureRecentApiItem = {
   title: string;
   disclosedAt: string;
   summary: string;
+  category?: string;
 };
 
 // ========================

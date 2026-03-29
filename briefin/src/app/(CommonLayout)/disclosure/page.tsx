@@ -13,7 +13,7 @@ export default async function DisclosurePage() {
       id: String(item.disclosureId),
       title: item.title,
       date: item.disclosedAt,
-      category: item.companyName ?? '',
+      category: item.category ?? '',
       companyName: item.companyName,
       summaryPoints: item.summary ? item.summary.split('\n').filter(Boolean) : [],
     }));
@@ -30,11 +30,7 @@ export default async function DisclosurePage() {
           {initialItems.length === 0 ? (
             <p className="text-text-secondary">공시 데이터가 없습니다.</p>
           ) : (
-            <DisclosureInfiniteList
-              initialItems={initialItems}
-              initialPage={0}
-              totalPages={totalPages}
-            />
+            <DisclosureInfiniteList initialItems={initialItems} initialPage={0} totalPages={totalPages} />
           )}
         </div>
         <aside className="flex w-full flex-col gap-14pxr lg:w-96 lg:shrink-0">

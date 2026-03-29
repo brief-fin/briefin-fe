@@ -37,8 +37,8 @@ export default function DisclosureCard({ item, sourceLabel = 'DART 공시' }: Di
       {/* 태그: 공시 유형 + 회사 */}
       {hasLabels && (
         <section className="flex flex-wrap gap-6pxr">
-          {category && <Label key="category" text={category} variant="category" />}
           {companyName && <Label key="company" text={companyName} variant="company" />}
+          {category && <Label key="category" text={category} variant="category" />}
         </section>
       )}
     </Link>

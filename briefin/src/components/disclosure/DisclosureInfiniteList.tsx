@@ -11,7 +11,7 @@ function toCardItem(item: DisclosureApiItem): DisclosureListItem {
     id: String(item.disclosureId),
     title: item.title,
     date: item.disclosedAt,
-    category: item.companyName ?? '',
+    category: item.category ?? '',
     companyName: item.companyName,
     summaryPoints: item.summary ? item.summary.split(/\\n|\n/).filter(Boolean) : [],
   };

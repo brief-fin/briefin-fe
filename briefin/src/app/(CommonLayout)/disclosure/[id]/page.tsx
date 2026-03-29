@@ -40,7 +40,7 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
           id: String(r.disclosureId),
           title: r.title,
           date: r.disclosedAt,
-          category: '',
+          category: r.category ?? '',
           companyName: data.companyName,
         }),
       );
@@ -59,7 +59,7 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
           <article className="rounded-card border border-surface-border bg-surface-white p-24pxr shadow-hero-card sm:p-32pxr">
             <DisclosureHeader
               data={{
-                category: '',
+                category: data.category ?? '',
                 date: data.disclosedAt,
                 source: 'DART',
                 title: data.title,
@@ -83,18 +83,14 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
                     p: ({ children }) => (
                       <p className="fonts-body mb-16pxr leading-relaxed text-text-secondary">{children}</p>
                     ),
-                    ul: ({ children }) => (
-                      <ul className="mb-16pxr flex flex-col gap-6pxr pl-4pxr">{children}</ul>
-                    ),
+                    ul: ({ children }) => <ul className="mb-16pxr flex flex-col gap-6pxr pl-4pxr">{children}</ul>,
                     li: ({ children }) => (
                       <li className="fonts-body flex gap-8pxr text-text-secondary">
-                        <span className="mt-[7px] h-5pxr w-5pxr shrink-0 rounded-full bg-primary opacity-50" />
+                        <span className="mt-7pxr h-5pxr w-5pxr shrink-0 rounded-full bg-primary opacity-50" />
                         <span>{children}</span>
                       </li>
                     ),
-                    strong: ({ children }) => (
-                      <strong className="font-semibold text-text-primary">{children}</strong>
-                    ),
+                    strong: ({ children }) => <strong className="font-semibold text-text-primary">{children}</strong>,
                   }}>
                   {data.summaryDetail}
                 </ReactMarkdown>
