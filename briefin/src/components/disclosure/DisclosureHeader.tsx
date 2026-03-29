@@ -3,12 +3,20 @@ import { DisclosureHeaderProps } from '@/types/disclosure';
 function formatKoreanDate(dateStr: string): string {
   const date = new Date(dateStr);
   if (isNaN(date.getTime())) return dateStr;
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  return `${year}년 ${month}월 ${day}일 ${hours}:${minutes}`;
+  const formatter = new Intl.DateTimeFormat('ko-KR', {
+    timeZone: 'Asia/Seoul',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  });
+  const parts = formatter.formatToParts(date);
+  const pick = (type: string) => parts.find((part) => part.type === type)?.value ?? '';
+
+  return `${pick('year')}년 ${pick('month')}월 ${pick('day')}일 ${pick('hour')}:${pick('minute')}`;
+}
 }
 
 export default function DisclosureHeader({
