@@ -3,7 +3,7 @@ import { FOOTER_LINKS } from '@/constants/footer';
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-[#D1D5DB] bg-white px-24pxr py-36pxr">
+    <footer className="w-full bg-white px-24pxr py-36pxr">
       <div className="footer-inner max-w-1600pxr mx-auto flex w-full flex-col">
         <div className="footer-links mb-4 flex flex-wrap items-center gap-5">
           {FOOTER_LINKS.map((item) => (
@@ -19,7 +19,7 @@ export default function Footer() {
             </Link>
           ))}
         </div>
-        <div className="footer-disclaimer mb-4 rounded-button bg-[#F3F4F6] px-18pxr py-14pxr text-[12px] leading-[1.7] text-[#9CA3AF]">
+        <div className="footer-disclaimer mb-4 text-[12px] leading-[1.7] text-[#9CA3AF]">
           본 서비스에서 제공하는 정보는 투자 참고 자료이며, 투자 판단의 책임은 이용자 본인에게 있습니다. 제공되는 정보는
           오류가 있을 수 있으며, 투자 결과에 대해 당사는 법적 책임을 지지 않습니다.
         </div>

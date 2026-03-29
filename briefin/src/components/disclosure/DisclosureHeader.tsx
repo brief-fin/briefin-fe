@@ -1,26 +1,48 @@
 import { DisclosureHeaderProps } from '@/types/disclosure';
 
-export default function DisclosureHeader({
-  data: { category, date, source, title, companyName, reportNumber },
-}: DisclosureHeaderProps) {
-  const subLine = [companyName, reportNumber && `공시번호 ${reportNumber}`].filter(Boolean).join(' · ');
+function formatKoreanDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return dateStr;
+  const formatter = new Intl.DateTimeFormat('ko-KR', {
+    timeZone: 'Asia/Seoul',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  });
+  const parts = formatter.formatToParts(date);
+  const pick = (type: string) => parts.find((part) => part.type === type)?.value ?? '';
 
+  return `${pick('year')}년 ${pick('month')}월 ${pick('day')}일 ${pick('hour')}:${pick('minute')}`;
+}
+}
+
+export default function DisclosureHeader({
+  data: { category, date, title, companyName, ticker },
+}: DisclosureHeaderProps) {
   return (
     <header className="space-y-12pxr">
-      <div className="flex flex-wrap items-center gap-8pxr">
-        <span className="rounded-badge bg-primary-light px-10pxr py-4pxr text-[10px] font-black tracking-wider text-primary-dark">
-          📋 DART 공시
-        </span>
-        <span className="rounded-badge bg-primary-light px-10pxr py-4pxr text-[11px] font-bold text-primary-dark">
-          {category}
-        </span>
+      {/* 회사명 + ticker / category 배지 */}
+      <div className="flex items-start justify-between gap-12pxr">
+        <div className="min-w-0">
+          {companyName && (
+            <p className="fonts-heading3 truncate font-bold text-text-primary">{companyName}</p>
+          )}
+        </div>
+        {category && (
+          <span className="shrink-0 rounded-pill border border-primary px-12pxr py-4pxr text-[11px] font-semibold text-primary">
+            {category}
+          </span>
+        )}
       </div>
-      <div className="fonts-caption flex flex-wrap items-center gap-16pxr text-text-muted">
-        {source && <span>{source}</span>}
-        <span>{date}</span>
-      </div>
-      <h1 className="fonts-heading3 text-text-primary">{title}</h1>
-      {subLine && <p className="text-[14px] font-normal text-text-muted">{subLine}</p>}
+
+      {/* 공시 제목 */}
+      <h1 className="fonts-heading4 break-keep text-text-primary">{title}</h1>
+
+      {/* 날짜 */}
+      <p className="fonts-caption text-text-muted">{formatKoreanDate(date)}</p>
     </header>
   );
 }

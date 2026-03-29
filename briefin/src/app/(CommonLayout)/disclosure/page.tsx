@@ -13,9 +13,9 @@ export default async function DisclosurePage() {
       id: String(item.disclosureId),
       title: item.title,
       date: item.disclosedAt,
-      category: item.companyName ?? '',
+      category: item.category ?? '',
       companyName: item.companyName,
-      summaryPoints: item.summary ? item.summary.split('\n').filter(Boolean) : [],
+      summaryPoints: item.summary ? item.summary.split(/\\n|\n/).filter(Boolean) : [],
     }));
     totalPages = data.totalPages;
   } catch {
@@ -30,11 +30,7 @@ export default async function DisclosurePage() {
           {initialItems.length === 0 ? (
             <p className="text-text-secondary">공시 데이터가 없습니다.</p>
           ) : (
-            <DisclosureInfiniteList
-              initialItems={initialItems}
-              initialPage={0}
-              totalPages={totalPages}
-            />
+            <DisclosureInfiniteList initialItems={initialItems} initialPage={0} totalPages={totalPages} />
           )}
         </div>
         <aside className="flex w-full flex-col gap-14pxr lg:w-96 lg:shrink-0">
@@ -42,6 +38,7 @@ export default async function DisclosurePage() {
             title="🔔 공시 알림 받기"
             description="관심 기업의 새 공시를 실시간으로 받아보세요."
             buttonLabel="알림 설정하기"
+            buttonHref="/mypage?tab=watchlist"
           />
         </aside>
       </div>
