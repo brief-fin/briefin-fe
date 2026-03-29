@@ -5,6 +5,7 @@ import Link from 'next/link';
 import AlertBanner from '@/components/common/AlertBanner';
 import { DisclosureSidebarProps } from '@/types/disclosure';
 import { getSubscriptionStatus, subscribePush, unsubscribePush } from '@/lib/pushNotification';
+import { useAuthSessionVersion } from '@/providers/AuthSessionProvider';
 
 export default function DisclosureSidebar({
   recentDisclosures,
@@ -13,9 +14,12 @@ export default function DisclosureSidebar({
 }: DisclosureSidebarProps) {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [loading, setLoading] = useState(true);
+  const authVersion = useAuthSessionVersion();
 
-  // 초기 구독 상태 조회
+  // auth 초기화 완료 후 구독 상태 조회 (authVersion === 0이면 토큰 미설정 상태)
   useEffect(() => {
+    if (authVersion === 0) return;
+
     let cancelled = false;
     if (!companyId) {
       setLoading(false);
@@ -36,7 +40,7 @@ export default function DisclosureSidebar({
     return () => {
       cancelled = true;
     };
-  }, [companyId]);
+  }, [companyId, authVersion]);
 
   const handleAlertClick = async () => {
     // Service Worker 미지원 브라우저
@@ -67,7 +71,8 @@ export default function DisclosureSidebar({
       <AlertBanner
         title="🔔 공시 알림 받기"
         description={`${companyName}의 새 공시가 올라오면 즉시 알려드려요.`}
-        buttonLabel={loading ? '처리 중...' : isSubscribed ? '알림 해제하기' : '알림 설정하기'}
+        loading={loading}
+        buttonLabel={isSubscribed ? '알림 해제하기' : '알림 설정하기'}
         onButtonClick={handleAlertClick}
       />
       <div className="overflow-hidden rounded-card border border-surface-border bg-surface-white">

@@ -23,8 +23,10 @@ export type DisclosureDetailApiItem = {
   companyId: number;
   companyName: string;
   ticker: string;
-  summary: string;
-  summaryDetail: string;
+  keyPoints?: string[];
+  detailedContent?: string;
+  sentiment?: '호재' | '악재' | '중립';
+  investmentAnalysis?: string;
   category?: string;
 };
 
@@ -83,8 +85,22 @@ export interface DisclosureHeaderProps {
     source?: string;
     title: string;
     companyName?: string;
+    ticker?: string;
     reportNumber?: string;
   };
+}
+
+export interface DisclosureInvestmentAnalysisProps {
+  sentiment: '호재' | '악재' | '중립';
+  investmentAnalysis: string;
+}
+
+export interface DisclosureKeyPointsProps {
+  keyPoints: string[];
+}
+
+export interface DisclosureDetailContentProps {
+  detailedContent: string;
 }
 
 export interface DisclosureListProps {

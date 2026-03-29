@@ -1,13 +1,14 @@
 import DisclosureHeader from '@/components/disclosure/DisclosureHeader';
-import DisclosureSummary from '@/components/disclosure/DisclosureSummary';
+import DisclosureInvestmentAnalysis from '@/components/disclosure/DisclosureInvestmentAnalysis';
+import DisclosureKeyPoints from '@/components/disclosure/DisclosureKeyPoints';
+import DisclosureDetailContent from '@/components/disclosure/DisclosureDetailContent';
 import DisclosureSidebar from '@/components/disclosure/DisclosureSideBar';
-import DisclosureActionButtons from '@/components/disclosure/DisclosureBtn';
+import DisclosureBtn from '@/components/disclosure/DisclosureBtn';
 import BackButton from '@/components/common/BackButton';
 import { fetchDisclosureDetail, fetchDisclosureRecent } from '@/api/disclosureApi';
 import { ApiError } from '@/api/client';
 import { notFound } from 'next/navigation';
 import type { DisclosureListItem, DisclosureRecentApiItem, PageProps } from '@/types/disclosure';
-import ReactMarkdown from 'react-markdown';
 
 export default async function DisclosureDetailPage({ params }: PageProps) {
   const { id } = await params;
@@ -26,8 +27,6 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
     }
     throw err;
   }
-
-  const summaryPoints = data.summary ? data.summary.split(/\\n|\n/).filter(Boolean) : [];
 
   let recentDisclosures: DisclosureListItem[] = [];
   try {
@@ -57,47 +56,36 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
       <div className="mt-16pxr flex flex-col gap-16pxr lg:flex-row lg:items-start lg:gap-24pxr">
         <div className="flex min-w-0 flex-1 flex-col gap-14pxr">
           <article className="rounded-card border border-surface-border bg-surface-white p-24pxr shadow-hero-card sm:p-32pxr">
+            {/* 1. 헤더: 회사명 + ticker, category 배지, 제목, 날짜 */}
             <DisclosureHeader
               data={{
                 category: data.category ?? '',
                 date: data.disclosedAt,
-                source: 'DART',
                 title: data.title,
                 companyName: data.companyName,
-                reportNumber: data.dartId,
               }}
             />
 
-            {summaryPoints.length > 0 && <DisclosureSummary summaryPoints={summaryPoints} />}
-
-            {data.summaryDetail && (
-              <div className="mt-24pxr border-t border-surface-border pt-24pxr">
-                <ReactMarkdown
-                  components={{
-                    h2: ({ children }) => (
-                      <h2 className="fonts-heading4 mb-12pxr mt-28pxr flex items-center gap-8pxr text-text-primary first:mt-0">
-                        <span className="inline-block h-16pxr w-3pxr shrink-0 rounded-full bg-primary" />
-                        {children}
-                      </h2>
-                    ),
-                    p: ({ children }) => (
-                      <p className="fonts-body mb-16pxr leading-relaxed text-text-secondary">{children}</p>
-                    ),
-                    ul: ({ children }) => <ul className="mb-16pxr flex flex-col gap-6pxr pl-4pxr">{children}</ul>,
-                    li: ({ children }) => (
-                      <li className="fonts-body flex gap-8pxr text-text-secondary">
-                        <span className="mt-7pxr h-5pxr w-5pxr shrink-0 rounded-full bg-primary opacity-50" />
-                        <span>{children}</span>
-                      </li>
-                    ),
-                    strong: ({ children }) => <strong className="font-semibold text-text-primary">{children}</strong>,
-                  }}>
-                  {data.summaryDetail}
-                </ReactMarkdown>
-              </div>
+            {/* 2. 투자 분석 */}
+            {data.investmentAnalysis && data.sentiment && (
+              <DisclosureInvestmentAnalysis
+                sentiment={data.sentiment}
+                investmentAnalysis={data.investmentAnalysis}
+              />
             )}
 
-            <DisclosureActionButtons url={data.url} />
+            {/* 3. 핵심 포인트 */}
+            {data.keyPoints && data.keyPoints.length > 0 && (
+              <DisclosureKeyPoints keyPoints={data.keyPoints} />
+            )}
+
+            {/* 4. 상세 내용 */}
+            {data.detailedContent && (
+              <DisclosureDetailContent detailedContent={data.detailedContent} />
+            )}
+
+            {/* 5. DART 원문 보기 버튼 */}
+            <DisclosureBtn url={data.url} />
           </article>
         </div>
 
