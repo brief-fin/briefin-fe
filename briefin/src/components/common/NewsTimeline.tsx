@@ -50,21 +50,21 @@ export default function NewsTimeline({ tags, activeTag, onTagChange, items, load
               const rowKey = item.newsId ?? `${item.date}-${idx}`;
 
               const inner = (
-                <div className="flex items-start">
+                <div className="flex items-stretch">
                   {/* Date */}
                   <div className="w-70pxr shrink-0 pr-12pxr pt-3pxr text-right">
                     <span className="text-[11px] font-medium text-text-muted">{item.date}</span>
                   </div>
 
                   {/* Dot + line */}
-                  <div className="flex shrink-0 flex-col items-center" style={{ width: 14 }}>
+                  <div className="flex shrink-0 flex-col items-center self-stretch pt-5pxr" style={{ width: 14 }}>
                     <div
                       className={[
-                        'mt-5pxr rounded-full',
+                        'rounded-full',
                         item.isLatest ? 'h-8pxr w-8pxr bg-primary' : 'h-6pxr w-6pxr bg-[#D1D5DB]',
                       ].join(' ')}
                     />
-                    {!isLast && <div className="mt-4pxr w-[1.5px] flex-1 bg-[#E5E7EB]" style={{ minHeight: 28 }} />}
+                    {!isLast && <div className="mt-4pxr w-[1.5px] flex-1 bg-[#E5E7EB]" />}
                   </div>
 
                   {/* Content */}
