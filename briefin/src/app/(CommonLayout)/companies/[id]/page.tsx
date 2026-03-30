@@ -7,13 +7,16 @@ import CompanyHero from '@/components/companies/CompanyHero';
 import NewsCard from '@/components/news/NewsCard';
 import AlertBanner from '@/components/common/AlertBanner';
 import PopularCompanyList from '@/components/common/PopularCompanyList';
+import NewsTimeline from '@/components/common/NewsTimeline';
 import DisclosureList from '@/components/disclosure/DisclosureList';
 import { MOCK_COMPANY, MOCK_NEWS, MOCK_RELATED_COMPANIES } from '@/mocks/companyDetail';
 import { MOCK_COMPANY_DISCLOSURES } from '@/mocks/disclosureDetail';
 import { COMPANY_DETAIL_TABS, type CompanyDetailTab } from '@/constants/companyDetail';
+import { TIMELINE_TAGS, MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
 
 export default function CompanyDetailPage() {
   const [activeTab, setActiveTab] = useState<CompanyDetailTab>('관련 뉴스');
+  const [activeTimelineTag, setActiveTimelineTag] = useState(TIMELINE_TAGS[0]);
 
   return (
     <div className="min-h-screen bg-surface-bg py-36pxr">
@@ -50,6 +53,13 @@ export default function CompanyDetailPage() {
             title="🔔 공시 알림 받기"
             description="이 기업의 새 공시·뉴스를 실시간으로 받아보세요."
             buttonLabel="알림 설정하기"
+          />
+
+          <NewsTimeline
+            tags={TIMELINE_TAGS}
+            activeTag={activeTimelineTag}
+            onTagChange={setActiveTimelineTag}
+            items={MOCK_TIMELINE_ITEMS}
           />
 
           <PopularCompanyList title="관련 기업" companies={MOCK_RELATED_COMPANIES} />
