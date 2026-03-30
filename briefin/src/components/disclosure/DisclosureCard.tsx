@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { CheckIcon } from '../../../public/icon';
 import Label from '@/components/common/Label';
 import { DisclosureCardProps } from '@/types/disclosure';
+import { getCategoryLabel } from '@/constants/disclosureCategories';
 
 export default function DisclosureCard({ item, sourceLabel = 'DART 공시' }: DisclosureCardProps) {
   const { title, date, category, companyName, summaryPoints } = item;
@@ -38,7 +39,7 @@ export default function DisclosureCard({ item, sourceLabel = 'DART 공시' }: Di
       {hasLabels && (
         <section className="flex flex-wrap gap-6pxr">
           {companyName && <Label key="company" text={companyName} variant="company" />}
-          {category && <Label key="category" text={category} variant="category" />}
+          {category && <Label key="category" text={getCategoryLabel(category)} variant="category" />}
         </section>
       )}
     </Link>

@@ -1,14 +1,11 @@
 import Link from 'next/link';
 import { DisclosureListProps } from '@/types/disclosure';
+import { getCategoryLabel } from '@/constants/disclosureCategories';
 
 function CategoryBadge({ category }: { category: string }) {
-  const isHighlight = category === '공급계약';
   return (
-    <span
-      className={`shrink-0 rounded-badge px-10pxr py-4pxr text-[12px] font-bold ${
-        isHighlight ? 'bg-primary-light text-primary-dark' : 'bg-surface-muted text-text-secondary'
-      }`}>
-      {category}
+    <span className="shrink-0 rounded-badge bg-surface-muted px-10pxr py-4pxr text-[12px] font-bold text-text-secondary">
+      {getCategoryLabel(category)}
     </span>
   );
 }
