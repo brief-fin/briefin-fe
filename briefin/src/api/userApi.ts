@@ -1,7 +1,7 @@
 import { apiClient, type ApiResponse } from './client';
-import type { UserInfo, ScrapedNews, WatchlistCompany } from '@/types/mypage';
+import type { UserInfo, ScrapedNews, WatchlistCompany, RecentNews } from '@/types/mypage';
 
-export type { UserInfo, ScrapedNews, WatchlistCompany };
+export type { UserInfo, ScrapedNews, WatchlistCompany, RecentNews };
 
 // 내 정보 조회
 export const fetchMyInfo = () =>
@@ -23,6 +23,14 @@ export const fetchWatchlist = () =>
   apiClient
     .get<ApiResponse<{ watchlist: WatchlistCompany[] }>>('/api/users/watchlist')
     .then((res) => res.result.watchlist);
+
+// 최근 본 뉴스 목록
+export const fetchRecentNews = (page = 1, size = 10) =>
+  apiClient
+    .get<ApiResponse<{ recentList: RecentNews[]; totalCount: number }>>(
+      `/api/users/recent?page=${page}&size=${size}`,
+    )
+    .then((res) => res.result);
 
 // 관심 기업 등록
 export const watchCompany = (companyId: number) =>

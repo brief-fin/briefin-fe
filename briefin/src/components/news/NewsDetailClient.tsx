@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import type { NewsDetailResponse } from '@/api/newsApi';
+import { scrapNews, deleteScrapNews, fetchRelatedNews } from '@/api/newsApi';
 import NewsHeader from '@/components/news/NewsHeader';
 import NewsSummary from '@/components/news/NewsSummary';
 import NewsDetail from '@/components/news/NewsDetail';
@@ -14,19 +16,42 @@ import { TIMELINE_TAGS, MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
 
 export default function NewsDetailClient({ data }: { data: NewsDetailResponse }) {
   const [activeTimelineTag, setActiveTimelineTag] = useState(TIMELINE_TAGS[0]);
+  const [isScrapped, setIsScrapped] = useState(data.isScraped ?? false);
 
-  // 백엔드 데이터 → 컴포넌트 형식으로 변환
+  const scrapMutation = useMutation({
+    mutationFn: () => scrapNews(data.newsId),
+    onSuccess: () => setIsScrapped(true),
+  });
+
+  const unscrapMutation = useMutation({
+    mutationFn: () => deleteScrapNews(data.newsId),
+    onSuccess: () => setIsScrapped(false),
+  });
+
+  const handleToggleScrap = () => {
+    if (isScrapped) {
+      unscrapMutation.mutate();
+    } else {
+      scrapMutation.mutate();
+    }
+  };
+
+  const { data: relatedNewsData } = useQuery({
+    queryKey: ['news', data.newsId, 'related'],
+    queryFn: () => fetchRelatedNews(data.newsId),
+  });
+
   const relatedCompanies = (data.relatedCompanies ?? []).map((name, i) => ({
     id: String(i),
     name,
     emoji: '🏢',
   }));
 
-  const relatedNews = (data.relatedNews ?? []).map((newsId, i) => ({
-    id: String(newsId),
-    title: `관련 뉴스 ${i + 1}`,
-    source: '',
-    publishedAt: '',
+  const relatedNews = (relatedNewsData ?? []).map((item) => ({
+    id: item.newsId,
+    title: item.title,
+    source: item.press,
+    publishedAt: item.publishedAt,
   }));
 
   return (
@@ -57,7 +82,7 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
 
           <NewsDetail content={data.content} />
 
-          <NewsActions originalUrl="" isScrapped={false} />
+          <NewsActions originalUrl={data.originalUrl ?? null} isScrapped={isScrapped} onToggleScrap={handleToggleScrap} />
           <NewsRelatedCompanies relatedCompanies={relatedCompanies} />
         </article>
 

@@ -20,8 +20,19 @@ export interface NewsDetailResponse {
   category: string;
   press: string;
   publishedAt: string | null;
+  originalUrl: string | null;
+  isScraped: boolean;
   relatedCompanies: string[];
   relatedNews: string[];
+}
+
+export interface NewsRelatedItem {
+  newsId: string;
+  title: string;
+  summary: string;
+  category: string;
+  press: string;
+  publishedAt: string;
 }
 
 export interface ScrapResponse {
@@ -85,8 +96,9 @@ export interface CategoryButtonProps {
 }
 
 export interface NewsActionsProps {
-  originalUrl: string;
+  originalUrl: string | null;
   isScrapped: boolean;
+  onToggleScrap: () => void;
 }
 
 export interface NewsDetailProps {
