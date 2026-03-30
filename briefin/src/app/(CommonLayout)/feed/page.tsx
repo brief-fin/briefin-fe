@@ -30,7 +30,7 @@ export default function FeedPage() {
             title="관심 기업을 더 추가해보세요"
             description="더 많은 기업을 등록할수록 내 피드가 풍성해져요."
             buttonLabel="🏢 관련 기업 추가하기"
-            buttonHref="/mypage?tab=watchlist"
+            buttonHref="/onboarding"
           />
           <PopularCompanyList title="👀 내 관심 기업" companies={MOCK_WATCHLIST} />
           <Link
