@@ -52,7 +52,7 @@ export default function CompanyDetailPage() {
     },
     {
       label: '시가총액',
-      value: ((company?.marketCap ?? 0) / 100000000).toFixed(0),
+      value: (company?.marketCap ?? 0).toLocaleString(), 
       unit: '억',
     },
   ];
