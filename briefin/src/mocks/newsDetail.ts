@@ -6,7 +6,7 @@ export type MockNewsDetailRaw = {
     isLive: boolean;
     category: string;
     source: string;
-    publishedAt: string;
+    publishedAt: string | null;
     title: string;
     summaries: string[];
     content: string;

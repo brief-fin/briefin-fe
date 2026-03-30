@@ -19,7 +19,7 @@ export interface NewsDetailResponse {
   summary: string;
   category: string;
   press: string;
-  publishedAt: string;
+  publishedAt: string | null;
   relatedCompanies: string[];
   relatedNews: string[];
 }
@@ -94,7 +94,9 @@ export interface NewsDetailProps {
 }
 
 export interface NewsHeaderProps {
-  data: Pick<MockNewsDetailRaw, 'category' | 'publishedAt' | 'source' | 'title' | 'isLive'>;
+  data: Pick<MockNewsDetailRaw, 'category' | 'source' | 'title' | 'isLive'> & {
+    publishedAt: string | null;
+  };
 }
 
 export interface Company {
