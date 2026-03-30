@@ -1,39 +1,76 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { SearchComponent } from '@/components/common/SearchComponent';
+import { apiClient, ApiResponse } from '@/api/client';
 import { CompanyCard } from '@/components/companies/CompanyCard';
-import { mockCompanyData } from '@/mocks/mockCompanyData';
-import { SearchPageProps } from '@/types/company';
 
-export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const { q } = await searchParams;
-  const query = q?.trim() ?? '';
+export default function SearchPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const query = searchParams.get('q')?.trim() ?? '';
 
-  const filtered = query
-    ? mockCompanyData.filter((company) => company.name.includes(query) || company.category.includes(query))
-    : mockCompanyData;
+  const [results, setResults] = useState<any[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      setLoading(true);
+      try {
+        // 백엔드 경로 확인: /api/companies/search
+        const res = await apiClient.get<ApiResponse<any>>(`/companies/search?q=${encodeURIComponent(query)}&size=20`);
+        setResults(res.result.content || []);
+        setTotalCount(res.result.totalElements || 0);
+      } catch (error) {
+        console.error('기업 데이터 로드 실패:', error);
+        setResults([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResults();
+  }, [query]);
 
   return (
-    <main className="relative flex h-full w-full flex-col py-36pxr">
-      <div className="fonts-heading3 mb-16pxr">기업</div>
-
-      <SearchComponent searchPath="/companies/result" placeholder="기업명, 종목코드를 입력하세요" />
-
-      <div className="fonts-caption mb-20pxr mt-20pxr text-text-muted">
-        {query
-          ? `"${query}" 검색 결과 ${filtered.length > 0 ? `${filtered.length}건` : '없음'}`
-          : `전체 기업 ${filtered.length}건`}
+    <main className="relative mx-auto flex h-full w-full max-w-screen-xl flex-col px-20pxr py-36pxr">
+      {/* 검색 헤더 - searchPath를 현재 페이지 경로로 설정 */}
+      <div className="mb-40pxr text-center">
+        <h1 className="fonts-heading2 mb-20pxr text-text-primary">기업 찾기</h1>
+        <SearchComponent
+          searchPath="/companies/result" // 이 경로가 현재 페이지 주소와 일치해야 합니다.
+          placeholder="기업명, 티커를 입력하세요"
+        />
       </div>
 
-      {filtered.length > 0 ? (
-        <div className="mb-20pxr grid grid-cols-1 gap-12pxr sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((company) => (
+      <div className="fonts-caption mb-20pxr mt-24pxr border-b border-surface-border pb-12pxr text-text-muted">
+        {query ? `"${query}" 검색 결과 ${totalCount > 0 ? `${totalCount}건` : '없음'}` : `전체 기업 ${totalCount}건`}
+      </div>
+
+      {loading ? (
+        <div className="fonts-body py-100pxr text-center">데이터를 불러오는 중...</div>
+      ) : results.length > 0 ? (
+        <div className="mb-40pxr grid grid-cols-1 gap-16pxr sm:grid-cols-2 lg:grid-cols-3">
+          {results.map((company) => (
             <CompanyCard key={company.id} company={company} />
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center gap-16pxr py-120pxr">
+        <div className="mt-10pxr flex flex-col items-center justify-center gap-16pxr rounded-summary bg-surface-white py-120pxr shadow-sm">
           <span className="text-60pxr">🏢</span>
           <div className="fonts-cardTitle text-text-primary">검색 결과가 없어요</div>
-          <div className="fonts-body text-text-muted">기업명이나 종목코드를 다시 확인해 보세요.</div>
+          <div className="fonts-body text-center text-text-muted">
+            검색어 <span className="font-bold">"{query}"</span>와 일치하는 기업이 없습니다.
+            <br />
+            기업명이나 종목코드를 다시 확인해 보세요.
+          </div>
+          <button
+            onClick={() => router.push('/companies/result')} // 클라이언트 컴포넌트이므로 작동함
+            className="text-primary-main fonts-label mt-10pxr hover:underline">
+            전체 목록 보기
+          </button>
         </div>
       )}
     </main>

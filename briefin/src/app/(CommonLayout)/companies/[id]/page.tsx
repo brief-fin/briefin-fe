@@ -18,6 +18,7 @@ import { TIMELINE_TAGS, MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
 import { MOCK_RELATED_COMPANIES } from '@/mocks/companyDetail';
 import { useStockPrice } from '@/api/hook/useStockPrice';
 import { apiClient } from '@/api/client';
+import { useAuthSessionVersion } from '@/providers/AuthSessionProvider';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -30,18 +31,22 @@ export default function CompanyDetailPage() {
   const [isWatchlisted, setIsWatchlisted] = useState(false);
   const [watchlistLoading, setWatchlistLoading] = useState(false);
 
+  const sessionVersion = useAuthSessionVersion()
+
   const stockPrice = useStockPrice(company?.ticker ?? null);
 
   useEffect(() => {
     if (!id) return;
-    fetchCompanyDetail(Number(id))
-      .then((data) => {
-        setCompany(data);
-        setIsWatchlisted(data.watchlisted ?? false); // 백엔드가 내려주는 경우
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, [id]);
+    if(sessionVersion){
+      fetchCompanyDetail(Number(id))
+        .then((data) => {
+          setCompany(data);
+          setIsWatchlisted(data.watchlisted ?? false); // 백엔드가 내려주는 경우
+        })
+        .catch(console.error)
+        .finally(() => setLoading(false));
+    }
+  }, [id, sessionVersion]);
 
   const handleToggleWatchlist = async () => {
     if (!company || watchlistLoading) return;
