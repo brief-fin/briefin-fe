@@ -17,7 +17,7 @@ function formatKoreanDate(dateStr: string): string {
 
   return `${pick('year')}년 ${pick('month')}월 ${pick('day')}일 ${pick('hour')}:${pick('minute')}`;
 }
-}
+
 
 export default function DisclosureHeader({
   data: { category, date, title, companyName, ticker },
