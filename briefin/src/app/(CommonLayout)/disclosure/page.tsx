@@ -15,7 +15,7 @@ export default async function DisclosurePage() {
       date: item.disclosedAt,
       category: item.category ?? '',
       companyName: item.companyName,
-      summaryPoints: item.summary ? item.summary.split(/\\n|\n/).filter(Boolean) : [],
+      summaryPoints: item.keyPoints ?? [],
     }));
     totalPages = data.totalPages;
   } catch {

@@ -11,6 +11,7 @@ export type DisclosureApiItem = {
   companyName: string;
   ticker: string;
   summary: string;
+  keyPoints?: string[];
   category?: string;
 };
 

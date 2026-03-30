@@ -22,12 +22,8 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
   try {
     data = await fetchDisclosureDetail(numericId);
   } catch (err) {
-  } catch (err) {
     if (err instanceof ApiError && err.status === 404) {
       notFound();
-    }
-    throw err;
-  }
     }
     throw err;
   }
@@ -72,21 +68,14 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
 
             {/* 2. 투자 분석 */}
             {data.investmentAnalysis && data.sentiment && (
-              <DisclosureInvestmentAnalysis
-                sentiment={data.sentiment}
-                investmentAnalysis={data.investmentAnalysis}
-              />
+              <DisclosureInvestmentAnalysis sentiment={data.sentiment} investmentAnalysis={data.investmentAnalysis} />
             )}
 
             {/* 3. 핵심 포인트 */}
-            {data.keyPoints && data.keyPoints.length > 0 && (
-              <DisclosureKeyPoints keyPoints={data.keyPoints} />
-            )}
+            {data.keyPoints && data.keyPoints.length > 0 && <DisclosureKeyPoints keyPoints={data.keyPoints} />}
 
             {/* 4. 상세 내용 */}
-            {data.detailedContent && (
-              <DisclosureDetailContent detailedContent={data.detailedContent} />
-            )}
+            {data.detailedContent && <DisclosureDetailContent detailedContent={data.detailedContent} />}
 
             {/* 5. DART 원문 보기 버튼 */}
             <DisclosureBtn url={data.url} />
