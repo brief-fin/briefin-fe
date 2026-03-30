@@ -22,12 +22,8 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
   try {
     data = await fetchDisclosureDetail(numericId);
   } catch (err) {
-  } catch (err) {
     if (err instanceof ApiError && err.status === 404) {
       notFound();
-    }
-    throw err;
-  }
     }
     throw err;
   }
