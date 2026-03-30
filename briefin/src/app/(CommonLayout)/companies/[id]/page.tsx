@@ -8,19 +8,28 @@ import CompanyHero from '@/components/companies/CompanyHero';
 import NewsCard from '@/components/news/NewsCard';
 import AlertBanner from '@/components/common/AlertBanner';
 import PopularCompanyList from '@/components/common/PopularCompanyList';
+import NewsTimeline from '@/components/common/NewsTimeline';
 import DisclosureList from '@/components/disclosure/DisclosureList';
 import { MOCK_NEWS } from '@/mocks/companyDetail';
 import { MOCK_COMPANY_DISCLOSURES } from '@/mocks/disclosureDetail';
 import { COMPANY_DETAIL_TABS, type CompanyDetailTab } from '@/constants/companyDetail';
+
 import { CompanyDetail, fetchCompanyDetail } from '@/api/companyApi';
 import { useStockPrice } from '@/api/hooks/useStockPrice';
+
+
+import { TIMELINE_TAGS, MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
+
+import { MOCK_RELATED_COMPANIES } from '@/mocks/companyDetail';
 
 
 export default function CompanyDetailPage() {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState<CompanyDetailTab>('관련 뉴스');
+
   const [company, setCompany] = useState<CompanyDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeTimelineTag, setActiveTimelineTag] = useState(TIMELINE_TAGS[0]);
 
   const stockPrice = useStockPrice(company?.ticker ?? null);
 
@@ -57,6 +66,9 @@ export default function CompanyDetailPage() {
     },
   ];
 
+
+
+
   return (
     <div className="min-h-screen bg-surface-bg py-36pxr">
       <div className="pt-20pxr sm:pt-28pxr">
@@ -91,6 +103,7 @@ export default function CompanyDetailPage() {
             description="이 기업의 새 공시·뉴스를 실시간으로 받아보세요."
             buttonLabel="알림 설정하기"
           />
+
           <PopularCompanyList
             title="관련 기업"
             companies={(company.relatedCompanies ?? []).map(c => ({
@@ -103,6 +116,16 @@ export default function CompanyDetailPage() {
               bgColor: 'bg-gray-100'
             }))}
           />
+
+          <NewsTimeline
+            tags={TIMELINE_TAGS}
+            activeTag={activeTimelineTag}
+            onTagChange={setActiveTimelineTag}
+            items={MOCK_TIMELINE_ITEMS}
+          />
+
+          <PopularCompanyList title="관련 기업" companies={MOCK_RELATED_COMPANIES} />
+
         </div>
       </div>
     </div>
