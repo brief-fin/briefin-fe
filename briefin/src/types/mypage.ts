@@ -22,3 +22,11 @@ export interface WatchlistCompany {
   logoUrl: string;
   addedAt: string;
 }
+
+export interface RecentNews {
+  newsId: number;
+  title: string;
+  summary: string;
+  source: string;
+  viewedAt: string;
+}

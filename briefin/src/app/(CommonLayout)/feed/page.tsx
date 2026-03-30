@@ -4,9 +4,12 @@ import Link from 'next/link';
 import NewsCard from '@/components/news/NewsCard';
 import AlertBanner from '@/components/common/AlertBanner';
 import PopularCompanyList from '@/components/common/PopularCompanyList';
-import { MOCK_FEED_NEWS, MOCK_WATCHLIST } from '@/mocks/feed';
+import { useFeed } from '@/hooks/useFeed';
+import { toNewsItem } from '@/api/newsApi';
 
 export default function FeedPage() {
+  const { data, isLoading, isError } = useFeed();
+
   return (
     <main className="min-h-screen bg-surface-bg py-36pxr">
       {/* Header */}
@@ -19,8 +22,17 @@ export default function FeedPage() {
       <div className="flex flex-col gap-16pxr lg:flex-row lg:items-start">
         {/* Left: news list */}
         <div className="flex flex-1 flex-col gap-14pxr">
-          {MOCK_FEED_NEWS.map((news) => (
-            <NewsCard key={news.id} news={news} />
+          {isLoading && (
+            <p className="fonts-label py-40pxr text-center text-text-muted">뉴스를 불러오는 중...</p>
+          )}
+          {isError && (
+            <p className="fonts-label py-40pxr text-center text-text-muted">뉴스를 불러오지 못했습니다.</p>
+          )}
+          {data && data.length === 0 && (
+            <p className="fonts-label py-40pxr text-center text-text-muted">관심 기업의 뉴스가 없습니다.</p>
+          )}
+          {data?.map((item) => (
+            <NewsCard key={item.newsId} news={toNewsItem(item)} />
           ))}
         </div>
 
@@ -32,12 +44,11 @@ export default function FeedPage() {
             buttonLabel="🏢 관련 기업 추가하기"
             buttonHref="/onboarding"
           />
-          <PopularCompanyList title="👀 내 관심 기업" companies={MOCK_WATCHLIST} />
           <Link
-          href="/mypage?tab=watchlist"
-          className="block text-center text-[13px] font-bold text-text-muted hover:text-text-primary">
-          관심 기업 관리 →
-        </Link>
+            href="/mypage?tab=watchlist"
+            className="block text-center text-[13px] font-bold text-text-muted hover:text-text-primary">
+            관심 기업 관리 →
+          </Link>
         </div>
       </div>
     </main>

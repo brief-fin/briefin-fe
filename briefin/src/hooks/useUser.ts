@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   fetchMyInfo,
+  fetchRecentNews,
   fetchScrappedNews,
   fetchWatchlist,
   unwatchCompany,
@@ -11,6 +12,7 @@ export const userKeys = {
   me: () => ['user', 'me'] as const,
   scraps: (page: number) => ['user', 'scraps', page] as const,
   watchlist: () => ['user', 'watchlist'] as const,
+  recent: (page: number) => ['user', 'recent', page] as const,
 };
 
 // 내 정보
@@ -26,6 +28,14 @@ export function useScrappedNews(page = 1) {
   return useQuery({
     queryKey: userKeys.scraps(page),
     queryFn: () => fetchScrappedNews(page),
+  });
+}
+
+// 최근 본 뉴스 목록
+export function useRecentNews(page = 1) {
+  return useQuery({
+    queryKey: userKeys.recent(page),
+    queryFn: () => fetchRecentNews(page),
   });
 }
 

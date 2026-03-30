@@ -1,7 +1,7 @@
 import { apiClient, type ApiResponse } from './client';
-import type { NewsListItem, NewsDetailResponse, ScrapResponse, NewsItem } from '@/types/news';
+import type { NewsListItem, NewsDetailResponse, ScrapResponse, NewsItem, NewsRelatedItem } from '@/types/news';
 
-export type { NewsListItem, NewsDetailResponse, ScrapResponse };
+export type { NewsListItem, NewsDetailResponse, ScrapResponse, NewsRelatedItem };
 
 // 뉴스 목록 조회 (category 없으면 전체)
 export const fetchNewsList = (category?: string) => {
@@ -15,6 +15,12 @@ export const fetchNewsList = (category?: string) => {
 export const fetchNewsDetail = (id: string | number) =>
   apiClient
     .get<ApiResponse<NewsDetailResponse>>(`/api/news/${id}`)
+    .then((res) => res.result);
+
+// 관련 뉴스 조회
+export const fetchRelatedNews = (id: string | number) =>
+  apiClient
+    .get<ApiResponse<NewsRelatedItem[]>>(`/api/news/${id}/related`)
     .then((res) => res.result);
 
 // 뉴스 검색
