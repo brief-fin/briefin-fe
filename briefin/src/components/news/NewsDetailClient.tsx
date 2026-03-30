@@ -1,15 +1,20 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import type { NewsDetailResponse } from '@/api/newsApi';
 import NewsHeader from '@/components/news/NewsHeader';
 import NewsSummary from '@/components/news/NewsSummary';
 import NewsDetail from '@/components/news/NewsDetail';
 import NewsSidebar from '@/components/news/NewsSidebar';
+import NewsTimeline from '@/components/common/NewsTimeline';
 import NewsRelatedCompanies from '@/components/news/NewsRelatedCompanies';
 import NewsActions from '@/components/news/NewsActions';
+import { TIMELINE_TAGS, MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
 
 export default function NewsDetailClient({ data }: { data: NewsDetailResponse }) {
+  const [activeTimelineTag, setActiveTimelineTag] = useState(TIMELINE_TAGS[0]);
+
   // 백엔드 데이터 → 컴포넌트 형식으로 변환
   const relatedCompanies = (data.relatedCompanies ?? []).map((name, i) => ({
     id: String(i),
@@ -47,7 +52,7 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
           />
 
           <div className="mt-20pxr">
-            <NewsSummary summaries={data.summary ? [data.summary] : []} />
+            <NewsSummary summaries={data.summary ? data.summary.split('\n').filter(Boolean) : []} />
           </div>
 
           <NewsDetail content={data.content} />
@@ -56,7 +61,15 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
           <NewsRelatedCompanies relatedCompanies={relatedCompanies} />
         </article>
 
-        <NewsSidebar relatedNews={relatedNews} relatedCompanies={relatedCompanies} />
+        <div className="flex w-full flex-col gap-16pxr lg:w-[320px] lg:shrink-0">
+          <NewsSidebar relatedNews={relatedNews} relatedCompanies={relatedCompanies} />
+          <NewsTimeline
+            tags={TIMELINE_TAGS}
+            activeTag={activeTimelineTag}
+            onTagChange={setActiveTimelineTag}
+            items={MOCK_TIMELINE_ITEMS}
+          />
+        </div>
       </div>
     </div>
   );

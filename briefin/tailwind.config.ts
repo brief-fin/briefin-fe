@@ -20,22 +20,26 @@ const config: Config = {
       /* color system */
       colors: {
         primary: {
-          DEFAULT: '#2C4A8F',
-          dark: '#1A3270',
-          light: '#F5F0E8',
-          mid: '#E0D8C8',
+          DEFAULT: '#1E3A8A',
+          dark: '#1E40AF',
+          light: '#DBEAFE',
+          mid: '#BFDBFE',
+          accent: '#BFDBFE',
+          subtle: '#EFF6FF',
         },
 
         text: {
-          primary: '#1A1D1F',
+          primary: '#111827',
           secondary: '#4B5563',
+          sub: '#6B7280',
           muted: '#9CA3AF',
+          divider: '#D1D5DB',
         },
 
         surface: {
-          bg: '#F5F6F8',
-          muted: '#F3F4F6',
-          border: '#E5E7EB',
+          bg: '#F3F4F6',
+          cream: '#FDFBF7',
+          border: '#F1F5F9',
           white: '#FFFFFF',
         },
 
@@ -68,10 +72,10 @@ const config: Config = {
 
       /* shadows */
       boxShadow: {
-        'hero-badge': '0 2px 12px rgba(44,74,143,0.20)',
+        'hero-badge': '0 2px 12px rgba(30,58,138,0.20)',
         'stat-chip': '0 2px 12px rgba(0,0,0,0.06)',
         'hero-card': '0 4px 24px rgba(0,0,0,0.06)',
-        'result-hover': '0 4px 16px rgba(44,74,143,0.10)',
+        'result-hover': '0 4px 16px rgba(30,58,138,0.10)',
         'news-hover': '0 6px 28px rgba(0,0,0,0.08)',
         autocomplete: '0 8px 24px rgba(0,0,0,0.10)',
         modal: '0 20px 60px rgba(0,0,0,0.15)',
