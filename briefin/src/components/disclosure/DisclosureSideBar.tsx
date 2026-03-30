@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AlertBanner from '@/components/common/AlertBanner';
 import { DisclosureSidebarProps } from '@/types/disclosure';
+import { getCategoryLabel } from '@/constants/disclosureCategories';
 import { getSubscriptionStatus, subscribePush, unsubscribePush } from '@/lib/pushNotification';
 import { useAuthSessionVersion } from '@/providers/AuthSessionProvider';
 
@@ -87,7 +88,7 @@ export default function DisclosureSidebar({
                 className="block px-22pxr py-16pxr transition-colors hover:bg-surface-bg">
                 <p className="line-clamp-2 text-[14px] font-bold text-text-primary">{item.title}</p>
                 <p className="fonts-caption mt-4pxr">
-                  {[item.date, item.category].filter(Boolean).join(' · ')}
+                  {[item.date, item.category ? getCategoryLabel(item.category) : ''].filter(Boolean).join(' · ')}
                 </p>
               </Link>
             </li>

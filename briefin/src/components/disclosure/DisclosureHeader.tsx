@@ -1,4 +1,5 @@
 import { DisclosureHeaderProps } from '@/types/disclosure';
+import { getCategoryLabel } from '@/constants/disclosureCategories';
 
 function formatKoreanDate(dateStr: string): string {
   const date = new Date(dateStr);
@@ -28,7 +29,7 @@ export default function DisclosureHeader({ data: { category, date, title, compan
         </div>
         {category && (
           <span className="shrink-0 rounded-pill border border-primary px-12pxr py-4pxr text-[11px] font-semibold text-primary">
-            {category}
+            {getCategoryLabel(category)}
           </span>
         )}
       </div>
