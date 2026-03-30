@@ -10,14 +10,6 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'thumb.tossinvest.com',
-      },
-    ],
-  },
 };
 
 export default nextConfig;
