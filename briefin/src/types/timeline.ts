@@ -1,4 +1,5 @@
 export interface NewsTimelineItem {
+  id: string;
   date: string;       // e.g. "2025.03.27"
   title: string;
   source: string;
