@@ -42,6 +42,12 @@ async function request<T>(path: string, options?: RequestInit, canRetry = true):
     throw new ApiError('인증이 만료되었습니다. 다시 로그인해주세요.', 401);
   }
 
+  if (res.status === 403 && !path.startsWith('/api/auth/')) {
+    authStore.clear();
+    redirectToLoginWithCurrentPath();
+    throw new ApiError('로그인이 필요합니다. 다시 로그인해주세요.', 403);
+  }
+
   const text = await res.text();
   const body = text
     ? (() => {
