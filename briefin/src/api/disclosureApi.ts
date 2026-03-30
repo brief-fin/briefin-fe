@@ -1,12 +1,36 @@
 import { apiClient, type ApiResponse } from './client';
-import type {
-  DisclosureApiItem,
-  DisclosureDetailApiItem,
-  DisclosureListResult,
-  DisclosureRecentApiItem,
-} from '@/types/disclosure';
 
-export type { DisclosureApiItem, DisclosureDetailApiItem, DisclosureListResult, DisclosureRecentApiItem };
+export interface DisclosureListItem {
+  disclosureId: number;
+  dartId: string;
+  title: string;
+  disclosedAt: string;
+  companyId: number;
+  companyName: string;
+  ticker: string;
+  summary: string;
+}
+
+export interface DisclosureDetailResponse {
+  disclosureId: number;
+  dartId: string;
+  title: string;
+  disclosedAt: string;
+  url: string;
+  companyId: number;
+  companyName: string;
+  ticker: string;
+  summary: string;
+  summaryDetail: string;
+}
+
+export interface DisclosureListResult {
+  content: DisclosureListItem[];
+  totalElements: number;
+  totalPages: number;
+  currentPage: number;
+  size: number;
+}
 
 // 공시 목록 조회
 export const fetchDisclosureList = (params?: { companyId?: number; page?: number; size?: number }) => {
@@ -20,16 +44,24 @@ export const fetchDisclosureList = (params?: { companyId?: number; page?: number
 
 // 공시 상세 조회
 export const fetchDisclosureDetail = (disclosureId: number) =>
-  apiClient.get<ApiResponse<DisclosureDetailApiItem>>(`/api/disclosures/${disclosureId}`).then((res) => res.result);
+  apiClient.get<ApiResponse<DisclosureDetailResponse>>(`/api/disclosures/${disclosureId}`).then((res) => res.result);
 
 // 구독 여부 조회
 export const fetchSubscriptionStatus = (companyId: number) =>
   apiClient.get<ApiResponse<boolean>>(`/api/push/status?companyId=${companyId}`).then((res) => res.result);
 
+export interface DisclosureRecentItem {
+  disclosureId: number;
+  dartId: string;
+  title: string;
+  disclosedAt: string;
+  summary: string;
+}
+
 // 최근 공시 3건 (사이드바용)
 export const fetchDisclosureRecent = (companyId: number) =>
   apiClient
-    .get<ApiResponse<DisclosureRecentApiItem[]>>(`/api/disclosures/recent?companyId=${companyId}`)
+    .get<ApiResponse<DisclosureRecentItem[]>>(`/api/disclosures/recent?companyId=${companyId}`)
     .then((res) => res.result);
 
 // VAPID 공개키 조회

@@ -9,7 +9,7 @@ export default function NewsHeader({ data: { category, publishedAt, source, titl
         </span>
         <div className="fonts-caption flex flex-wrap items-center gap-16pxr text-text-muted">
           {source && <span>{source}</span>}
-          {publishedAt && <span>{publishedAt}</span>}
+          <span>{publishedAt}</span>
         </div>
       </div>
       <h1 className="fonts-heading3 text-text-primary">{title}</h1>

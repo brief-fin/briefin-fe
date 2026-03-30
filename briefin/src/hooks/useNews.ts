@@ -24,13 +24,11 @@ export function useNewsList(category?: string) {
 }
 
 // 뉴스 상세
-export function useNewsDetail(id: string | number, options?: { enabled?: boolean }) {
-  const enabledById = !!id;
-  const enabledByOptions = options?.enabled ?? true;
+export function useNewsDetail(id: string | number) {
   return useQuery({
     queryKey: newsKeys.detail(id),
     queryFn: () => fetchNewsDetail(id),
-    enabled: enabledById && enabledByOptions,
+    enabled: !!id,
   });
 }
 

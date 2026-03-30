@@ -46,9 +46,8 @@ export default function PushAlarmButton({ companyId, companyName }: Props) {
     <button
       onClick={handleClick}
       disabled={loading}
-      style={!isSubscribed ? { background: 'linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%)' } : undefined}
-      className={`rounded-lg px-4 py-2 text-sm font-medium transition-opacity ${
-        isSubscribed ? 'bg-gray-100 text-gray-700 hover:opacity-70' : 'text-white hover:opacity-80'
+      className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+        isSubscribed ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-blue-500 text-white hover:bg-blue-600'
       }`}>
       {loading ? '처리 중...' : isSubscribed ? '🔔 알림 해제' : '🔔 알림 받기'}
     </button>

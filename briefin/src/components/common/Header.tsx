@@ -50,7 +50,7 @@ export default function Header() {
   };
 
   return (
-    <header className="w-full min-w-0 shrink-0 bg-white">
+    <header className="w-full min-w-0 shrink-0 border-b border-[#E5E7EB] bg-white">
       <div className="mx-auto max-w-1600pxr">
         <div className="flex min-h-16 min-w-0 flex-wrap items-center justify-between gap-3 px-130pxr py-20pxr">
           <div className="flex min-w-0 flex-wrap items-center gap-4 gap-y-2">
@@ -80,10 +80,10 @@ export default function Header() {
                     href={item.href}
                     className={`fonts-bodySmall flex h-36pxr shrink-0 items-center rounded-nav px-12pxr font-bold transition-colors ${
                       isActive
-                        ? 'bg-[#EFF6FF] text-[#1E3A8A]'
+                        ? 'bg-[#F5F0E8] text-[#2C4A8F]'
                         : item.highlight
-                          ? 'text-[#1E3A8A] hover:bg-[#EFF6FF]'
-                          : 'text-[#4B5563] hover:bg-[#EFF6FF]'
+                          ? 'text-[#2C4A8F] hover:bg-[#F8F5EF]'
+                          : 'text-[#4B5563] hover:bg-[#F8F5EF]'
                     }`}>
                     {item.label}
                   </Link>
@@ -98,12 +98,12 @@ export default function Header() {
                 <span className="fonts-label">{userEmail}</span>
                 <Link
                   href="/mypage"
-                  className="fonts-bodySmall flex h-38pxr min-w-102pxr items-center justify-center rounded-button border border-[#D1D5DB] bg-white px-4 font-bold text-[#4B5563] hover:bg-[#F3F4F6]">
+                  className="fonts-bodySmall flex h-38pxr min-w-102pxr items-center justify-center rounded-button border border-[#E5E7EB] bg-white px-4 font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
                   마이페이지
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="fonts-bodySmall flex h-38pxr min-w-90pxr items-center justify-center rounded-button border border-[#D1D5DB] bg-white px-16pxr font-bold text-[#4B5563] hover:bg-[#F3F4F6]">
+                  className="fonts-bodySmall flex h-38pxr min-w-90pxr items-center justify-center rounded-button border border-[#E5E7EB] bg-white px-16pxr font-bold text-[#4B5563] hover:bg-[#F9FAFB]">
                   로그아웃
                 </button>
               </>
@@ -111,12 +111,12 @@ export default function Header() {
               <>
                 <Link
                   href="/login"
-                  className="fonts-label flex h-9 items-center justify-center rounded-button border border-[#D1D5DB] px-12pxr text-[#4B5563]">
+                  className="fonts-label flex h-9 items-center justify-center rounded-button border border-[#E5E7EB] px-12pxr text-[#4B5563]">
                   로그인
                 </Link>
                 <Link
                   href="/signup"
-                  className="fonts-label flex h-9 items-center justify-center rounded-[10px] bg-[#1E3A8A] px-12pxr text-white">
+                  className="fonts-label flex h-9 items-center justify-center rounded-[10px] bg-[#2C4A8F] px-12pxr text-white">
                   회원가입
                 </Link>
               </>

@@ -18,7 +18,7 @@ export default function HomePage() {
         </div>
 
         {/* Right sidebar */}
-        <div className="flex flex-col gap-16pxr lg:w-96 lg:shrink-0 lg:pt-[39px]">
+        <div className="flex flex-col gap-16pxr lg:w-96 lg:shrink-0">
           <AlertBanner
             title="관심 기업을 더 추가해보세요"
             description="더 많은 기업을 등록할수록 내 피드가 풍성해져요."
