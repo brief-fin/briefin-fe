@@ -25,11 +25,11 @@ export default function NewsDetail({ content }: NewsDetailProps) {
   const paragraphs = buildParagraphs(content);
 
   return (
-    <div className="mt-24pxr border-t border-surface-border pt-24pxr">
+    <div className="mt-28pxr border-t border-surface-border pt-28pxr">
       {paragraphs.map((paragraph, i) => (
         <p
           key={i}
-          className="leading-28pxr mt-18pxr break-keep text-[15px] tracking-[-0.1px] text-text-secondary first:mt-0">
+          className="leading-32pxr mt-24pxr break-keep text-[16px] tracking-[-0.2px] text-text-primary first:mt-0">
           {paragraph}
         </p>
       ))}

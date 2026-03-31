@@ -21,6 +21,13 @@ export interface NewsListItem {
   relatedCompanies: string[];
 }
 
+export interface RelatedCompanyItem {
+  companyId: number;
+  name: string;
+  ticker?: string | null;
+  logoUrl?: string | null;
+}
+
 export interface NewsDetailResponse {
   newsId: string;
   title: string;
@@ -31,7 +38,7 @@ export interface NewsDetailResponse {
   publishedAt: string | null;
   originalUrl: string | null;
   isScraped: boolean;
-  relatedCompanies: string[];
+  relatedCompanies: (RelatedCompanyItem | string)[];
   relatedNews: string[];
   thumbnailUrl?: string | null;
 }
@@ -126,7 +133,8 @@ export interface NewsHeaderProps {
 export interface Company {
   id: string;
   name: string;
-  emoji: string;
+  ticker?: string | null;
+  logoUrl?: string | null;
 }
 
 export interface NewsRelatedCompaniesProps {

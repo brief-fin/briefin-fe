@@ -1,4 +1,5 @@
 import { NewsHeaderProps } from '@/types/news';
+import { formatDateTime } from '@/utils/date';
 
 export default function NewsHeader({
   data: { category, publishedAt, source, title },
@@ -16,11 +17,11 @@ export default function NewsHeader({
         <div className="fonts-caption flex flex-wrap items-center gap-6pxr text-text-muted">
           {source && <span className="font-medium">{source}</span>}
           {source && publishedAt && <span>·</span>}
-          {publishedAt && <span>{publishedAt}</span>}
+          {publishedAt && <span>{formatDateTime(publishedAt)}</span>}
         </div>
       </div>
       <div className="flex items-start justify-between gap-12pxr">
-        <h1 className="break-keep text-[22px] font-black leading-[34px] tracking-[-0.5px] text-text-primary">
+        <h1 className="break-keep text-[24px] font-black leading-[38px] tracking-[-0.6px] text-text-primary">
           {title}
         </h1>
         {onToggleScrap && (

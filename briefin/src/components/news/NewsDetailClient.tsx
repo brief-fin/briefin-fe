@@ -42,11 +42,17 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
     queryFn: () => fetchRelatedNews(data.newsId),
   });
 
-  const relatedCompanies = (data.relatedCompanies ?? []).map((name, i) => ({
-    id: String(i),
-    name,
-    emoji: '🏢',
-  }));
+  const relatedCompanies = (data.relatedCompanies ?? []).map((company, i) => {
+    if (typeof company === 'string') {
+      return { id: String(i), name: company, ticker: null, logoUrl: null };
+    }
+    return {
+      id: String(company.companyId ?? i),
+      name: company.name,
+      ticker: company.ticker ?? null,
+      logoUrl: company.logoUrl ?? null,
+    };
+  });
 
   const relatedNews = (relatedNewsData ?? []).map((item) => ({
     id: item.newsId,
@@ -95,7 +101,7 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
                   priority
                 />
               </div>
-              <p className="text-text-disabled mt-8pxr text-right text-[12px]">{data.press}</p>
+              <p className="text-text-disabled mt-6pxr text-right text-[12px]">{data.press}</p>
             </div>
           )}
 

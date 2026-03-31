@@ -10,8 +10,8 @@ export default function NewsSummary({ summaries }: NewsSummaryProps) {
       <ul className="space-y-10pxr">
         {summaries.map((point, i) => (
           <li key={i} className="flex items-start gap-8pxr">
-            <CheckIcon className="mt-[3px] shrink-0" />
-            <span className="text-[14px] font-normal leading-[22px] break-keep text-primary-dark">{point}</span>
+            <CheckIcon className="mt-[4px] shrink-0" />
+            <span className="break-keep text-[15px] font-medium leading-[26px] text-primary-dark">{point}</span>
           </li>
         ))}
       </ul>
