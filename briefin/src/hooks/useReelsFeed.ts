@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { REELS_AUTO_ADVANCE_MS, REELS_SCROLL_DEBOUNCE_MS } from '@/constants/reels';
 import type { ReelNews } from '@/types/reelNews';
+import { scrapNews, deleteScrapNews } from '@/api/newsApi';
 
 export function useReelsFeed(reels: ReelNews[]) {
   const router = useRouter();
@@ -16,7 +17,8 @@ export function useReelsFeed(reels: ReelNews[]) {
   const total = reels.length;
 
   const [current, setCurrent] = useState(0);
-  const [scrapped, setScrapped] = useState<Set<number>>(new Set());
+  const [scrapped, setScrapped] = useState<Set<string>>(new Set());
+  const pendingScrapRef = useRef<Set<string>>(new Set());
   const [alerted, setAlerted] = useState<Set<number>>(new Set());
   const [progress, setProgress] = useState(0);
 
@@ -122,13 +124,34 @@ export function useReelsFeed(reels: ReelNews[]) {
   }, [goTo, router]);
 
   const toggleScrap = useCallback(() => {
+    const newsId = reels[currentRef.current]?.id;
+    if (!newsId) return;
+    if (pendingScrapRef.current.has(newsId)) return;
+
+    const isScrapped = scrapped.has(newsId);
+
+    pendingScrapRef.current.add(newsId);
     setScrapped((prev) => {
       const s = new Set(prev);
-      if (s.has(currentRef.current)) s.delete(currentRef.current);
-      else s.add(currentRef.current);
+      if (isScrapped) s.delete(newsId);
+      else s.add(newsId);
       return s;
     });
-  }, []);
+
+    const apiCall = isScrapped ? deleteScrapNews(newsId) : scrapNews(newsId);
+    apiCall
+      .catch(() => {
+        setScrapped((p) => {
+          const ns = new Set(p);
+          if (isScrapped) ns.add(newsId);
+          else ns.delete(newsId);
+          return ns;
+        });
+      })
+      .finally(() => {
+        pendingScrapRef.current.delete(newsId);
+      });
+  }, [reels, scrapped]);
 
   const toggleAlert = useCallback(() => {
     setAlerted((prev) => {

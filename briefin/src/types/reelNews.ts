@@ -14,7 +14,7 @@ export interface ReelNewsCompany {
 }
 
 export interface ReelNews {
-  id: number;
+  id: string;
   badge: ReelNewsBadge;
   category: string;
   source: string;
@@ -29,7 +29,7 @@ export interface ReelNews {
 }
 
 export interface ReelsActionRailProps {
-  newsId: number;
+  newsId: string;
   isScrapped: boolean;
   onToggleScrap: () => void;
 }

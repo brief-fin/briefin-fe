@@ -31,12 +31,14 @@ export default function ReelsActionRail({ newsId, isScrapped, onToggleScrap }: R
           <div
             className={`flex h-40pxr w-40pxr items-center justify-center rounded-full border text-[16px] shadow-stat-chip transition-all ${
               isScrapped
-                ? 'border-primary bg-primary-light'
+                ? 'border-primary bg-primary text-white'
                 : 'border-surface-border bg-surface-white hover:bg-surface-bg'
             }`}>
             🔖
           </div>
-          <span className="w-full text-center text-[10px] font-semibold leading-tight text-text-secondary">스크랩</span>
+          <span className={`w-full text-center text-[10px] font-semibold leading-tight transition-colors ${isScrapped ? 'text-primary' : 'text-text-secondary'}`}>
+            {isScrapped ? '스크랩됨' : '스크랩'}
+          </span>
         </button>
 
         <Link href={`/news/${newsId}`} className="flex w-full flex-col items-center gap-2pxr">
