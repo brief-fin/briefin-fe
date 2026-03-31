@@ -194,6 +194,7 @@ function RecentViewedCompanies({ companies }: { companies: RecentCompany[] }) {
                   alt={company.name}
                   fill
                   className="object-cover"
+                  unoptimized
                   onError={() => setImgErrors(prev => ({ ...prev, [company.id]: true }))}
                 />
               </div>
@@ -247,7 +248,7 @@ export default function Page() {
           {(recentSearches.length > 0 || recentViewed.length > 0) && (
             <div className="rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr">
               {recentSearches.length > 0 && (
-                <div className={recentViewed.length > 0 ? 'mb-16pxr' : ''}>
+                <div className={recentViewed.length > 0 ? 'mb-28pxr' : ''}>
                   <p className="mb-10pxr text-[12px] font-black text-text-muted">최근 검색어</p>
                   <div className="flex flex-wrap gap-8pxr">
                     {recentSearches.map((q) => (

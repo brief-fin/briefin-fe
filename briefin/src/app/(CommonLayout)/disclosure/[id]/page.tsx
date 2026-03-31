@@ -51,8 +51,6 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-surface-bg py-36pxr">
-      <BackButton href="/disclosure">← 공시 목록으로</BackButton>
-
       <div className="mt-16pxr flex flex-col gap-16pxr lg:flex-row lg:items-start lg:gap-24pxr">
         <div className="flex min-w-0 flex-1 flex-col gap-14pxr">
           <article className="rounded-card border border-surface-border bg-surface-white p-24pxr shadow-hero-card sm:p-32pxr">

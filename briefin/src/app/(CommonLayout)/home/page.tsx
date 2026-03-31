@@ -21,7 +21,7 @@ export default function HomePage() {
           <AlertBanner
             title="관심 기업을 더 추가해보세요"
             description="더 많은 기업을 등록할수록 내 피드가 풍성해져요."
-            buttonLabel="🏢 관심 기업 추가하기"
+            buttonLabel="관심 기업 추가하기"
             buttonHref="/companies"
           />
         </div>

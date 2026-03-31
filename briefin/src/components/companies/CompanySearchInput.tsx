@@ -96,7 +96,7 @@ export default function CompanySearchInput({ onSearch }: { onSearch?: () => void
   return (
     <div ref={containerRef} className="relative w-full">
       {/* 입력창 */}
-      <div className="flex w-full items-center gap-8pxr rounded-input border border-surface-border bg-surface-white px-16pxr py-12pxr shadow-sm">
+      <div className="flex w-full items-center gap-8pxr rounded-input border border-surface-border bg-surface-white px-16pxr py-12pxr">
         <input
           className="w-full bg-transparent p-5pxr text-text-primary placeholder:text-text-muted focus:outline-none"
           type="text"

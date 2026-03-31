@@ -73,16 +73,8 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
   }));
 
   return (
-    <div className="min-h-screen bg-surface-bg pb-40pxr">
-      <div className="pt-20pxr sm:pt-28pxr md:pt-36pxr">
-        <Link
-          href="/news"
-          className="inline-flex items-center gap-4pxr rounded-button bg-surface-white px-12pxr py-8pxr text-[13px] font-bold text-text-secondary transition-shadow hover:shadow-md sm:px-14pxr sm:py-10pxr sm:text-[14px]">
-          ← 뉴스 목록으로
-        </Link>
-      </div>
-
-      <div className="mt-14pxr flex flex-col gap-16pxr lg:flex-row lg:items-start lg:gap-24pxr">
+    <div className="min-h-screen bg-surface-bg py-36pxr">
+      <div className="mt-16pxr flex flex-col gap-16pxr lg:flex-row lg:items-start lg:gap-24pxr">
         <article className="min-w-0 flex-1 rounded-card border border-surface-border bg-surface-white p-24pxr shadow-hero-card sm:p-32pxr">
           <NewsHeader
             data={{

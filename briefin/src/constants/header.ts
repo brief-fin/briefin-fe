@@ -5,5 +5,5 @@ export const NAV_ITEMS: NavItem[] = [
   { label: '내 피드', href: '/feed' },
   { label: '공시', href: '/disclosure' },
   { label: '기업', href: '/companies' },
-  { label: '✦ 뉴스릴스', href: '/reels', highlight: true },
+  { label: '✦ Shorts', href: '/reels', highlight: true },
 ];

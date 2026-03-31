@@ -28,15 +28,7 @@ function CompanyLogo({ company }: { company: WatchlistCompany }) {
     );
   }
 
-  return (
-    <Image
-      src="/default-company.png"
-      alt="기본 회사 로고"
-      width={40}
-      height={40}
-      className="object-cover"
-    />
-  );
+  return <Image src="/default-company.png" alt="기본 회사 로고" width={40} height={40} className="object-cover" />;
 }
 
 export default function HomeWatchlistSection() {
@@ -45,7 +37,7 @@ export default function HomeWatchlistSection() {
 
   return (
     <div className="rounded-card border border-surface-border bg-surface-white p-20pxr">
-      <p className="text-[15px] font-black text-text-primary">👀 내 관심 기업</p>
+      <p className="text-[15px] font-black text-text-primary">내 관심 기업</p>
 
       {status === 'checking' && (
         <ul className="mt-8pxr divide-y divide-surface-border">
@@ -80,9 +72,7 @@ export default function HomeWatchlistSection() {
       )}
 
       {!isLoading && (!watchlist || watchlist.length === 0) && (
-        <p className="py-20pxr text-center text-[13px] text-text-muted">
-          등록된 관심 기업이 없습니다.
-        </p>
+        <p className="py-20pxr text-center text-[13px] text-text-muted">등록된 관심 기업이 없습니다.</p>
       )}
 
       {!isLoading && watchlist && watchlist.length > 0 && (
@@ -99,9 +89,7 @@ export default function HomeWatchlistSection() {
                   <p className="truncate text-[14px] font-bold text-text-primary">
                     {company.companyName ?? company.name ?? ''}
                   </p>
-                  {(company.ticker ?? '').trim() && (
-                    <p className="fonts-caption text-text-muted">{company.ticker}</p>
-                  )}
+                  {(company.ticker ?? '').trim() && <p className="fonts-caption text-text-muted">{company.ticker}</p>}
                 </div>
               </Link>
             </li>

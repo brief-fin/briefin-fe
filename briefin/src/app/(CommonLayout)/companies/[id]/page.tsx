@@ -96,18 +96,12 @@ export default function CompanyDetailPage() {
 
   return (
     <div className="min-h-screen bg-surface-bg py-36pxr">
-      <div className="pt-20pxr sm:pt-28pxr">
-        <Link
-          href="/companies"
-          className="fonts-label inline-flex items-center gap-4pxr rounded-button bg-surface-white px-12pxr py-8pxr font-bold text-text-secondary transition-shadow hover:shadow-md sm:px-14pxr sm:py-10pxr sm:text-[14px]">
-          ← 이전으로
-        </Link>
-      </div>
-
       <div className="mt-14pxr sm:mt-18pxr md:mt-20pxr">
         <CompanyHero
           industry={company.sector ?? '기타'}
           name={company.name}
+          logoUrl={company.logoUrl}
+          ticker={company.ticker}
           stats={stats}
           isWatchlisted={isWatchlisted}
           onToggleWatchlist={handleToggleWatchlist}
