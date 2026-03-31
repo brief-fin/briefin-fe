@@ -6,22 +6,18 @@ export default function PrivacyPage() {
         className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen py-16pxr"
         style={{ background: 'linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%)' }}>
         <div className="mx-auto max-w-3xl px-6 text-center">
-          <p className="mb-4 text-sm font-semibold tracking-widest text-blue-200 uppercase">
-            BrieFin
-          </p>
+          <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-blue-200">BrieFin</p>
           <h1 className="fonts-heading1 text-white">개인정보처리방침</h1>
         </div>
       </section>
 
       {/* Content */}
-      <div className="mx-auto w-full max-w-3xl flex flex-col gap-8">
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
         {PRIVACY_SECTIONS.map((section) => (
           <section key={section.title} className="flex flex-col gap-3">
             <h2 className="fonts-heading3 text-text-primary">{section.title}</h2>
-            <div className="rounded-card border border-surface-border bg-surface-white p-6 shadow-card flex flex-col gap-4">
-              {section.intro && (
-                <p className="fonts-body1 text-text-secondary">{section.intro}</p>
-              )}
+            <div className="shadow-card flex flex-col gap-4 rounded-card border border-surface-border bg-surface-white p-6">
+              {section.intro && <p className="fonts-body1 text-text-secondary">{section.intro}</p>}
               {section.items && (
                 <ul className="flex flex-col gap-2">
                   {section.items.map((item) => (
@@ -32,22 +28,21 @@ export default function PrivacyPage() {
                   ))}
                 </ul>
               )}
-              {section.groups && section.groups.map((group) => (
-                <div key={group.label} className="flex flex-col gap-2">
-                  <p className="fonts-label1 font-semibold text-text-primary">{group.label}</p>
-                  <ul className="flex flex-col gap-1">
-                    {group.items.map((item) => (
-                      <li key={item} className="fonts-body2 flex items-start gap-2 text-text-secondary">
-                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-              {section.note && (
-                <p className="fonts-body2 text-text-muted">{section.note}</p>
-              )}
+              {section.groups &&
+                section.groups.map((group) => (
+                  <div key={group.label} className="flex flex-col gap-2">
+                    <p className="fonts-label1 font-semibold text-text-primary">{group.label}</p>
+                    <ul className="flex flex-col gap-1">
+                      {group.items.map((item) => (
+                        <li key={item} className="fonts-body2 flex items-start gap-2 text-text-secondary">
+                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              {section.note && <p className="fonts-body2 text-text-muted">{section.note}</p>}
             </div>
           </section>
         ))}
@@ -77,11 +72,7 @@ const PRIVACY_SECTIONS = [
       },
       {
         label: '② 서비스 이용 과정에서 자동 수집',
-        items: [
-          '접속 로그',
-          '이용 기록 (조회, 좋아요, 체류 시간 등)',
-          'IP 주소, 브라우저 정보',
-        ],
+        items: ['접속 로그', '이용 기록 (조회, 좋아요, 체류 시간 등)', 'IP 주소, 브라우저 정보'],
       },
     ],
   },
@@ -98,10 +89,7 @@ const PRIVACY_SECTIONS = [
   {
     title: '5. 개인정보 처리 위탁',
     intro: '서비스는 원활한 운영을 위해 일부 업무를 외부에 위탁할 수 있습니다.',
-    items: [
-      '클라우드 서비스 제공자 (예: Amazon Web Services, Supabase)',
-      '분석 도구 (예: Google Analytics)',
-    ],
+    items: ['클라우드 서비스 제공자 (예: Amazon Web Services, Supabase)', '분석 도구 (예: Google Analytics)'],
   },
   {
     title: '6. 개인정보의 안전성 확보 조치',
@@ -122,11 +110,10 @@ const PRIVACY_SECTIONS = [
   {
     title: '9. 개인정보 보호책임자',
     intro: '서비스는 개인정보 보호 관련 문의를 위해 아래와 같이 담당자를 지정합니다.',
-    items: ['이메일: seohyeonkim111@gmail.com'],
+    items: ['이메일: briefin@gmail.com'],
   },
   {
     title: '10. 정책 변경',
-    intro:
-      '본 개인정보처리방침은 법령 및 서비스 변경에 따라 수정될 수 있으며, 변경 시 공지합니다.',
+    intro: '본 개인정보처리방침은 법령 및 서비스 변경에 따라 수정될 수 있으며, 변경 시 공지합니다.',
   },
 ];
