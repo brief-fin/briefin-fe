@@ -22,7 +22,12 @@ export const fetchScrappedNews = (page = 1, size = 10) =>
 export const fetchWatchlist = () =>
   apiClient
     .get<ApiResponse<{ watchlist: WatchlistCompany[] }>>('/api/users/watchlist')
-    .then((res) => res.result.watchlist);
+    .then((res) =>
+      (res.result.watchlist ?? []).map((c) => ({
+        ...c,
+        companyName: c.companyName ?? c.name ?? '',
+      })),
+    );
 
 // 최근 본 뉴스 목록
 export const fetchRecentNews = (page = 1, size = 10) =>

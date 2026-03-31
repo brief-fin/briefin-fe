@@ -25,8 +25,8 @@ export default function WatchlistSection() {
             🏢
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[14px] font-bold text-text-primary">{company.companyName}</p>
-            <p className="fonts-caption">{company.ticker}</p>
+            <p className="text-[14px] font-bold text-text-primary">{company.name}</p>
+            {(company.ticker ?? '').trim() && <p className="fonts-caption text-text-muted">{company.ticker}</p>}
           </div>
           <PushAlarmButton companyId={company.companyId} companyName={company.companyName} />
           <button
