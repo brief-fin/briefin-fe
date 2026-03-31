@@ -145,7 +145,6 @@ export default function CompanyDetailPage() {
             onTagChange={setActiveTimelineTag}
             items={MOCK_TIMELINE_ITEMS}
           />
-          <PopularCompanyList title="관련 기업" companies={MOCK_RELATED_COMPANIES} />
         </div>
       </div>
     </div>

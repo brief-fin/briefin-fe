@@ -3,15 +3,28 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { SearchComponent } from '@/components/common/SearchComponent';
-import { apiClient, ApiResponse } from '@/api/client';
+import { apiClient, type ApiResponse } from '@/api/client';
 import { CompanyCard } from '@/components/companies/CompanyCard';
+
+interface CompanyItem {
+  id: number;
+  name: string;
+  sector: string | null;
+  logoUrl: string | null;
+  changeRate: number | null;
+}
+
+interface CompanyPage {
+  content: CompanyItem[];
+  totalElements: number;
+}
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const query = searchParams.get('q')?.trim() ?? '';
 
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<CompanyItem[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
@@ -19,13 +32,15 @@ export default function SearchPage() {
     const fetchResults = async () => {
       setLoading(true);
       try {
-        // 백엔드 경로 확인: /api/companies/search
-        const res = await apiClient.get<ApiResponse<any>>(`/companies/search?q=${encodeURIComponent(query)}&size=20`);
-        setResults(res.result.content || []);
-        setTotalCount(res.result.totalElements || 0);
+        const res = await apiClient.get<ApiResponse<CompanyPage>>(
+          `/companies/search?q=${encodeURIComponent(query)}&size=20`,
+        );
+        setResults(res.result.content);
+        setTotalCount(res.result.totalElements);
       } catch (error) {
         console.error('기업 데이터 로드 실패:', error);
         setResults([]);
+        setTotalCount(0);
       } finally {
         setLoading(false);
       }
@@ -36,17 +51,18 @@ export default function SearchPage() {
 
   return (
     <main className="relative mx-auto flex h-full w-full max-w-screen-xl flex-col px-20pxr py-36pxr">
-      {/* 검색 헤더 - searchPath를 현재 페이지 경로로 설정 */}
       <div className="mb-40pxr text-center">
         <h1 className="fonts-heading2 mb-20pxr text-text-primary">기업 찾기</h1>
         <SearchComponent
-          searchPath="/companies/result" // 이 경로가 현재 페이지 주소와 일치해야 합니다.
+          searchPath="/companies/result"
           placeholder="기업명, 티커를 입력하세요"
         />
       </div>
 
       <div className="fonts-caption mb-20pxr mt-24pxr border-b border-surface-border pb-12pxr text-text-muted">
-        {query ? `"${query}" 검색 결과 ${totalCount > 0 ? `${totalCount}건` : '없음'}` : `전체 기업 ${totalCount}건`}
+        {query
+          ? `"${query}" 검색 결과 ${totalCount > 0 ? `${totalCount}건` : '없음'}`
+          : `전체 기업 ${totalCount}건`}
       </div>
 
       {loading ? (
@@ -62,13 +78,20 @@ export default function SearchPage() {
           <span className="text-60pxr">🏢</span>
           <div className="fonts-cardTitle text-text-primary">검색 결과가 없어요</div>
           <div className="fonts-body text-center text-text-muted">
-            검색어 <span className="font-bold">"{query}"</span>와 일치하는 기업이 없습니다.
-            <br />
-            기업명이나 종목코드를 다시 확인해 보세요.
+            {query ? (
+              <>
+                검색어 <span className="font-bold">"{query}"</span>와 일치하는 기업이 없습니다.
+                <br />
+                기업명이나 종목코드를 다시 확인해 보세요.
+              </>
+            ) : (
+              <>검색어를 입력해 주세요.</>
+            )}
           </div>
           <button
-            onClick={() => router.push('/companies/result')} // 클라이언트 컴포넌트이므로 작동함
-            className="text-primary-main fonts-label mt-10pxr hover:underline">
+            onClick={() => router.push('/companies/result')}
+            className="text-primary-main fonts-label mt-10pxr hover:underline"
+          >
             전체 목록 보기
           </button>
         </div>

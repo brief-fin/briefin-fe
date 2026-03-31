@@ -114,7 +114,9 @@ function redirectToLoginWithCurrentPath() {
 }
 
 export const apiClient = {
-  get: <T>(path: string) => request<T>(path),
+  // options를 받아 request()로 전달 — cache: 'no-store' 등 per-request 옵션 지원
+  get: <T>(path: string, options?: Omit<RequestInit, 'method'>) =>
+    request<T>(path, options),
   post: <T>(path: string, body?: unknown) =>
     request<T>(path, { method: 'POST', body: JSON.stringify(body) }),
   delete: <T>(path: string) => request<T>(path, { method: 'DELETE' }),
