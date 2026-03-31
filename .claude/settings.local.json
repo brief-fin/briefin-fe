@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(python3:*)",
+      "Bash(node:*)",
+      "Bash(find /c/Users/user/briefin-fe/briefin/src -type f \\\\\\(-name *.tsx -o -name *.ts \\\\\\))"
+    ]
+  }
+}

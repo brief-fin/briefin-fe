@@ -5,14 +5,14 @@ export default function NewsRelatedCompanies({ relatedCompanies }: NewsRelatedCo
   if (!relatedCompanies || relatedCompanies.length === 0) return null;
 
   return (
-    <div className="mt-24pxr">
-      <p className="fonts-caption mb-8pxr font-bold text-text-muted">관련 기업</p>
+    <div className="mt-20pxr border-t border-surface-border pt-20pxr">
+      <p className="mb-10pxr text-[11px] font-black uppercase tracking-[1.5px] text-text-muted">관련 기업</p>
       <div className="flex flex-wrap gap-8pxr">
         {relatedCompanies.map((company) => (
           <Link
             key={company.id}
             href={`/companies/${company.id}`}
-            className="rounded-badge border border-surface-border bg-surface-white px-14pxr py-8pxr text-[13px] font-bold text-text-secondary transition-colors hover:bg-surface-bg">
+            className="inline-flex items-center gap-6pxr rounded-badge border border-primary-mid bg-primary-subtle px-14pxr py-8pxr text-[13px] font-bold text-primary transition-colors hover:bg-primary-light">
             {company.emoji} {company.name}
           </Link>
         ))}

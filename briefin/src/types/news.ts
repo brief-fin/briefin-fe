@@ -33,6 +33,7 @@ export interface NewsDetailResponse {
   isScraped: boolean;
   relatedCompanies: string[];
   relatedNews: string[];
+  thumbnailUrl?: string | null;
 }
 
 export interface NewsRelatedItem {
@@ -118,6 +119,8 @@ export interface NewsHeaderProps {
   data: Pick<MockNewsDetailRaw, 'category' | 'source' | 'title' | 'isLive'> & {
     publishedAt: string | null;
   };
+  isScrapped?: boolean;
+  onToggleScrap?: () => void;
 }
 
 export interface Company {

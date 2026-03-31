@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { MyPageTab } from '@/types/mypage';
 import { TAB_FROM_QUERY, TAB_TO_QUERY, MY_PAGE_TABS } from '@/constants/mypage';
 import { useMyInfo, useScrappedNews, useRecentNews } from '@/hooks/useUser';
+import { formatDateTime } from '@/utils/date';
 
 function MyPageContent() {
   const router = useRouter();
@@ -54,7 +55,7 @@ function MyPageContent() {
                 {news.summary && (
                   <p className="fonts-caption line-clamp-2 text-text-muted">{news.summary}</p>
                 )}
-                <p className="fonts-caption text-text-disabled">{news.source} · {news.scrapedAt}</p>
+                <p className="fonts-caption text-text-disabled">{news.source} · {formatDateTime(news.scrapedAt)}</p>
               </Link>
             ))}
           </div>
@@ -76,7 +77,7 @@ function MyPageContent() {
                 {news.summary && (
                   <p className="fonts-caption line-clamp-2 text-text-muted">{news.summary}</p>
                 )}
-                <p className="fonts-caption text-text-disabled">{news.source} · {news.viewedAt}</p>
+                <p className="fonts-caption text-text-disabled">{news.source} · {formatDateTime(news.viewedAt)}</p>
               </Link>
             ))}
           </div>

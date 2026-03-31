@@ -22,7 +22,7 @@ export default function HomeNewsSection() {
     return <p className="fonts-label py-10 text-center text-text-muted">뉴스를 불러오지 못했습니다.</p>;
   }
 
-  const newsList = data.content.map(toNewsItem);
+  const newsList = (data.content ?? []).map(toNewsItem);
 
   return (
     <div className="flex w-full flex-col gap-14pxr">

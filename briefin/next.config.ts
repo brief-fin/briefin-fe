@@ -16,6 +16,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'thumb.tossinvest.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.hankyung.com',
+      },
     ],
   },
 };
