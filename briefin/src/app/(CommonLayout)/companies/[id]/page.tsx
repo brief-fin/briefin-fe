@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Tabs from '@/components/common/Tabs';
 import CompanyHero from '@/components/companies/CompanyHero';
@@ -9,18 +10,88 @@ import AlertBanner from '@/components/common/AlertBanner';
 import PopularCompanyList from '@/components/common/PopularCompanyList';
 import NewsTimeline from '@/components/common/NewsTimeline';
 import DisclosureList from '@/components/disclosure/DisclosureList';
-import { MOCK_COMPANY, MOCK_NEWS, MOCK_RELATED_COMPANIES } from '@/mocks/companyDetail';
+import { MOCK_NEWS } from '@/mocks/companyDetail';
 import { MOCK_COMPANY_DISCLOSURES } from '@/mocks/disclosureDetail';
 import { COMPANY_DETAIL_TABS, type CompanyDetailTab } from '@/constants/companyDetail';
+import { CompanyDetail, fetchCompanyDetail } from '@/api/companyApi';
 import { TIMELINE_TAGS, MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
+import { MOCK_RELATED_COMPANIES } from '@/mocks/companyDetail';
+import { useStockPrice } from '@/api/hook/useStockPrice';
+import { apiClient } from '@/api/client';
+import { useAuthSessionVersion } from '@/providers/AuthSessionProvider';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function CompanyDetailPage() {
+  const { id } = useParams();
   const [activeTab, setActiveTab] = useState<CompanyDetailTab>('관련 뉴스');
+  const [company, setCompany] = useState<CompanyDetail | null>(null);
+  const [loading, setLoading] = useState(true);
   const [activeTimelineTag, setActiveTimelineTag] = useState(TIMELINE_TAGS[0]);
+  const [isWatchlisted, setIsWatchlisted] = useState(false);
+  const [watchlistLoading, setWatchlistLoading] = useState(false);
+
+  const sessionVersion = useAuthSessionVersion()
+
+  const stockPrice = useStockPrice(company?.ticker ?? null);
+
+  useEffect(() => {
+    if (!id) return;
+    if(sessionVersion){
+      fetchCompanyDetail(Number(id))
+        .then((data) => {
+          setCompany(data);
+          setIsWatchlisted(data.watchlisted ?? false); // 백엔드가 내려주는 경우
+        })
+        .catch(console.error)
+        .finally(() => setLoading(false));
+    }
+  }, [id, sessionVersion]);
+
+  const handleToggleWatchlist = async () => {
+    if (!company || watchlistLoading) return;
+  
+    setWatchlistLoading(true);
+    try {
+      if (isWatchlisted) {
+        await apiClient.delete(`/api/users/${company.id}/watch`);
+      } else {
+        await apiClient.post(`/api/users/${company.id}/watch`);
+      }
+      setIsWatchlisted((prev) => !prev);
+    } catch (e) {
+      console.error('관심 기업 처리 실패:', e);
+      alert('요청에 실패했어요. 다시 시도해 주세요.');
+    } finally {
+      setWatchlistLoading(false);
+    }
+  };
+
+  if (loading) return <div className="min-h-screen bg-surface-bg py-36pxr">로딩중...</div>;
+  if (!company) return <div className="min-h-screen bg-surface-bg py-36pxr">기업 정보를 찾을 수 없어요.</div>;
+
+  const stats = [
+    {
+      label: '현재가',
+      value: (stockPrice?.currentPrice ?? company?.currentPrice ?? 0).toLocaleString(),
+      unit: '원',
+    },
+    {
+      label: '등락률',
+      value: `${(stockPrice?.changeRate ?? company?.changeRate ?? 0) > 0 ? '+' : ''}${stockPrice?.changeRate ?? company?.changeRate ?? 0}`,
+      unit: '%',
+      isRise: (stockPrice?.changeRate ?? company?.changeRate ?? 0) > 0,
+      isFall: (stockPrice?.changeRate ?? company?.changeRate ?? 0) < 0,
+    },
+    {
+      label: '시가총액',
+      value: (company?.marketCap ?? 0).toLocaleString(),
+      unit: '억',
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-surface-bg py-36pxr">
-      {/* 뒤로가기 */}
       <div className="pt-20pxr sm:pt-28pxr">
         <Link
           href="/companies"
@@ -29,40 +100,51 @@ export default function CompanyDetailPage() {
         </Link>
       </div>
 
-      {/* 히어로 */}
       <div className="mt-14pxr sm:mt-18pxr md:mt-20pxr">
-        <CompanyHero {...MOCK_COMPANY} />
+        <CompanyHero
+          industry={company.sector ?? '기타'}
+          name={company.name}
+          stats={stats}
+          isWatchlisted={isWatchlisted}
+          onToggleWatchlist={handleToggleWatchlist}
+        />
       </div>
 
-      {/* 탭 */}
+      {/* 이하 동일 */}
       <div className="mt-20pxr">
         <Tabs tabs={COMPANY_DETAIL_TABS} activeTab={activeTab} onTabChange={setActiveTab} />
       </div>
 
-      {/* 컨텐츠 — 모바일: 단일 컬럼 / 데스크톱: 좌우 2컬럼 */}
       <div className="mt-16pxr flex flex-col gap-16pxr lg:flex-row lg:items-start lg:gap-24pxr">
-        {/* 좌: 뉴스 목록 */}
         <div className="min-w-0 flex-1 flex flex-col gap-14pxr">
           {activeTab === '관련 뉴스' && MOCK_NEWS.map((news) => <NewsCard key={news.id} news={news} />)}
           {activeTab === '공시' && <DisclosureList items={MOCK_COMPANY_DISCLOSURES} />}
         </div>
 
-        {/* 우: 사이드바 — 모바일에서는 탭 컨텐츠 아래 전체 너비 */}
         <div className="flex w-full flex-col gap-14pxr lg:w-96">
           <AlertBanner
             title="🔔 공시 알림 받기"
             description="이 기업의 새 공시·뉴스를 실시간으로 받아보세요."
             buttonLabel="알림 설정하기"
           />
-
+          <PopularCompanyList
+            title="관련 기업"
+            companies={(company.relatedCompanies ?? []).map((c) => ({
+              id: c.id,
+              name: c.name,
+              sector: '',
+              change: '',
+              isRise: false,
+              emoji: '🏢',
+              bgColor: 'bg-gray-100',
+            }))}
+          />
           <NewsTimeline
             tags={TIMELINE_TAGS}
             activeTag={activeTimelineTag}
             onTagChange={setActiveTimelineTag}
             items={MOCK_TIMELINE_ITEMS}
           />
-
-          <PopularCompanyList title="관련 기업" companies={MOCK_RELATED_COMPANIES} />
         </div>
       </div>
     </div>
