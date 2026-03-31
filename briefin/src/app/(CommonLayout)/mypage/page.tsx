@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Tabs from '@/components/common/Tabs';
 import MyPageHeader from '@/components/mypage/mypageheader';
@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { MyPageTab } from '@/types/mypage';
 import { TAB_FROM_QUERY, TAB_TO_QUERY, MY_PAGE_TABS } from '@/constants/mypage';
 import { useMyInfo, useScrappedNews, useRecentNews } from '@/hooks/useUser';
+import { useDeleteScrapNews } from '@/hooks/useNews';
 
 function MyPageContent() {
   const router = useRouter();
@@ -21,6 +22,8 @@ function MyPageContent() {
   const { data: userInfo } = useMyInfo();
   const { data: scrapsData, isLoading: scrapsLoading } = useScrappedNews();
   const { data: recentData, isLoading: recentLoading } = useRecentNews();
+  const { mutate: deleteScrap } = useDeleteScrapNews();
+  const [unscrappedIds, setUnscrappedIds] = useState<Set<number>>(new Set());
 
   const handleTabChange = (tab: MyPageTab) => {
     router.push(`/mypage?tab=${TAB_TO_QUERY[tab]}`);
@@ -49,12 +52,24 @@ function MyPageContent() {
               <Link
                 key={news.newsId}
                 href={`/news/${news.newsId}`}
-                className="flex flex-col gap-6pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr hover:bg-surface-bg transition-colors">
-                <p className="text-[14px] font-bold text-text-primary">{news.title}</p>
-                {news.summary && (
-                  <p className="fonts-caption line-clamp-2 text-text-muted">{news.summary}</p>
-                )}
-                <p className="fonts-caption text-text-disabled">{news.source} · {news.scrapedAt}</p>
+                className="flex items-start gap-12pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr hover:bg-surface-bg transition-colors">
+                <div className="flex min-w-0 flex-1 flex-col gap-6pxr">
+                  <p className="text-[14px] font-bold text-text-primary">{news.title}</p>
+                  {news.summary && (
+                    <p className="fonts-caption line-clamp-2 text-text-muted">{news.summary}</p>
+                  )}
+                  <p className="fonts-caption text-text-disabled">{news.source} · {news.scrapedAt}</p>
+                </div>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    deleteScrap(news.newsId);
+                    setUnscrappedIds((prev) => new Set(prev).add(news.newsId));
+                  }}
+                  className={`shrink-0 text-[20px] transition-colors ${unscrappedIds.has(news.newsId) ? 'text-text-muted' : 'text-yellow-400'}`}>
+                  ★
+                </button>
               </Link>
             ))}
           </div>
