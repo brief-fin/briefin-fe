@@ -1,7 +1,8 @@
 import { authStore } from '@/store/authStore';
+import { authDebug } from '@/lib/authDebug';
+import { refreshAccessTokenSingleFlight } from '@/lib/refreshSession';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
-let refreshPromise: Promise<string | null> | null = null;
 
 export class ApiError extends Error {
   constructor(
@@ -32,20 +33,39 @@ async function request<T>(path: string, options?: RequestInit, canRetry = true):
     ...options,
   });
 
-  if (res.status === 401 && canRetry && !path.startsWith('/api/auth/')) {
-    const newToken = await tryRefreshAccessToken();
-    if (newToken) {
-      return request<T>(path, options, false);
-    }
-    authStore.clear();
-    redirectToLoginWithCurrentPath();
-    throw new ApiError('인증이 만료되었습니다. 다시 로그인해주세요.', 401);
-  }
+  const isAuthPath = path.startsWith('/api/auth/');
+  const isUnauthorized = res.status === 401 || res.status === 403;
+  if (isUnauthorized && !isAuthPath) {
+    const status = authStore.getStatus();
+    authDebug('api:unauthorized', { path, status, httpStatus: res.status, canRetry });
 
-  if (res.status === 403 && !path.startsWith('/api/auth/')) {
+    // checking 동안은 성급하게 로그인으로 보내지 말고 refresh 결과를 기다려본다.
+    if (canRetry) {
+      const newToken = await refreshAccessTokenSingleFlight(`api:${res.status}:${path}`);
+      if (newToken) {
+        authDebug('api:retry-after-refresh', { path });
+        return request<T>(path, options, false);
+      }
+
+      // checking이 끝나기 전이면 provider refresh를 기다렸다가 1회만 더 시도
+      if (status === 'checking' && !authStore.isSessionInitDone()) {
+        authDebug('api:wait-session-init', { path });
+        await authStore.whenSessionInitialized();
+        const tokenAfterInit = authStore.getAccessToken();
+        if (tokenAfterInit) {
+          authDebug('api:retry-after-init', { path });
+          return request<T>(path, options, false);
+        }
+      }
+    }
+
     authStore.clear();
+    authDebug('api:redirect-login', { path, httpStatus: res.status });
     redirectToLoginWithCurrentPath();
-    throw new ApiError('로그인이 필요합니다. 다시 로그인해주세요.', 403);
+    throw new ApiError(
+      res.status === 401 ? '인증이 만료되었습니다. 다시 로그인해주세요.' : '로그인이 필요합니다. 다시 로그인해주세요.',
+      res.status,
+    );
   }
 
   const text = await res.text();
@@ -68,43 +88,6 @@ async function request<T>(path: string, options?: RequestInit, canRetry = true):
   }
 
   return body as T;
-}
-
-async function tryRefreshAccessToken(): Promise<string | null> {
-  if (!refreshPromise) {
-    refreshPromise = (async () => {
-      try {
-        const res = await fetch(`${BASE_URL}/api/auth/refresh`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({}),
-        });
-        if (!res.ok) return null;
-
-        const text = await res.text();
-        const body = text
-          ? (() => {
-              try {
-                return JSON.parse(text) as ApiResponse<{ accessToken: string }>;
-              } catch {
-                return null;
-              }
-            })()
-          : null;
-
-        const newToken = body?.result?.accessToken ?? null;
-        if (newToken) authStore.setAccessToken(newToken);
-        return newToken;
-      } catch {
-        return null;
-      } finally {
-        refreshPromise = null;
-      }
-    })();
-  }
-
-  return refreshPromise;
 }
 
 function redirectToLoginWithCurrentPath() {

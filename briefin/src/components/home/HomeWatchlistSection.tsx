@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useWatchlist } from '@/hooks/useUser';
+import { useAuthStatus } from '@/providers/AuthSessionProvider';
 import type { WatchlistCompany } from '@/types/mypage';
 
 function CompanyLogo({ company }: { company: WatchlistCompany }) {
@@ -13,10 +14,11 @@ function CompanyLogo({ company }: { company: WatchlistCompany }) {
     : (company.logoUrl ?? null);
 
   if (logoUrl && !imgError) {
+    const altText = company.companyName?.trim() ? `${company.companyName} 로고` : '회사 로고';
     return (
       <Image
         src={logoUrl}
-        alt={company.companyName}
+        alt={altText}
         width={40}
         height={40}
         className="object-cover"
@@ -33,11 +35,30 @@ function CompanyLogo({ company }: { company: WatchlistCompany }) {
 }
 
 export default function HomeWatchlistSection() {
-  const { data: watchlist, isLoading } = useWatchlist();
+  const status = useAuthStatus();
+  const { data: watchlist, isLoading } = useWatchlist({ enabled: status === 'authenticated' });
 
   return (
     <div className="rounded-card border border-surface-border bg-surface-white p-20pxr">
       <p className="text-[15px] font-black text-text-primary">👀 내 관심 기업</p>
+
+      {status === 'checking' && (
+        <ul className="mt-8pxr divide-y divide-surface-border">
+          {[...Array(3)].map((_, i) => (
+            <li key={i} className="flex items-center gap-12pxr py-12pxr">
+              <div className="h-40pxr w-40pxr shrink-0 animate-pulse rounded-full bg-surface-border" />
+              <div className="flex-1 space-y-6pxr">
+                <div className="h-12pxr w-24 animate-pulse rounded bg-surface-border" />
+                <div className="h-10pxr w-16 animate-pulse rounded bg-surface-border" />
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {status === 'unauthenticated' && (
+        <p className="py-20pxr text-center text-[13px] text-text-muted">로그인하면 관심 기업을 볼 수 있어요</p>
+      )}
 
       {isLoading && (
         <ul className="mt-8pxr divide-y divide-surface-border">
