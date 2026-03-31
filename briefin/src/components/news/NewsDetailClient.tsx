@@ -77,7 +77,7 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
       <div className="pt-20pxr sm:pt-28pxr md:pt-36pxr">
         <Link
           href="/news"
-          className="inline-flex items-center gap-4pxr rounded-button border border-surface-border bg-surface-white px-12pxr py-8pxr text-[13px] font-bold text-text-secondary transition-colors hover:bg-surface-bg sm:px-14pxr sm:py-10pxr sm:text-[14px]">
+          className="inline-flex items-center gap-4pxr rounded-button bg-surface-white px-12pxr py-8pxr text-[13px] font-bold text-text-secondary transition-shadow hover:shadow-md sm:px-14pxr sm:py-10pxr sm:text-[14px]">
           ← 뉴스 목록으로
         </Link>
       </div>

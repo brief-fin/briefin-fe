@@ -57,7 +57,7 @@ export default function NewsCard({ news }: NewsCardProps) {
 
       {/* 썸네일: 와이드형, 상단 정렬 */}
       {thumbnailUrl && (
-        <div className="relative h-100pxr w-160pxr shrink-0 self-start overflow-hidden rounded-md">
+        <div className="relative h-100pxr w-160pxr shrink-0 self-center overflow-hidden rounded-md">
           <Image src={thumbnailUrl} alt="" fill className="object-cover" />
         </div>
       )}
