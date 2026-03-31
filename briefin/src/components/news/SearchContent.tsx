@@ -1,30 +1,76 @@
 'use client';
 
-import NewsList from '@/components/news/NewsList';
+import Link from 'next/link';
+import { useEffect, useRef } from 'react';
 import { SearchComponent } from '@/components/common/SearchComponent';
 import { useSearchParams } from 'next/navigation';
-import { NEWS_DUMMY } from '@/mocks/newsDummy';
+import { useNewsSearch } from '@/hooks/useNews';
 
 export default function SearchContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') ?? '';
 
-  const filtered = NEWS_DUMMY.filter((news) => news.companies.includes(query) || news.categories.includes(query));
+  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } = useNewsSearch(query);
+
+  const results = data?.pages.flatMap((page) => page.content) ?? [];
+  const totalCount = data?.pages[0]?.totalElements ?? 0;
+
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = bottomRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.1 },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
     <main className="relative flex h-full w-full flex-col pt-36pxr">
       <div className="fonts-heading3 mb-16pxr">뉴스</div>
-      <SearchComponent searchPath="/news/search" />
+      <SearchComponent searchPath="/news/search/result" />
 
-      <div className="fonts-caption mt-20pxr text-text-muted">
-        &quot;{query}&quot; 검색 결과 {filtered.length > 0 ? `${filtered.length}건` : '없음'}
-      </div>
-
-      {filtered.length > 0 ? (
-        <div className="mb-30pxr mt-20pxr">
-          <NewsList category={query} />
+      {query && (
+        <div className="fonts-caption mt-20pxr text-text-muted">
+          &quot;{query}&quot; 검색 결과 {isLoading ? '...' : `${totalCount}건`}
         </div>
-      ) : (
+      )}
+
+      {isLoading && (
+        <p className="py-40pxr text-center text-[14px] text-text-muted">불러오는 중...</p>
+      )}
+
+      {!isLoading && results.length > 0 && (
+        <div className="mb-30pxr mt-20pxr flex flex-col gap-12pxr">
+          {results.map((news) => (
+            <Link
+              key={news.newsId}
+              href={`/news/${news.newsId}`}
+              className="flex flex-col gap-6pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr transition-colors hover:bg-surface-bg">
+              <p className="text-[14px] font-bold text-text-primary">{news.title}</p>
+              {news.summary && <p className="fonts-caption line-clamp-2 text-text-muted">{news.summary}</p>}
+              <p className="fonts-caption text-text-disabled">{news.press} · {news.publishedAt}</p>
+            </Link>
+          ))}
+
+          <div ref={bottomRef} className="py-4pxr">
+            {isFetchingNextPage && (
+              <p className="py-16pxr text-center text-[14px] text-text-muted">불러오는 중...</p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {!isLoading && results.length === 0 && query && (
         <div className="flex flex-col items-center justify-center gap-16pxr py-120pxr">
           <span className="text-60pxr">🔍</span>
           <div className="fonts-cardTitle text-text-primary">검색 결과가 없어요</div>

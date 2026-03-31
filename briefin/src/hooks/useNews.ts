@@ -44,11 +44,13 @@ export function useNewsDetail(id: string | number, options?: { enabled?: boolean
   });
 }
 
-// 뉴스 검색
+// 뉴스 검색 (무한스크롤)
 export function useNewsSearch(q: string) {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: newsKeys.search(q),
-    queryFn: () => searchNews(q),
+    queryFn: ({ pageParam = 0 }) => searchNews(q, pageParam as number),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => (lastPage.hasNext ? lastPage.currentPage + 1 : undefined),
     enabled: q.length > 0,
   });
 }
