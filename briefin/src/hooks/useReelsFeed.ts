@@ -32,6 +32,7 @@ export function useReelsFeed(reels: ReelNews[]) {
   }, []);
 
   const startProgress = useCallback((fromElapsed = 0) => {
+    if (total <= 0) return;
     clearTimers();
     pausedRef.current = false;
     elapsedRef.current = fromElapsed;
