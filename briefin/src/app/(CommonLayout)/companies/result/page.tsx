@@ -56,6 +56,7 @@ export default function SearchPage() {
         <SearchComponent
           searchPath="/companies/result"
           placeholder="기업명, 티커를 입력하세요"
+          defaultValue={query}
         />
       </div>
 

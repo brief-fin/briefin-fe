@@ -38,7 +38,14 @@ export default function CompanyDetailPage() {
       fetchCompanyDetail(Number(id))
         .then((data) => {
           setCompany(data);
-          setIsWatchlisted(data.watchlisted ?? false); // 백엔드가 내려주는 경우
+          setIsWatchlisted(data.watchlisted ?? false);
+          try {
+            const key = 'company_recent_viewed';
+            const prev = JSON.parse(localStorage.getItem(key) ?? '[]');
+            const entry = { id: data.id, name: data.name, ticker: data.ticker };
+            const next = [entry, ...prev.filter((c: { id: number }) => c.id !== data.id)].slice(0, 10);
+            localStorage.setItem(key, JSON.stringify(next));
+          } catch {}
         })
         .catch(console.error)
         .finally(() => setLoading(false));
@@ -93,7 +100,7 @@ export default function CompanyDetailPage() {
         <Link
           href="/companies"
           className="fonts-label inline-flex items-center gap-4pxr rounded-button bg-surface-white px-12pxr py-8pxr font-bold text-text-secondary transition-shadow hover:shadow-md sm:px-14pxr sm:py-10pxr sm:text-[14px]">
-          ← 뉴스 목록으로
+          ← 이전으로
         </Link>
       </div>
 
