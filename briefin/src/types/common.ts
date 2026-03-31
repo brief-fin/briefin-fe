@@ -9,15 +9,6 @@ export interface AlertBannerProps {
   onButtonClick?: () => void;
 }
 
-export type BackButtonProps = {
-  /** 이동할 경로. 있으면 Link, 없으면 button으로 렌더 */
-  href?: string;
-  /** 클릭 핸들러. href가 없을 때만 사용 */
-  onClick?: () => void;
-  children: React.ReactNode;
-  className?: string;
-};
-
 export type HeaderProps = {
   isLoggedIn?: boolean;
   userEmail?: string;

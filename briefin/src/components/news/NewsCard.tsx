@@ -46,8 +46,8 @@ export default function NewsCard({ news }: NewsCardProps) {
         {summary && summary.length > 0 && (
           <ul className="flex flex-col gap-4pxr">
             {summary.slice(0, 2).map((item, idx) => (
-              <li key={idx} className="fonts-label flex items-start gap-6pxr text-text-secondary">
-                <span className="mt-2pxr shrink-0 text-primary">•</span>
+              <li key={idx} className="fonts-label flex items-center gap-6pxr text-text-secondary">
+                <span className="shrink-0 text-primary">•</span>
                 <span className="line-clamp-1">{item}</span>
               </li>
             ))}

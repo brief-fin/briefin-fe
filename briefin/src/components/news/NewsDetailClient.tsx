@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import Link from 'next/link';
 import Image from 'next/image';
 import type { NewsDetailResponse } from '@/api/newsApi';
 import { scrapNews, deleteScrapNews, fetchRelatedNews } from '@/api/newsApi';
@@ -99,7 +98,7 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
                 alt={data.title}
                 width={800}
                 height={600}
-                className="h-auto max-h-[500px] w-full object-contain"
+                className="h-auto max-h-500pxr w-full object-contain"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
                 priority
               />

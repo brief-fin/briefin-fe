@@ -2,12 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import Link from 'next/link';
 import Tabs from '@/components/common/Tabs';
 import CompanyHero from '@/components/companies/CompanyHero';
 import NewsCard from '@/components/news/NewsCard';
 import AlertBanner from '@/components/common/AlertBanner';
-import PopularCompanyList from '@/components/common/PopularCompanyList';
 import NewsTimeline from '@/components/common/NewsTimeline';
 import DisclosureList from '@/components/disclosure/DisclosureList';
 import { MOCK_NEWS } from '@/mocks/companyDetail';
@@ -120,28 +118,16 @@ export default function CompanyDetailPage() {
         </div>
 
         <div className="flex w-full flex-col gap-14pxr lg:w-96">
-          <AlertBanner
-            title="🔔 공시 알림 받기"
-            description="이 기업의 새 공시·뉴스를 실시간으로 받아보세요."
-            buttonLabel="알림 설정하기"
-          />
-          <PopularCompanyList
-            title="관련 기업"
-            companies={(company.relatedCompanies ?? []).map((c) => ({
-              id: c.id,
-              name: c.name,
-              sector: '',
-              change: '',
-              isRise: false,
-              emoji: '🏢',
-              bgColor: 'bg-gray-100',
-            }))}
-          />
           <NewsTimeline
             tags={TIMELINE_TAGS}
             activeTag={activeTimelineTag}
             onTagChange={setActiveTimelineTag}
             items={MOCK_TIMELINE_ITEMS}
+          />
+          <AlertBanner
+            title="🔔 공시 알림 받기"
+            description="이 기업의 새 공시·뉴스를 실시간으로 받아보세요."
+            buttonLabel="알림 설정하기"
           />
         </div>
       </div>

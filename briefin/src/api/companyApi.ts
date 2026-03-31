@@ -1,6 +1,7 @@
 import { authStore } from '@/store/authStore';
 import { apiClient, type ApiResponse } from './client';
 import type { CompanyDetail } from '@/types/company';
+import type { NewsListItem } from '@/types/news';
 
 export type { CompanyDetail };
 
@@ -23,4 +24,10 @@ export const searchCompanies = (q: string, page = 0, size = 10) =>
     .get<ApiResponse<CompanyDetail[]>>(
       `/companies/search?q=${encodeURIComponent(q)}&page=${page}&size=${size}`,
     )
+    .then((res) => res.result);
+
+// 기업 관련 뉴스 조회
+export const fetchCompanyNews = (id: number, size = 20) =>
+  apiClient
+    .get<ApiResponse<NewsListItem[]>>(`/companies/${id}/news?size=${size}`)
     .then((res) => res.result);
