@@ -50,11 +50,13 @@ export default function CompanyDetailPage() {
 
   useEffect(() => {
     if (!id || !sessionVersion) return;
+    let cancelled = false;
     setNewsLoading(true);
     fetchCompanyNews(Number(id))
-      .then((data) => setNews((data.content ?? []).map(toNewsItem)))
-      .catch(console.error)
-      .finally(() => setNewsLoading(false));
+      .then((data) => { if (!cancelled) setNews((data.content ?? []).map(toNewsItem)); })
+      .catch((e) => { if (!cancelled) console.error(e); })
+      .finally(() => { if (!cancelled) setNewsLoading(false); });
+    return () => { cancelled = true; };
   }, [id, sessionVersion]);
 
   const handleToggleWatchlist = async () => {
@@ -129,7 +131,15 @@ export default function CompanyDetailPage() {
           {activeTab === '관련 뉴스' && (
             newsLoading
               ? <div>뉴스 로딩중...</div>
-              : news.map((item) => <NewsCard key={item.id} news={item} />)
+              : news.length === 0
+                ? (
+                  <div className="flex flex-col items-center justify-center gap-8pxr py-60pxr text-center text-text-secondary">
+                    <span className="text-32pxr">📭</span>
+                    <p className="fonts-body font-medium">아직 관련 뉴스가 없어요</p>
+                    <p className="fonts-label text-text-tertiary">새로운 뉴스가 등록되면 이곳에 표시됩니다.</p>
+                  </div>
+                )
+                : news.map((item) => <NewsCard key={item.id} news={item} />)
           )}
           {activeTab === '공시' && <DisclosureList items={MOCK_COMPANY_DISCLOSURES} />}
         </div>
