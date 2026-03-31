@@ -51,5 +51,6 @@ export function toNewsItem(item: NewsListItem): NewsItem {
     summary: item.summary ? item.summary.split('\n').filter(Boolean) : [],
     categories: item.category ? [item.category] : [],
     companies: item.relatedCompanies ?? [],
+    thumbnailUrl: item.thumbnailUrl ?? null,
   };
 }

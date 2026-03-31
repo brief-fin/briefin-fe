@@ -13,6 +13,7 @@ export type DisclosureApiItem = {
   summary: string;
   keyPoints?: string[];
   category?: string;
+  sentiment?: '호재' | '악재' | '중립';
 };
 
 export type DisclosureDetailApiItem = {
@@ -59,6 +60,7 @@ export type DisclosureListItem = {
   category: string;
   companyName?: string;
   summaryPoints?: string[];
+  sentiment?: '호재' | '악재' | '중립';
 };
 
 // ========================

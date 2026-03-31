@@ -14,6 +14,7 @@ function toCardItem(item: DisclosureApiItem): DisclosureListItem {
     category: item.category ?? '',
     companyName: item.companyName,
     summaryPoints: item.keyPoints ?? [],
+    sentiment: item.sentiment,
   };
 }
 
@@ -63,22 +64,22 @@ export default function DisclosureInfiniteList({ initialItems, initialPage, tota
   }, [loadMore]);
 
   return (
-    <div className="flex flex-col gap-14pxr">
+    <div className="grid grid-cols-2 gap-14pxr">
       {items.map((item) => (
         <DisclosureCard key={item.id} item={item} />
       ))}
 
       {/* sentinel: 이 div가 뷰포트에 진입하면 다음 페이지 로드 */}
-      <div ref={sentinelRef} className="h-1" />
+      <div ref={sentinelRef} className="col-span-2 h-1" />
 
       {isLoading && (
         <>
           <DisclosureCardSkeleton />
           <DisclosureCardSkeleton />
           <DisclosureCardSkeleton />
+          <DisclosureCardSkeleton />
         </>
       )}
-
     </div>
   );
 }
