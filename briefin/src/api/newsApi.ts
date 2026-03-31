@@ -47,6 +47,18 @@ export const fetchCompanyNews = (companyId: number, page = 0, size = 10) =>
     .get<ApiResponse<NewsPageResponse>>(`/companies/${companyId}/news?page=${page}&size=${size}`)
     .then((res) => res.result);
 
+// 뉴스 경제 용어 조회
+export interface TermExplanation {
+  term: string;
+  explanation: string;
+  originalExplanation: string | null;
+}
+
+export const fetchNewsTerms = (id: string | number) =>
+  apiClient
+    .get<ApiResponse<TermExplanation[]>>(`/api/news/${id}/terms`)
+    .then((res) => res.result);
+
 // 뉴스 타임라인 조회
 export interface NewsTimelineItemResponse {
   newsId: string;
