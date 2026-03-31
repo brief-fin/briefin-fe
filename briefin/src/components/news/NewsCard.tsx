@@ -34,7 +34,7 @@ export default function NewsCard({ news }: NewsCardProps) {
         <div className="flex items-start gap-12pxr sm:block">
           {thumbnailUrl && (
             <div className="relative h-72pxr w-100pxr shrink-0 overflow-hidden rounded-md sm:hidden">
-              <Image src={thumbnailUrl} alt="" fill className="object-cover" />
+              <Image src={thumbnailUrl} alt="" fill className="object-cover" unoptimized />
             </div>
           )}
           <p className="fonts-cardTitle line-clamp-2 flex-1 text-text-primary transition-colors group-hover:text-primary">
@@ -65,7 +65,7 @@ export default function NewsCard({ news }: NewsCardProps) {
       {/* 썸네일: 데스크탑만 */}
       {thumbnailUrl && (
         <div className="relative hidden h-100pxr w-160pxr shrink-0 self-center overflow-hidden rounded-md sm:block">
-          <Image src={thumbnailUrl} alt="" fill className="object-cover" />
+          <Image src={thumbnailUrl} alt="" fill className="object-cover" unoptimized />
         </div>
       )}
     </Link>

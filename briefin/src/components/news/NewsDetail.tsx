@@ -1,4 +1,6 @@
 import { NewsDetailProps } from '@/types/news';
+import type { TermExplanation } from '@/api/newsApi';
+import TermHighlightText from './TermHighlightText';
 
 const SENTENCE_TERMINAL = /[.!?]$|[다요죠음함임]\.?$/;
 
@@ -21,7 +23,11 @@ function buildParagraphs(raw: string): string[] {
   return result;
 }
 
-export default function NewsDetail({ content }: NewsDetailProps) {
+interface NewsDetailWithTermsProps extends NewsDetailProps {
+  terms?: TermExplanation[];
+}
+
+export default function NewsDetail({ content, terms = [] }: NewsDetailWithTermsProps) {
   const paragraphs = buildParagraphs(content);
 
   return (
@@ -30,7 +36,7 @@ export default function NewsDetail({ content }: NewsDetailProps) {
         <p
           key={i}
           className="leading-32pxr mt-24pxr break-keep text-[16px] tracking-[-0.2px] text-text-primary first:mt-0">
-          {paragraph}
+          <TermHighlightText text={paragraph} terms={terms} />
         </p>
       ))}
     </div>

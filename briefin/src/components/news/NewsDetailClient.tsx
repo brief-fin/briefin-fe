@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import type { NewsDetailResponse } from '@/api/newsApi';
-import { scrapNews, deleteScrapNews, fetchRelatedNews } from '@/api/newsApi';
+import { scrapNews, deleteScrapNews, fetchRelatedNews, fetchNewsTerms } from '@/api/newsApi';
 import NewsHeader from '@/components/news/NewsHeader';
 import NewsSummary from '@/components/news/NewsSummary';
 import NewsDetail from '@/components/news/NewsDetail';
@@ -40,6 +40,11 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
   const { data: relatedNewsData } = useQuery({
     queryKey: ['news', data.newsId, 'related'],
     queryFn: () => fetchRelatedNews(data.newsId),
+  });
+
+  const { data: termsData } = useQuery({
+    queryKey: ['news', data.newsId, 'terms'],
+    queryFn: () => fetchNewsTerms(data.newsId),
   });
 
   const { data: timelineData, isLoading: timelineLoading } = useNewsTimeline(data.newsId);
@@ -88,7 +93,7 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
           />
 
           <div className="mt-20pxr">
-            <NewsSummary summaries={data.summary ? data.summary.split('\n').filter(Boolean) : []} />
+            <NewsSummary summaries={data.summary ? data.summary.split('\n').filter(Boolean) : []} terms={termsData ?? []} />
           </div>
 
           {data.thumbnailUrl && (
@@ -99,14 +104,14 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
                 width={800}
                 height={600}
                 className="h-auto max-h-500pxr w-full object-contain"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
+                unoptimized
                 priority
               />
               <p className="text-text-disabled mt-6pxr text-right text-[12px]">{data.press}</p>
             </div>
           )}
 
-          <NewsDetail content={data.content} />
+          <NewsDetail content={data.content} terms={termsData ?? []} />
 
           <NewsActions originalUrl={data.originalUrl ?? null} />
           <NewsRelatedCompanies relatedCompanies={relatedCompanies} />

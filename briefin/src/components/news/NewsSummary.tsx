@@ -1,7 +1,13 @@
 import { CheckIcon } from '../../../public/icon';
 import { NewsSummaryProps } from '@/types/news';
+import type { TermExplanation } from '@/api/newsApi';
+import TermHighlightText from './TermHighlightText';
 
-export default function NewsSummary({ summaries }: NewsSummaryProps) {
+interface Props extends NewsSummaryProps {
+  terms?: TermExplanation[];
+}
+
+export default function NewsSummary({ summaries, terms = [] }: Props) {
   if (!summaries || summaries.length === 0) return null;
 
   return (
@@ -11,7 +17,9 @@ export default function NewsSummary({ summaries }: NewsSummaryProps) {
         {summaries.map((point, i) => (
           <li key={i} className="flex items-start gap-8pxr">
             <CheckIcon className="mt-[4px] shrink-0" />
-            <span className="break-keep text-[15px] font-medium leading-[26px] text-primary-dark">{point}</span>
+            <span className="break-keep text-[15px] font-medium leading-[26px] text-primary-dark">
+              <TermHighlightText text={point} terms={terms} />
+            </span>
           </li>
         ))}
       </ul>
