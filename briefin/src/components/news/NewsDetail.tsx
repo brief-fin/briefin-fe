@@ -14,7 +14,7 @@ function buildParagraphs(raw: string): string[] {
       result.push(current);
       current = lines[i];
     } else {
-      current += lines[i];
+      current += ' ' + lines[i];
     }
   }
   result.push(current);
