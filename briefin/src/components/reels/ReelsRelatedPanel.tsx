@@ -8,17 +8,22 @@ export interface ReelsRelatedPanelProps {
 }
 
 export default function ReelsRelatedPanel({ reel, reels, onGoTo }: ReelsRelatedPanelProps) {
+  if (!reel) return null;
+
   return (
     <div className="hidden min-h-0 w-full shrink-0 flex-col gap-16pxr overflow-y-auto bg-surface-muted/50 px-24pxr py-28pxr [-ms-overflow-style:none] [scrollbar-width:none] lg:flex lg:w-[min(100%,520px)] lg:min-w-400pxr xl:min-w-460pxr [&::-webkit-scrollbar]:hidden">
       <p className="fonts-overline text-[11px] tracking-wide">관련 기업</p>
-      <div className="cursor-pointer rounded-hero border border-surface-border bg-surface-white p-20pxr shadow-hero-card transition-colors hover:bg-primary-light/40">
-        <p className="text-[17px] font-bold leading-snug text-text-primary">{reel.company.name}</p>
-        <p className="fonts-bodySmall mt-8pxr text-text-secondary">{reel.company.sub}</p>
-        <p
-          className={`fonts-subTitle mt-10pxr ${reel.company.changePositive ? 'text-semantic-teal' : 'text-semantic-red'}`}>
-          {reel.company.changePositive ? '▲' : '▼'} {reel.company.change}
-        </p>
-      </div>
+      {reel.tags.length === 0 ? (
+        <p className="fonts-bodySmall text-text-muted">관련 기업 정보가 없습니다.</p>
+      ) : (
+        <div className="flex flex-col gap-8pxr">
+          {reel.tags.map((name) => (
+            <div key={name} className="rounded-hero border border-surface-border bg-surface-white px-20pxr py-14pxr shadow-hero-card">
+              <p className="text-[15px] font-bold text-text-primary">🏢 {name}</p>
+            </div>
+          ))}
+        </div>
+      )}
 
       <p className="fonts-overline mt-4pxr text-[11px] tracking-wide">관련 뉴스</p>
       {reel.relatedNews.map((n, ri) => {

@@ -11,6 +11,8 @@ export interface ReelFeedPanelProps {
   goTo: (index: number) => void;
   scrapped: Set<string>;
   onToggleScrap: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 export default function ReelFeedPanel({
@@ -20,9 +22,11 @@ export default function ReelFeedPanel({
   progress,
   scrapped,
   onToggleScrap,
+  onMouseEnter,
+  onMouseLeave,
 }: ReelFeedPanelProps) {
   return (
-    <div className="group/reelnav relative h-full min-w-0 flex-1 border-r border-surface-border">
+    <div className="group/reelnav relative h-full min-w-0 flex-1 border-r border-surface-border" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <div
         ref={feedRef}
         className="flex h-full w-full snap-x snap-mandatory flex-nowrap overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -32,7 +36,9 @@ export default function ReelFeedPanel({
         ))}
       </div>
 
-      <ReelsActionRail newsId={reels[current].id} isScrapped={scrapped.has(reels[current].id)} onToggleScrap={onToggleScrap} />
+      {reels[current] && (
+        <ReelsActionRail newsId={reels[current].id} isScrapped={scrapped.has(reels[current].id)} onToggleScrap={onToggleScrap} />
+      )}
     </div>
   );
 }

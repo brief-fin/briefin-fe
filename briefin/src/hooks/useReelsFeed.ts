@@ -21,6 +21,8 @@ export function useReelsFeed(reels: ReelNews[]) {
   const pendingScrapRef = useRef<Set<string>>(new Set());
   const [alerted, setAlerted] = useState<Set<number>>(new Set());
   const [progress, setProgress] = useState(0);
+  const pausedRef = useRef(false);
+  const elapsedRef = useRef(0); // 이미 흐른 ms
 
   const clearTimers = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
@@ -29,13 +31,17 @@ export function useReelsFeed(reels: ReelNews[]) {
     progressIntervalRef.current = null;
   }, []);
 
-  const startProgress = useCallback(() => {
+  const startProgress = useCallback((fromElapsed = 0) => {
     clearTimers();
-    setProgress(0);
-    const start = Date.now();
+    pausedRef.current = false;
+    elapsedRef.current = fromElapsed;
+    const remaining = REELS_AUTO_ADVANCE_MS - fromElapsed;
+    const startedAt = Date.now();
 
     progressIntervalRef.current = setInterval(() => {
-      const pct = Math.min(((Date.now() - start) / REELS_AUTO_ADVANCE_MS) * 100, 100);
+      const elapsed = fromElapsed + (Date.now() - startedAt);
+      elapsedRef.current = elapsed;
+      const pct = Math.min((elapsed / REELS_AUTO_ADVANCE_MS) * 100, 100);
       setProgress(pct);
     }, 50);
 
@@ -43,8 +49,19 @@ export function useReelsFeed(reels: ReelNews[]) {
       if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
       const next = (currentRef.current + 1) % total;
       goToRef.current(next);
-    }, REELS_AUTO_ADVANCE_MS);
+    }, remaining);
   }, [clearTimers, total]);
+
+  const pause = useCallback(() => {
+    if (pausedRef.current) return;
+    pausedRef.current = true;
+    clearTimers();
+  }, [clearTimers]);
+
+  const resume = useCallback(() => {
+    if (!pausedRef.current) return;
+    startProgress(elapsedRef.current);
+  }, [startProgress]);
 
   const goTo = useCallback(
     (idx: number) => {
@@ -175,5 +192,7 @@ export function useReelsFeed(reels: ReelNews[]) {
     toggleScrap,
     toggleAlert,
     reels,
+    pause,
+    resume,
   };
 }
