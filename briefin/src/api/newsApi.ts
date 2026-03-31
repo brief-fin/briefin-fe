@@ -41,6 +41,12 @@ export const scrapNews = (id: string | number) =>
 export const deleteScrapNews = (id: string | number) =>
   apiClient.delete<ApiResponse<null>>(`/api/news/${id}/scrap`);
 
+// 기업 관련 뉴스 조회 (페이지네이션)
+export const fetchCompanyNews = (companyId: number, page = 0, size = 10) =>
+  apiClient
+    .get<ApiResponse<NewsPageResponse>>(`/companies/${companyId}/news?page=${page}&size=${size}`)
+    .then((res) => res.result);
+
 // 뉴스 타임라인 조회
 export interface NewsTimelineItemResponse {
   newsId: string;
