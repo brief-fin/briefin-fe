@@ -19,6 +19,7 @@ export interface NewsListItem {
   press: string;
   publishedAt: string;
   relatedCompanies: string[];
+  thumbnailUrl?: string | null;
 }
 
 export interface RelatedCompanyItem {
@@ -66,6 +67,7 @@ export interface NewsItem {
   summary?: string[]; // 요약 bullet 리스트 (없으면 요약 섹션 미표시)
   categories: string[]; // 카테고리 태그
   companies: string[]; // 관련기업 태그
+  thumbnailUrl?: string | null;
 }
 
 export type NewsDetail = {

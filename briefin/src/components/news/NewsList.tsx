@@ -44,7 +44,7 @@ export default function NewsList({ category }: NewsListProps) {
     return <p className="fonts-label py-40pxr text-center text-text-muted">뉴스를 불러오지 못했습니다.</p>;
   }
 
-  const newsList = data.pages.flatMap((page) => page.content.map(toNewsItem));
+  const newsList = data.pages.flatMap((page) => (page.content ?? []).map(toNewsItem));
 
   return (
     <div className="flex w-full flex-col gap-14pxr">
