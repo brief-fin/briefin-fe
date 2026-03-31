@@ -25,10 +25,10 @@ export const fetchRelatedNews = (id: string | number) =>
     .get<ApiResponse<NewsRelatedItem[]>>(`/api/news/${id}/related`)
     .then((res) => res.result);
 
-// 뉴스 검색
-export const searchNews = (q: string) =>
+// 뉴스 검색 (페이지네이션)
+export const searchNews = (q: string, page = 0, size = 10) =>
   apiClient
-    .get<ApiResponse<NewsListItem[]>>(`/api/news/search?q=${encodeURIComponent(q)}`)
+    .get<ApiResponse<NewsPageResponse>>(`/api/news/search?q=${encodeURIComponent(q)}&page=${page}&size=${size}`)
     .then((res) => res.result);
 
 // 뉴스 스크랩 등록
