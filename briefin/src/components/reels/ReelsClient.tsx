@@ -9,7 +9,7 @@ import { toReelNews } from '@/api/reelsApi';
 export default function ReelsClient() {
   const { data, isLoading, isError } = useReels();
   const reels = data?.map(toReelNews) ?? [];
-  const { feedRef, current, progress, goTo, reel, scrapped, toggleScrap } = useReelsFeed(reels);
+  const { feedRef, current, progress, goTo, reel, scrapped, toggleScrap, pause, resume } = useReelsFeed(reels);
 
   if (isLoading) {
     return (
@@ -38,6 +38,8 @@ export default function ReelsClient() {
           goTo={goTo}
           scrapped={scrapped}
           onToggleScrap={toggleScrap}
+          onMouseEnter={pause}
+          onMouseLeave={resume}
         />
         <ReelsRelatedPanel reel={reel} reels={reels} onGoTo={goTo} />
       </div>
