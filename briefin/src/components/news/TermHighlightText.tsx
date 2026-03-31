@@ -37,7 +37,9 @@ function splitWithTerms(
 ): React.ReactNode[] {
   if (terms.length === 0) return [text];
 
-  const sorted = [...terms].sort((a, b) => b.term.length - a.term.length);
+  const sorted = [...terms]
+    .filter((t) => t.term.trim().length > 0)
+    .sort((a, b) => b.term.length - a.term.length);
   const pattern = new RegExp(
     `(${sorted.map((t) => t.term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`,
     'g',

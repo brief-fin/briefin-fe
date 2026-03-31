@@ -56,8 +56,8 @@ export interface TermExplanation {
 
 export const fetchNewsTerms = (id: string | number) =>
   apiClient
-    .get<ApiResponse<TermExplanation[]>>(`/api/news/${id}/terms`)
-    .then((res) => res.result);
+    .get<ApiResponse<TermExplanation[] | null>>(`/api/news/${id}/terms`)
+    .then((res) => res.result ?? []);
 
 // 뉴스 타임라인 조회
 export interface NewsTimelineItemResponse {
