@@ -41,6 +41,23 @@ export const scrapNews = (id: string | number) =>
 export const deleteScrapNews = (id: string | number) =>
   apiClient.delete<ApiResponse<null>>(`/api/news/${id}/scrap`);
 
+// 뉴스 타임라인 조회
+export interface NewsTimelineItemResponse {
+  newsId: string;
+  title: string;
+  summary: string;
+  category: string;
+  press: string;
+  thumbnailUrl?: string | null;
+  publishedAt: string | null;
+  isCurrent: boolean;
+}
+
+export const fetchNewsTimeline = (id: string | number) =>
+  apiClient
+    .get<ApiResponse<NewsTimelineItemResponse[]>>(`/api/news/${id}/timeline`)
+    .then((res) => res.result);
+
 // 백엔드 NewsListItem → 프론트 NewsItem 변환
 export function toNewsItem(item: NewsListItem): NewsItem {
   return {
