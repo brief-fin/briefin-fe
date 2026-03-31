@@ -11,6 +11,12 @@ function CategoryBadge({ category }: { category: string }) {
 }
 
 export default function DisclosureList({ items, sourceLabel = 'DART 공시' }: DisclosureListProps) {
+  if (!items || items.length === 0) {
+    return (
+      <p className="py-40pxr text-center text-[13px] text-text-muted">해당 기업의 최근 공시가 없습니다.</p>
+    );
+  }
+
   return (
     <div className="overflow-hidden rounded-card border border-surface-border bg-surface-white shadow-hero-card">
       <ul className="divide-y divide-surface-border">

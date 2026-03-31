@@ -77,7 +77,7 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
       <div className="pt-20pxr sm:pt-28pxr md:pt-36pxr">
         <Link
           href="/news"
-          className="inline-flex items-center gap-4pxr rounded-button border border-surface-border bg-surface-white px-12pxr py-8pxr text-[13px] font-bold text-text-secondary transition-colors hover:bg-surface-bg sm:px-14pxr sm:py-10pxr sm:text-[14px]">
+          className="inline-flex items-center gap-4pxr rounded-button bg-surface-white px-12pxr py-8pxr text-[13px] font-bold text-text-secondary transition-shadow hover:shadow-md sm:px-14pxr sm:py-10pxr sm:text-[14px]">
           ← 뉴스 목록으로
         </Link>
       </div>
@@ -102,16 +102,15 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
 
           {data.thumbnailUrl && (
             <div className="rounded-8pxr mt-20pxr overflow-hidden">
-              <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
-                <Image
-                  src={data.thumbnailUrl}
-                  alt={data.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
-                  priority
-                />
-              </div>
+              <Image
+                src={data.thumbnailUrl}
+                alt={data.title}
+                width={800}
+                height={600}
+                className="h-auto max-h-[500px] w-full object-contain"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
+                priority
+              />
               <p className="text-text-disabled mt-6pxr text-right text-[12px]">{data.press}</p>
             </div>
           )}

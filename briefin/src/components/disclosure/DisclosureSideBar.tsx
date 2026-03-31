@@ -80,20 +80,24 @@ export default function DisclosureSidebar({
         <h2 className="border-b border-surface-border px-22pxr py-16pxr text-[13px] font-black text-text-primary">
           📋 최근 공시
         </h2>
-        <ul className="divide-y divide-surface-border">
-          {recentDisclosures.map((item) => (
-            <li key={item.id}>
-              <Link
-                href={`/disclosure/${item.id}`}
-                className="block px-22pxr py-16pxr transition-colors hover:bg-surface-bg">
-                <p className="line-clamp-2 text-[14px] font-bold text-text-primary">{item.title}</p>
-                <p className="fonts-caption mt-4pxr">
-                  {[item.date, item.category ? getCategoryLabel(item.category) : ''].filter(Boolean).join(' · ')}
-                </p>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {recentDisclosures.length === 0 ? (
+          <p className="px-22pxr py-20pxr text-center text-[13px] text-text-muted">해당 기업의 최근 공시가 없습니다.</p>
+        ) : (
+          <ul className="divide-y divide-surface-border">
+            {recentDisclosures.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={`/disclosure/${item.id}`}
+                  className="block px-22pxr py-16pxr transition-colors hover:bg-surface-bg">
+                  <p className="line-clamp-2 text-[14px] font-bold text-text-primary">{item.title}</p>
+                  <p className="fonts-caption mt-4pxr">
+                    {[item.date, item.category ? getCategoryLabel(item.category) : ''].filter(Boolean).join(' · ')}
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </aside>
   );

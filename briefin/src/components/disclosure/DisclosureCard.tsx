@@ -12,7 +12,7 @@ export default function DisclosureCard({ item, sourceLabel = 'DART 공시' }: Di
   return (
     <Link
       href={`/disclosure/${item.id}`}
-      className="flex w-full cursor-pointer flex-col gap-14pxr rounded-card border border-surface-border bg-white px-25pxr py-28pxr">
+      className="group flex w-full cursor-pointer flex-col gap-14pxr rounded-card border border-surface-border bg-white px-25pxr py-28pxr">
       {/* 회사명 + 공시 유형 태그 / 출처 + 날짜 */}
       <div className="flex items-center justify-between gap-8pxr">
         <section className="flex flex-wrap gap-6pxr">
@@ -25,7 +25,7 @@ export default function DisclosureCard({ item, sourceLabel = 'DART 공시' }: Di
       </div>
 
       {/* 제목 */}
-      <p className="fonts-cardTitle line-clamp-2 text-text-primary">{title}</p>
+      <p className="fonts-cardTitle line-clamp-2 text-text-primary transition-colors group-hover:text-primary">{title}</p>
 
       {/* 요약 */}
       {summaryPoints && summaryPoints.length > 0 && (

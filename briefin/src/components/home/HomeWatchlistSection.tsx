@@ -81,7 +81,7 @@ export default function HomeWatchlistSection() {
 
       {!isLoading && (!watchlist || watchlist.length === 0) && (
         <p className="py-20pxr text-center text-[13px] text-text-muted">
-          관심 기업을 추가해보세요
+          등록된 관심 기업이 없습니다.
         </p>
       )}
 
