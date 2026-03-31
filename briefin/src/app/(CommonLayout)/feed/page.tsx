@@ -3,7 +3,7 @@
 import NewsCard from '@/components/news/NewsCard';
 import AlertBanner from '@/components/common/AlertBanner';
 import { useFeed } from '@/hooks/useFeed';
-import { toNewsItem } from '@/api/newsApi';
+import { mapNewsItem } from '@/lib/viewMappers';
 
 export default function FeedPage() {
   const { data, isLoading, isError } = useFeed();
@@ -23,10 +23,10 @@ export default function FeedPage() {
           {isLoading && <p className="fonts-label py-40pxr text-center text-text-muted">뉴스를 불러오는 중...</p>}
           {isError && <p className="fonts-label py-40pxr text-center text-text-muted">뉴스를 불러오지 못했습니다.</p>}
           {data && data.length === 0 && (
-            <p className="fonts-label tex음 t-text-muted py-40pxr text-center">관심 기업의 뉴스가 없습니다.</p>
+            <p className="fonts-label py-40pxr text-center text-text-muted">관심 기업의 뉴스가 없습니다.</p>
           )}
           {data?.map((item) => (
-            <NewsCard key={item.newsId} news={toNewsItem(item)} />
+            <NewsCard key={item.newsId} news={mapNewsItem(item)} />
           ))}
         </div>
 
@@ -36,7 +36,7 @@ export default function FeedPage() {
             title="관심 기업을 더 추가해보세요"
             description="더 많은 기업을 등록할수록 내 피드가 풍성해져요."
             buttonLabel="🏢 관심 기업 추가하기"
-            buttonHref="/companies"
+            buttonHref="/onboarding"
           />
         </div>
       </div>

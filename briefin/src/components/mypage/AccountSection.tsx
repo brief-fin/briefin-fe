@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import WithdrawConfirmModal from '@/components/auth/WithdrawConfirmModal';
 import { deleteMyAccount } from '@/api/userApi';
-import { STORAGE_KEY_SELECTED_COMPANIES } from '@/mocks/mock-companies';
 import { authStore } from '@/store/authStore';
 import { useMyInfo } from '@/hooks/useUser';
 
@@ -22,9 +21,6 @@ export default function AccountSection() {
 
     try {
       await deleteMyAccount();
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem(STORAGE_KEY_SELECTED_COMPANIES);
-      }
       authStore.clear();
       setShowWithdrawModal(false);
       router.replace('/');
