@@ -71,12 +71,15 @@ export default function Page() {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}${TABS[activeTab].endpoint}`)
       .then(res => res.text())
       .then(text => {
-        if (!text) return;
+        if (!text) {
+          setCompanies([]);
+          return;
+        }
         try {
           const data = JSON.parse(text);
           setCompanies(data.result ?? []);
         } catch {
-          // HTML 에러 페이지 등 JSON이 아닌 응답 무시
+          setCompanies([]);
         }
       })
       .catch(console.error)
