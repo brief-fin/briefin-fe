@@ -35,12 +35,12 @@ function PopularCompanyCard({ company, rank }: { company: PopularCompany; rank: 
       </span>
       <div className="relative h-40pxr w-40pxr shrink-0 overflow-hidden rounded-full border border-surface-border bg-surface-bg">
         <Image
-          src={company.logoUrl}
+          src={company.logoUrl || '/default-company.png'}
           alt={company.name}
           fill
           className="object-cover"
           onError={(e) => {
-            (e.target as HTMLImageElement).style.display = 'none';
+            (e.target as HTMLImageElement).src = '/default-company.png';
           }}
         />
       </div>
