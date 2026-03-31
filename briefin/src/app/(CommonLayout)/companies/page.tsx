@@ -72,8 +72,12 @@ export default function Page() {
       .then(res => res.text())
       .then(text => {
         if (!text) return;
-        const data = JSON.parse(text);
-        setCompanies(data.result ?? []);
+        try {
+          const data = JSON.parse(text);
+          setCompanies(data.result ?? []);
+        } catch {
+          // HTML 에러 페이지 등 JSON이 아닌 응답 무시
+        }
       })
       .catch(console.error)
       .finally(() => setLoading(false));
