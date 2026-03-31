@@ -10,7 +10,7 @@ export function SearchComponent({
   const router = useRouter();
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
       const value = e.currentTarget.value;
       if (value.trim()) {
         router.push(`${searchPath}?q=${encodeURIComponent(value)}`);
@@ -36,7 +36,7 @@ export function SearchComponent({
         className="w-full bg-transparent p-5pxr text-text-primary placeholder:text-text-muted focus:outline-none"
         type="text"
         placeholder={placeholder}
-        onKeyDown={handleSearch}
+        onKeyUp={handleSearch}
       />
     </div>
   );

@@ -9,7 +9,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ c
   return (
     <main className="min-h-screen bg-surface-bg py-36pxr">
       <h1 className="fonts-heading3 pb-16pxr">뉴스</h1>
-      <SearchComponent />
+      <SearchComponent searchPath="/news/search/result" />
       <TickerNav />
       <div className="flex flex-col gap-16pxr lg:flex-row lg:items-start">
         {/* Left: news list */}
