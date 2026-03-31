@@ -6,9 +6,11 @@ import WithdrawConfirmModal from '@/components/auth/WithdrawConfirmModal';
 import { deleteMyAccount } from '@/api/userApi';
 import { STORAGE_KEY_SELECTED_COMPANIES } from '@/mocks/mock-companies';
 import { authStore } from '@/store/authStore';
+import { useMyInfo } from '@/hooks/useUser';
 
 export default function AccountSection() {
   const router = useRouter();
+  const { data: userInfo } = useMyInfo();
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -36,7 +38,7 @@ export default function AccountSection() {
   return (
     <>
       <div className="rounded-card border border-surface-border bg-surface-white p-24pxr">
-        <h3 className="text-[15px] font-bold text-text-primary">계정</h3>
+        <h3 className="text-[15px] font-bold text-text-primary">{userInfo?.email ?? '계정'}</h3>
         <button
           type="button"
           onClick={() => {
