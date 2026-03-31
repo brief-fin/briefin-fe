@@ -16,8 +16,9 @@ export default function HomeNewsSection() {
     return <p className="fonts-label py-10 text-center text-text-muted">뉴스를 불러오지 못했습니다.</p>;
   }
 
-  const domestic = data.filter((item) => item.region === '국내').slice(0, 3).map(toNewsItem);
-  const overseas = data.filter((item) => item.region === '해외').slice(0, 3).map(toNewsItem);
+  const allItems = data.pages.flatMap((page) => page.content);
+  const domestic = allItems.filter((item) => item.region === '국내').slice(0, 3).map(toNewsItem);
+  const overseas = allItems.filter((item) => item.region === '해외').slice(0, 3).map(toNewsItem);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import {
   deleteScrapNews,
   fetchNewsDetail,
@@ -15,11 +15,13 @@ export const newsKeys = {
   search: (q: string) => ['news', 'search', q] as const,
 };
 
-// 뉴스 목록
+// 뉴스 목록 (무한스크롤)
 export function useNewsList(category?: string) {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: newsKeys.list(category),
-    queryFn: () => fetchNewsList(category),
+    queryFn: ({ pageParam = 0 }) => fetchNewsList(category, pageParam as number),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => (lastPage.hasNext ? lastPage.currentPage + 1 : undefined),
   });
 }
 
