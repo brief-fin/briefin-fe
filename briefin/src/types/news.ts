@@ -22,7 +22,7 @@ export interface NewsListItem {
 }
 
 export interface RelatedCompanyItem {
-  companyId: number;
+  companyId: string;
   name: string;
   ticker?: string | null;
   logoUrl?: string | null;
@@ -38,7 +38,7 @@ export interface NewsDetailResponse {
   publishedAt: string | null;
   originalUrl: string | null;
   isScraped: boolean;
-  relatedCompanies: (RelatedCompanyItem | string)[];
+  relatedCompanies: RelatedCompanyItem[];
   relatedNews: string[];
   thumbnailUrl?: string | null;
 }
