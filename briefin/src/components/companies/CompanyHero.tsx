@@ -12,9 +12,10 @@ interface CompanyHeroProps {
   stats: StatChip[];
   isWatchlisted?: boolean;
   onToggleWatchlist?: () => void;
+  logoUrl?: string; // 추가
 }
 
-export default function CompanyHero({ industry, name, stats, isWatchlisted = false, onToggleWatchlist }: CompanyHeroProps) {
+export default function CompanyHero({ industry, name, stats, isWatchlisted = false, onToggleWatchlist, logoUrl }: CompanyHeroProps) {
   return (
     <div
       className="rounded-hero p-16pxr md:px-40pxr md:py-36pxr"
@@ -30,12 +31,19 @@ export default function CompanyHero({ industry, name, stats, isWatchlisted = fal
         </button>
       </div>
 
-      {/* 기업명 */}
-      <h1 className="mt-10pxr text-[22px] font-black tracking-[-0.5px] text-text-primary md:mt-16pxr md:text-[32px] md:tracking-[-1px]">
-        {name}
-      </h1>
+      {/* 로고 + 기업명 */}
+      <div className="mt-10pxr flex items-center gap-12pxr md:mt-16pxr">
+        {logoUrl && (
+          <div className="flex h-48pxr w-48pxr flex-shrink-0 items-center justify-center overflow-hidden rounded-nav bg-surface-white shadow-stat-chip md:h-64pxr md:w-64pxr">
+            <img src={logoUrl} alt={name} className="h-full w-full object-contain" />
+          </div>
+        )}
+        <h1 className="text-[22px] font-black tracking-[-0.5px] text-text-primary md:text-[32px] md:tracking-[-1px]">
+          {name}
+        </h1>
+      </div>
 
-      {/* 스탯 칩 — 모바일: 균등 분배 / 데스크톱: 컨텐츠 자연 너비 */}
+      {/* 스탯 칩 */}
       <div className="mt-14pxr flex gap-8pxr md:mt-20pxr md:gap-12pxr">
         {stats.map((stat) => (
           <div key={stat.label} className="flex-1 rounded-summary bg-surface-white px-12pxr py-10pxr shadow-stat-chip md:flex-none md:px-20pxr md:py-14pxr">
