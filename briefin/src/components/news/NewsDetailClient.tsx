@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { NewsDetailResponse } from '@/api/newsApi';
 import { scrapNews, deleteScrapNews, fetchRelatedNews } from '@/api/newsApi';
 import NewsHeader from '@/components/news/NewsHeader';
@@ -41,10 +42,11 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
     queryFn: () => fetchRelatedNews(data.newsId),
   });
 
-  const relatedCompanies = (data.relatedCompanies ?? []).map((name, i) => ({
-    id: String(i),
-    name,
-    emoji: '🏢',
+  const relatedCompanies = (data.relatedCompanies ?? []).map((company) => ({
+    id: company.companyId,
+    name: company.name,
+    ticker: company.ticker ?? null,
+    logoUrl: company.logoUrl ?? null,
   }));
 
   const relatedNews = (relatedNewsData ?? []).map((item) => ({
@@ -74,26 +76,44 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
               title: data.title,
               isLive: false,
             }}
+            isScrapped={isScrapped}
+            onToggleScrap={handleToggleScrap}
           />
 
           <div className="mt-20pxr">
             <NewsSummary summaries={data.summary ? data.summary.split('\n').filter(Boolean) : []} />
           </div>
 
+          {data.thumbnailUrl && (
+            <div className="rounded-8pxr mt-20pxr overflow-hidden">
+              <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
+                <Image
+                  src={data.thumbnailUrl}
+                  alt={data.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
+                  priority
+                />
+              </div>
+              <p className="text-text-disabled mt-6pxr text-right text-[12px]">{data.press}</p>
+            </div>
+          )}
+
           <NewsDetail content={data.content} />
 
-          <NewsActions originalUrl={data.originalUrl ?? null} isScrapped={isScrapped} onToggleScrap={handleToggleScrap} />
+          <NewsActions originalUrl={data.originalUrl ?? null} />
           <NewsRelatedCompanies relatedCompanies={relatedCompanies} />
         </article>
 
         <div className="flex w-full flex-col gap-16pxr lg:w-[320px] lg:shrink-0">
-          <NewsSidebar relatedNews={relatedNews} relatedCompanies={relatedCompanies} />
           <NewsTimeline
             tags={TIMELINE_TAGS}
             activeTag={activeTimelineTag}
             onTagChange={setActiveTimelineTag}
             items={MOCK_TIMELINE_ITEMS}
           />
+          <NewsSidebar relatedNews={relatedNews} relatedCompanies={relatedCompanies} />
         </div>
       </div>
     </div>

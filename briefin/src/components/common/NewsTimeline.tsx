@@ -10,7 +10,7 @@ export default function NewsTimeline({ tags, activeTag, onTagChange, items, load
     <div className="rounded-card border border-[#E5E7EB] bg-surface-white">
       {/* Header */}
       <div className="px-20pxr pt-16pxr">
-        <p className="text-[15px] font-bold text-text-primary">🗂 뉴스 히스토리</p>
+        <p className="text-[15px] font-bold text-text-primary">뉴스 히스토리</p>
       </div>
 
       {/*

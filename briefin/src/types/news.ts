@@ -21,6 +21,13 @@ export interface NewsListItem {
   relatedCompanies: string[];
 }
 
+export interface RelatedCompanyItem {
+  companyId: string;
+  name: string;
+  ticker?: string | null;
+  logoUrl?: string | null;
+}
+
 export interface NewsDetailResponse {
   newsId: string;
   title: string;
@@ -31,8 +38,9 @@ export interface NewsDetailResponse {
   publishedAt: string | null;
   originalUrl: string | null;
   isScraped: boolean;
-  relatedCompanies: string[];
+  relatedCompanies: RelatedCompanyItem[];
   relatedNews: string[];
+  thumbnailUrl?: string | null;
 }
 
 export interface NewsRelatedItem {
@@ -118,12 +126,15 @@ export interface NewsHeaderProps {
   data: Pick<MockNewsDetailRaw, 'category' | 'source' | 'title' | 'isLive'> & {
     publishedAt: string | null;
   };
+  isScrapped?: boolean;
+  onToggleScrap?: () => void;
 }
 
 export interface Company {
   id: string;
   name: string;
-  emoji: string;
+  ticker?: string | null;
+  logoUrl?: string | null;
 }
 
 export interface NewsRelatedCompaniesProps {

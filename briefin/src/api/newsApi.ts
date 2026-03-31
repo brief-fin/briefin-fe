@@ -1,5 +1,6 @@
 import { apiClient, type ApiResponse } from './client';
 import type { NewsListItem, NewsPageResponse, NewsDetailResponse, ScrapResponse, NewsItem, NewsRelatedItem } from '@/types/news';
+import { formatDateTime } from '@/utils/date';
 
 export type { NewsListItem, NewsPageResponse, NewsDetailResponse, ScrapResponse, NewsRelatedItem };
 
@@ -45,7 +46,7 @@ export function toNewsItem(item: NewsListItem): NewsItem {
   return {
     id: String(item.newsId),
     source: item.press,
-    time: item.publishedAt,
+    time: item.publishedAt ? formatDateTime(item.publishedAt) : '',
     title: item.title,
     summary: item.summary ? item.summary.split('\n').filter(Boolean) : [],
     categories: item.category ? [item.category] : [],

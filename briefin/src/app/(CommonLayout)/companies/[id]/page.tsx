@@ -15,12 +15,9 @@ import { MOCK_COMPANY_DISCLOSURES } from '@/mocks/disclosureDetail';
 import { COMPANY_DETAIL_TABS, type CompanyDetailTab } from '@/constants/companyDetail';
 import { CompanyDetail, fetchCompanyDetail } from '@/api/companyApi';
 import { TIMELINE_TAGS, MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
-import { MOCK_RELATED_COMPANIES } from '@/mocks/companyDetail';
 import { useStockPrice } from '@/api/hook/useStockPrice';
 import { apiClient } from '@/api/client';
 import { useAuthSessionVersion } from '@/providers/AuthSessionProvider';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function CompanyDetailPage() {
   const { id } = useParams();
@@ -31,13 +28,13 @@ export default function CompanyDetailPage() {
   const [isWatchlisted, setIsWatchlisted] = useState(false);
   const [watchlistLoading, setWatchlistLoading] = useState(false);
 
-  const sessionVersion = useAuthSessionVersion()
+  const sessionVersion = useAuthSessionVersion();
 
   const stockPrice = useStockPrice(company?.ticker ?? null);
 
   useEffect(() => {
     if (!id) return;
-    if(sessionVersion){
+    if (sessionVersion) {
       fetchCompanyDetail(Number(id))
         .then((data) => {
           setCompany(data);
@@ -50,7 +47,7 @@ export default function CompanyDetailPage() {
 
   const handleToggleWatchlist = async () => {
     if (!company || watchlistLoading) return;
-  
+
     setWatchlistLoading(true);
     try {
       if (isWatchlisted) {
@@ -116,7 +113,7 @@ export default function CompanyDetailPage() {
       </div>
 
       <div className="mt-16pxr flex flex-col gap-16pxr lg:flex-row lg:items-start lg:gap-24pxr">
-        <div className="min-w-0 flex-1 flex flex-col gap-14pxr">
+        <div className="flex min-w-0 flex-1 flex-col gap-14pxr">
           {activeTab === '관련 뉴스' && MOCK_NEWS.map((news) => <NewsCard key={news.id} news={news} />)}
           {activeTab === '공시' && <DisclosureList items={MOCK_COMPANY_DISCLOSURES} />}
         </div>
