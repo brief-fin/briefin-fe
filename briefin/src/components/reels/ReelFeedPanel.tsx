@@ -32,7 +32,7 @@ export default function ReelFeedPanel({
         ))}
       </div>
 
-      <ReelsActionRail newsId={reels[current].id} isScrapped={scrapped.has(current)} onToggleScrap={onToggleScrap} />
+      <ReelsActionRail newsId={reels[current].id} isScrapped={scrapped.has(reels[current].id)} onToggleScrap={onToggleScrap} />
     </div>
   );
 }

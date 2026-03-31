@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { REELS_AUTO_ADVANCE_MS, REELS_SCROLL_DEBOUNCE_MS } from '@/constants/reels';
 import type { ReelNews } from '@/types/reelNews';
+import { scrapNews, deleteScrapNews } from '@/api/newsApi';
 
 export function useReelsFeed(reels: ReelNews[]) {
   const router = useRouter();
@@ -122,13 +123,26 @@ export function useReelsFeed(reels: ReelNews[]) {
   }, [goTo, router]);
 
   const toggleScrap = useCallback(() => {
+    const newsId = reels[currentRef.current]?.id;
+    if (!newsId) return;
+
+    const isScrapped = scrapped.has(newsId);
+
     setScrapped((prev) => {
       const s = new Set(prev);
-      if (s.has(currentRef.current)) s.delete(currentRef.current);
-      else s.add(currentRef.current);
+      if (isScrapped) s.delete(newsId);
+      else s.add(newsId);
       return s;
     });
-  }, []);
+
+    if (isScrapped) {
+      deleteScrapNews(newsId).catch(() => setScrapped((p) => new Set(p).add(newsId)));
+    } else {
+      scrapNews(newsId).catch(() => {
+        setScrapped((p) => { const ns = new Set(p); ns.delete(newsId); return ns; });
+      });
+    }
+  }, [reels, scrapped]);
 
   const toggleAlert = useCallback(() => {
     setAlerted((prev) => {
