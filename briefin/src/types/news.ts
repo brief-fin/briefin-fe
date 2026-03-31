@@ -1,6 +1,15 @@
 import type { MockNewsDetailRaw } from '@/mocks/newsDetail';
 
 // API 응답 타입
+export interface NewsPageResponse {
+  content: NewsListItem[];
+  totalElements: number;
+  totalPages: number;
+  currentPage: number;
+  size: number;
+  hasNext: boolean;
+}
+
 export interface NewsListItem {
   newsId: string;
   title: string;

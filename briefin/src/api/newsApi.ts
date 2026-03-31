@@ -1,13 +1,14 @@
 import { apiClient, type ApiResponse } from './client';
-import type { NewsListItem, NewsDetailResponse, ScrapResponse, NewsItem, NewsRelatedItem } from '@/types/news';
+import type { NewsListItem, NewsPageResponse, NewsDetailResponse, ScrapResponse, NewsItem, NewsRelatedItem } from '@/types/news';
 
-export type { NewsListItem, NewsDetailResponse, ScrapResponse, NewsRelatedItem };
+export type { NewsListItem, NewsPageResponse, NewsDetailResponse, ScrapResponse, NewsRelatedItem };
 
-// 뉴스 목록 조회 (category 없으면 전체)
-export const fetchNewsList = (category?: string) => {
-  const query = category && category !== 'all' ? `?category=${category}` : '';
+// 뉴스 목록 조회 (페이지네이션)
+export const fetchNewsList = (category?: string, page = 0, size = 10) => {
+  const params = new URLSearchParams({ page: String(page), size: String(size) });
+  if (category && category !== 'all') params.set('category', category);
   return apiClient
-    .get<ApiResponse<NewsListItem[]>>(`/api/news${query}`)
+    .get<ApiResponse<NewsPageResponse>>(`/api/news?${params.toString()}`)
     .then((res) => res.result);
 };
 
