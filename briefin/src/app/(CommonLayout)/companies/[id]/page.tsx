@@ -7,7 +7,6 @@ import Tabs from '@/components/common/Tabs';
 import CompanyHero from '@/components/companies/CompanyHero';
 import NewsCard from '@/components/news/NewsCard';
 import AlertBanner from '@/components/common/AlertBanner';
-import PopularCompanyList from '@/components/common/PopularCompanyList';
 import NewsTimeline from '@/components/common/NewsTimeline';
 import DisclosureList from '@/components/disclosure/DisclosureList';
 import { MOCK_COMPANY_DISCLOSURES } from '@/mocks/disclosureDetail';
@@ -150,19 +149,7 @@ export default function CompanyDetailPage() {
             description="이 기업의 새 공시·뉴스를 실시간으로 받아보세요."
             buttonLabel="알림 설정하기"
           />
-          <PopularCompanyList
-            title="관련 기업"
-            companies={(company.relatedCompanies ?? []).map((c) => ({
-              id: c.id,
-              name: c.name,
-              sector: '',
-              change: '',
-              isRise: false,
-              emoji: '🏢',
-              bgColor: 'bg-gray-100',
-            }))}
-          />
-          <NewsTimeline
+<NewsTimeline
             tags={TIMELINE_TAGS}
             activeTag={activeTimelineTag}
             onTagChange={setActiveTimelineTag}
