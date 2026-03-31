@@ -16,7 +16,7 @@ const GLOW_COLORS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444'];
 export function toReelNews(item: ReelsItem, index: number): ReelNews {
   const lines = item.summary ? item.summary.split('\n').filter(Boolean) : [];
   return {
-    id: Number(item.newsId),
+    id: item.newsId,
     badge: null,
     category: item.category ?? '',
     source: item.press ?? '',

@@ -17,7 +17,7 @@ export function useReelsFeed(reels: ReelNews[]) {
   const total = reels.length;
 
   const [current, setCurrent] = useState(0);
-  const [scrapped, setScrapped] = useState<Set<number>>(new Set());
+  const [scrapped, setScrapped] = useState<Set<string>>(new Set());
   const [alerted, setAlerted] = useState<Set<number>>(new Set());
   const [progress, setProgress] = useState(0);
 

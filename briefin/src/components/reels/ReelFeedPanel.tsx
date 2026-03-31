@@ -9,7 +9,7 @@ export interface ReelFeedPanelProps {
   current: number;
   progress: number;
   goTo: (index: number) => void;
-  scrapped: Set<number>;
+  scrapped: Set<string>;
   onToggleScrap: () => void;
 }
 
