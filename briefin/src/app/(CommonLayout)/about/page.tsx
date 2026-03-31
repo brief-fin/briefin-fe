@@ -1,6 +1,6 @@
 export default function AboutPage() {
   return (
-    <main className="flex h-full w-full flex-col gap-16 pb-16">
+    <div className="flex h-full w-full flex-col gap-16 pb-16">
       {/* Hero Section */}
       <section
         className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen py-20pxr"
@@ -90,7 +90,7 @@ export default function AboutPage() {
           </div>
         </section>
       </div>
-    </main>
+    </div>
   );
 }
 

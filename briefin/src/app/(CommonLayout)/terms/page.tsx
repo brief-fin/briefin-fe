@@ -1,6 +1,6 @@
 export default function TermsPage() {
   return (
-    <main className="flex h-full w-full flex-col gap-10 pb-16">
+    <div className="flex h-full w-full flex-col gap-10 pb-16">
       {/* Header */}
       <section
         className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen py-16pxr"
@@ -38,7 +38,7 @@ export default function TermsPage() {
           </section>
         ))}
       </div>
-    </main>
+    </div>
   );
 }
 
