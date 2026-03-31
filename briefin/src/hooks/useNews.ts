@@ -3,6 +3,7 @@ import {
   deleteScrapNews,
   fetchNewsDetail,
   fetchNewsList,
+  fetchNewsTimeline,
   scrapNews,
   searchNews,
 } from '@/api/newsApi';
@@ -50,6 +51,15 @@ export function useNewsSearch(q: string) {
     queryKey: newsKeys.search(q),
     queryFn: () => searchNews(q),
     enabled: q.length > 0,
+  });
+}
+
+// 뉴스 타임라인
+export function useNewsTimeline(id: string | number) {
+  return useQuery({
+    queryKey: ['news', id, 'timeline'],
+    queryFn: () => fetchNewsTimeline(id),
+    enabled: !!id,
   });
 }
 

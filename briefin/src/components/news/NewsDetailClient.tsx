@@ -13,10 +13,11 @@ import NewsSidebar from '@/components/news/NewsSidebar';
 import NewsTimeline from '@/components/common/NewsTimeline';
 import NewsRelatedCompanies from '@/components/news/NewsRelatedCompanies';
 import NewsActions from '@/components/news/NewsActions';
-import { TIMELINE_TAGS, MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
+import { useNewsTimeline } from '@/hooks/useNews';
+import type { NewsTimelineItem } from '@/types/timeline';
 
 export default function NewsDetailClient({ data }: { data: NewsDetailResponse }) {
-  const [activeTimelineTag, setActiveTimelineTag] = useState(TIMELINE_TAGS[0]);
+  const [activeTimelineTag, setActiveTimelineTag] = useState('');
   const [isScrapped, setIsScrapped] = useState(data.isScraped ?? false);
 
   const scrapMutation = useMutation({
@@ -41,6 +42,21 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
     queryKey: ['news', data.newsId, 'related'],
     queryFn: () => fetchRelatedNews(data.newsId),
   });
+
+  const { data: timelineData, isLoading: timelineLoading } = useNewsTimeline(data.newsId);
+
+  const timelineItems: NewsTimelineItem[] = (timelineData ?? []).map((item) => ({
+    id: item.newsId,
+    date: item.publishedAt ? item.publishedAt.slice(0, 10).replace(/-/g, '.') : '',
+    title: item.title,
+    source: item.press,
+    tag: item.category ?? '기타',
+    isLatest: item.isCurrent,
+    newsId: item.newsId,
+  }));
+
+  const timelineTags = [...new Set(timelineItems.map((i) => i.tag))];
+  const effectiveTag = timelineTags.includes(activeTimelineTag) ? activeTimelineTag : (timelineTags[0] ?? '');
 
   const relatedCompanies = (data.relatedCompanies ?? []).map((company) => ({
     id: company.companyId,
@@ -108,10 +124,11 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
 
         <div className="flex w-full flex-col gap-16pxr lg:w-[320px] lg:shrink-0">
           <NewsTimeline
-            tags={TIMELINE_TAGS}
-            activeTag={activeTimelineTag}
+            tags={timelineTags}
+            activeTag={effectiveTag}
             onTagChange={setActiveTimelineTag}
-            items={MOCK_TIMELINE_ITEMS}
+            items={timelineItems}
+            loading={timelineLoading}
           />
           <NewsSidebar relatedNews={relatedNews} relatedCompanies={relatedCompanies} />
         </div>
