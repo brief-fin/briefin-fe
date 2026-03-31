@@ -101,6 +101,7 @@ export default function CompanyDetailPage() {
         <CompanyHero
           industry={company.sector ?? '기타'}
           name={company.name}
+          logoUrl={`https://thumb.tossinvest.com/image/resized/96x0/https%3A%2F%2Fstatic.toss.im%2Fpng-icons%2Fsecurities%2Ficn-sec-fill-${company.ticker}.png`}
           stats={stats}
           isWatchlisted={isWatchlisted}
           onToggleWatchlist={handleToggleWatchlist}

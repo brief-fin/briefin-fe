@@ -9,32 +9,43 @@ interface CompanyCardProps {
   sector: string | null;
   logoUrl: string | null;
   changeRate: number | null;
+  currentPrice?: number | null;
 }
 
-export function CompanyCard({ company }: { company: CompanyCardProps }) {
-  const isPositive = (company.changeRate ?? 0) >= 0;
+interface LivePrice {
+  currentPrice: number;
+  changeRate: number;
+}
+
+export function CompanyCard({ company, livePrice }: { company: CompanyCardProps; livePrice?: LivePrice }) {
+  const changeRate = livePrice?.changeRate ?? company.changeRate;
+  const currentPrice = livePrice?.currentPrice ?? company.currentPrice;
+  const isPositive = (changeRate ?? 0) >= 0;
   const router = useRouter();
 
   return (
-    <div
+    <li
       onClick={() => router.push(`/companies/${company.id}`)}
-      className="flex cursor-pointer items-center gap-16pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr transition-shadow hover:shadow-news-hover">
-      <div className="flex h-48pxr w-48pxr flex-shrink-0 items-center justify-center rounded-nav bg-primary-light overflow-hidden">
+      className="flex cursor-pointer items-center gap-12pxr py-12pxr hover:opacity-70">
+      <div className="flex h-40pxr w-40pxr shrink-0 items-center justify-center rounded-button bg-primary-light overflow-hidden">
         {company.logoUrl ? (
-          <Image src={company.logoUrl} alt={company.name} width={48} height={48} />
+          <Image src={company.logoUrl} alt={company.name} width={40} height={40} />
         ) : (
-          <span className="text-24pxr">🏢</span>
+          <span className="text-18pxr">🏢</span>
         )}
       </div>
-      <div className="flex flex-col gap-4pxr">
-        <div className="fonts-cardTitle">{company.name}</div>
-        <div className="fonts-caption">{company.sector ?? '업종 미분류'}</div>
-        <div className={`fonts-subTitle ${isPositive ? 'text-semantic-red' : 'text-semantic-blue'}`}>
-          {company.changeRate != null
-            ? `${isPositive ? '+' : ''}${company.changeRate}%`
-            : '-'}
-        </div>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-[14px] font-bold text-text-primary">{company.name}</p>
+        <p className="fonts-caption">{company.sector ?? '업종 미분류'}</p>
       </div>
-    </div>
+      <div className="shrink-0 text-right">
+        <p className={`text-[13px] font-bold ${isPositive ? 'text-semantic-red' : 'text-semantic-blue'}`}>
+          {changeRate != null ? `${isPositive ? '+' : ''}${changeRate}%` : '-'}
+        </p>
+        {currentPrice != null && (
+          <p className="fonts-caption text-text-muted">{currentPrice.toLocaleString()}원</p>
+        )}
+      </div>
+    </li>
   );
 }
