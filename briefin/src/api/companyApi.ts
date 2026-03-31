@@ -1,11 +1,17 @@
+import { authStore } from '@/store/authStore';
 import { apiClient, type ApiResponse } from './client';
 import type { CompanyDetail } from '@/types/company';
 
 export type { CompanyDetail };
 
+
 // 기업 상세 조회
-export const fetchCompanyDetail = (id: number) =>
-  apiClient.get<ApiResponse<CompanyDetail>>(`/companies/${id}`).then((res) => res.result);
+export const fetchCompanyDetail = async (id: number): Promise<CompanyDetail> => {
+  const res = await apiClient.get<ApiResponse<CompanyDetail>>(`/companies/${id}`, {
+    cache: 'no-store',
+  });
+  return res.result;
+};
 
 // 인기 기업 목록
 export const fetchPopularCompanies = () =>

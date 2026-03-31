@@ -9,6 +9,7 @@ export interface CompanyDetail {
   changeRate: number;
   marketCap: number;
   isOverseas: boolean;
+  watchlisted: boolean;
   relatedCompanies: { id: number; name: string; ticker: string }[];
 }
 
