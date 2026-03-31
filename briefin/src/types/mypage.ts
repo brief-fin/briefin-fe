@@ -17,7 +17,8 @@ export interface ScrapedNews {
 
 export interface WatchlistCompany {
   companyId: number;
-  companyName: string;
+  name?: string;
+  companyName?: string;
   ticker: string;
   logoUrl: string;
   addedAt: string;

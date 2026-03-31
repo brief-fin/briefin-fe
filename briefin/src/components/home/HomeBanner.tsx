@@ -20,7 +20,7 @@ const SLIDES = [
     imageSrc: '/images/disclo.svg',
     imageStyle: { maxHeight: '400px' },
     imageContainerClass:
-      'mt-8 flex w-full justify-center md:absolute md:bottom-0 md:right-0 md:mt-0 md:w-auto md:items-end md:justify-end',
+      'mt-8 flex w-full justify-center lg:absolute lg:bottom-0 lg:right-0 lg:mt-0 lg:w-auto lg:items-end lg:justify-end',
     background: 'linear-gradient(106deg, #F0FDF4 0%, #DCFCE7 60%, #F0FDF4 100%)',
     navColor: '#166534',
     navHoverColor: '#15803D',
@@ -32,7 +32,7 @@ const SLIDES = [
     imageSrc: '/images/disclosure.svg',
     imageStyle: { maxHeight: '380px' },
     imageContainerClass:
-      'mt-8 flex w-full justify-center md:absolute md:bottom-0 md:right-16 md:mt-0 md:w-auto md:items-end md:justify-end',
+      'mt-8 flex w-full justify-center lg:absolute lg:bottom-0 lg:right-16 lg:mt-0 lg:w-auto lg:items-end lg:justify-end',
     background: 'linear-gradient(106deg, #FAF5FF 0%, #EDE9FE 60%, #FAF5FF 100%)',
     navColor: '#6B21A8',
     navHoverColor: '#7E22CE',
@@ -44,7 +44,7 @@ const SLIDES = [
     imageSrc: '/images/news.svg',
     imageStyle: { maxHeight: '450px' },
     imageContainerClass:
-      'mt-8 flex w-full justify-center md:absolute md:bottom-0 md:right-48 md:mt-0 md:w-auto md:translate-y-40pxr md:items-end md:justify-end',
+      'mt-8 flex w-full justify-center lg:absolute lg:bottom-0 lg:right-48 lg:mt-0 lg:w-auto lg:translate-y-40pxr lg:items-end lg:justify-end',
     background: 'linear-gradient(106deg, #FFFBEB 0%, #FEF3C7 60%, #FFFBEB 100%)',
     navColor: '#92400E',
     navHoverColor: '#B45309',
@@ -56,7 +56,7 @@ const SLIDES = [
     imageSrc: '/images/graph.svg',
     imageStyle: { maxHeight: '450px' },
     imageContainerClass:
-      'mt-8 flex w-full justify-center md:absolute md:bottom-0 md:right-48 md:mt-0 md:w-auto md:translate-y-40pxr md:items-end md:justify-end',
+      'mt-8 flex w-full justify-center lg:absolute lg:bottom-0 lg:right-48 lg:mt-0 lg:w-auto lg:translate-y-40pxr lg:items-end lg:justify-end',
     background: 'linear-gradient(106deg, #F0FDFA 0%, #CCFBF1 60%, #F0FDFA 100%)',
     navColor: '#134E4A',
     navHoverColor: '#0F766E',
@@ -96,7 +96,7 @@ export default function HomeBanner() {
 
   return (
     <section
-      className="relative min-h-620pxr w-full overflow-hidden md:min-h-400pxr"
+      className="relative min-h-620pxr w-full overflow-hidden lg:min-h-400pxr"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       style={{ background: slide.background }}>
@@ -107,9 +107,9 @@ export default function HomeBanner() {
         }
       `}</style>
 
-      <div className="mx-auto flex h-full min-h-620pxr w-full max-w-1600pxr flex-col items-start md:min-h-400pxr md:flex-row md:items-center">
+      <div className="mx-auto flex h-full min-h-620pxr w-full max-w-1600pxr flex-col items-start lg:min-h-400pxr lg:flex-row lg:items-center">
         {/* 왼쪽 텍스트 블럭 */}
-        <div className="flex w-full shrink-0 flex-col items-center gap-6 px-20pxr py-24pxr text-center sm:px-36pxr md:ml-8 md:max-w-[56%] md:items-start md:px-80pxr md:py-16 md:text-left lg:px-130pxr">
+        <div className="flex w-full shrink-0 flex-col items-center gap-6 px-20pxr py-24pxr text-center sm:px-36pxr lg:ml-8 lg:max-w-[56%] lg:items-start lg:px-80pxr lg:py-16 lg:text-left xl:px-130pxr">
           <h1
             key={`title-${current}`}
             className="fonts-display whitespace-pre-line text-[#111827]"
@@ -164,7 +164,7 @@ export default function HomeBanner() {
             key={`image-${current}`}
             className={
               slide.imageContainerClass ??
-              'mt-8 flex w-full justify-center md:absolute md:bottom-0 md:right-48 md:mt-0 md:w-auto md:items-end md:justify-end'
+              'mt-8 flex w-full justify-center lg:absolute lg:bottom-0 lg:right-48 lg:mt-0 lg:w-auto lg:items-end lg:justify-end'
             }
             style={fadeUpStyle(100)}>
             <img

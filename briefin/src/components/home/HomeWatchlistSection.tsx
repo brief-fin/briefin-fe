@@ -14,7 +14,8 @@ function CompanyLogo({ company }: { company: WatchlistCompany }) {
     : (company.logoUrl ?? null);
 
   if (logoUrl && !imgError) {
-    const altText = company.companyName?.trim() ? `${company.companyName} 로고` : '회사 로고';
+    const name = company.companyName ?? company.name ?? '';
+    const altText = name.trim() ? `${name} 로고` : '회사 로고';
     return (
       <Image
         src={logoUrl}
@@ -29,7 +30,7 @@ function CompanyLogo({ company }: { company: WatchlistCompany }) {
 
   return (
     <span className="text-[16px] font-black text-primary">
-      {company.companyName.charAt(0)}
+      {(company.companyName ?? company.name ?? '?').charAt(0)}
     </span>
   );
 }
@@ -91,8 +92,12 @@ export default function HomeWatchlistSection() {
                   <CompanyLogo company={company} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[14px] font-bold text-text-primary">{company.companyName}</p>
-                  <p className="fonts-caption text-text-muted">{company.ticker}</p>
+                  <p className="truncate text-[14px] font-bold text-text-primary">
+                    {company.companyName ?? company.name ?? ''}
+                  </p>
+                  {(company.ticker ?? '').trim() && (
+                    <p className="fonts-caption text-text-muted">{company.ticker}</p>
+                  )}
                 </div>
               </Link>
             </li>
