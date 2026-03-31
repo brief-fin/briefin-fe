@@ -162,11 +162,6 @@ export default function CompanyDetailPage() {
             onTagChange={setActiveTimelineTag}
             items={MOCK_TIMELINE_ITEMS}
           />
-          <AlertBanner
-            title="🔔 공시 알림 받기"
-            description="이 기업의 새 공시·뉴스를 실시간으로 받아보세요."
-            buttonLabel="알림 설정하기"
-          />
         </div>
       </div>
     </div>
