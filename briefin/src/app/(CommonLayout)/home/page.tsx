@@ -1,8 +1,7 @@
 import HomeBanner from '@/components/home/HomeBanner';
 import HomeNewsSection from '@/components/home/HomeNewsSection';
 import AlertBanner from '@/components/common/AlertBanner';
-import PopularCompanyList from '@/components/common/PopularCompanyList';
-import { MOCK_WATCHLIST } from '@/mocks/feed';
+import HomeWatchlistSection from '@/components/home/HomeWatchlistSection';
 
 export default function HomePage() {
   return (
@@ -18,7 +17,7 @@ export default function HomePage() {
 
         {/* Right sidebar */}
         <div className="flex flex-col gap-16pxr lg:w-96 lg:shrink-0">
-          <PopularCompanyList title="👀 내 관심 기업" companies={MOCK_WATCHLIST} />
+          <HomeWatchlistSection />
           <AlertBanner
             title="관심 기업을 더 추가해보세요"
             description="더 많은 기업을 등록할수록 내 피드가 풍성해져요."
