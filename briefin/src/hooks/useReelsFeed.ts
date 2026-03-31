@@ -18,6 +18,7 @@ export function useReelsFeed(reels: ReelNews[]) {
 
   const [current, setCurrent] = useState(0);
   const [scrapped, setScrapped] = useState<Set<string>>(new Set());
+  const pendingScrapRef = useRef<Set<string>>(new Set());
   const [alerted, setAlerted] = useState<Set<number>>(new Set());
   const [progress, setProgress] = useState(0);
 
@@ -125,9 +126,11 @@ export function useReelsFeed(reels: ReelNews[]) {
   const toggleScrap = useCallback(() => {
     const newsId = reels[currentRef.current]?.id;
     if (!newsId) return;
+    if (pendingScrapRef.current.has(newsId)) return;
 
     const isScrapped = scrapped.has(newsId);
 
+    pendingScrapRef.current.add(newsId);
     setScrapped((prev) => {
       const s = new Set(prev);
       if (isScrapped) s.delete(newsId);
@@ -135,13 +138,19 @@ export function useReelsFeed(reels: ReelNews[]) {
       return s;
     });
 
-    if (isScrapped) {
-      deleteScrapNews(newsId).catch(() => setScrapped((p) => new Set(p).add(newsId)));
-    } else {
-      scrapNews(newsId).catch(() => {
-        setScrapped((p) => { const ns = new Set(p); ns.delete(newsId); return ns; });
+    const apiCall = isScrapped ? deleteScrapNews(newsId) : scrapNews(newsId);
+    apiCall
+      .catch(() => {
+        setScrapped((p) => {
+          const ns = new Set(p);
+          if (isScrapped) ns.add(newsId);
+          else ns.delete(newsId);
+          return ns;
+        });
+      })
+      .finally(() => {
+        pendingScrapRef.current.delete(newsId);
       });
-    }
   }, [reels, scrapped]);
 
   const toggleAlert = useCallback(() => {
