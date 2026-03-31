@@ -29,9 +29,13 @@ function CompanyLogo({ company }: { company: WatchlistCompany }) {
   }
 
   return (
-    <span className="text-[16px] font-black text-primary">
-      {(company.companyName ?? company.name ?? '?').charAt(0)}
-    </span>
+    <Image
+      src="/default-company.png"
+      alt="기본 회사 로고"
+      width={40}
+      height={40}
+      className="object-cover"
+    />
   );
 }
 

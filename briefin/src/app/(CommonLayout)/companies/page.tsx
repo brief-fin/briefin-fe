@@ -25,6 +25,8 @@ function PopularCompanyCard({ company, rank }: { company: PopularCompany; rank: 
   const router = useRouter();
   const isRise = company.changeRate > 0;
   const isFall = company.changeRate < 0;
+  const [imgError, setImgError] = useState(false);
+  const logoSrc = !imgError && company.logoUrl ? company.logoUrl : '/default-company.png';
 
   return (
     <div
@@ -35,13 +37,11 @@ function PopularCompanyCard({ company, rank }: { company: PopularCompany; rank: 
       </span>
       <div className="relative h-40pxr w-40pxr shrink-0 overflow-hidden rounded-full border border-surface-border bg-surface-bg">
         <Image
-          src={company.logoUrl}
+          src={logoSrc}
           alt={company.name}
           fill
           className="object-cover"
-          onError={(e) => {
-            (e.target as HTMLImageElement).style.display = 'none';
-          }}
+          onError={() => setImgError(true)}
         />
       </div>
       <div className="min-w-0 flex-1">
