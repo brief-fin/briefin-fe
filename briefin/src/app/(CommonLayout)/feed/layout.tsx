@@ -1,29 +1,24 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuthSessionVersion } from '@/providers/AuthSessionProvider';
-import { authStore } from '@/store/authStore';
+import { useAuthStatus } from '@/providers/AuthSessionProvider';
 
 export default function FeedProtectedLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const authSessionVersion = useAuthSessionVersion();
-  const [ready, setReady] = useState(false);
+  const status = useAuthStatus();
 
   useEffect(() => {
-    if (authSessionVersion === 0) return;
-    const authed = authStore.isAuthenticated();
-    if (!authed) {
-      setReady(false);
+    if (status === 'checking') return;
+    if (status !== 'authenticated') {
       const redirect = pathname || '/feed';
       router.replace(`/login?redirect=${encodeURIComponent(redirect)}`);
       return;
     }
-    setReady(true);
-  }, [authSessionVersion, pathname, router]);
+  }, [status, pathname, router]);
 
-  if (!ready) return null;
+  if (status !== 'authenticated') return null;
 
   return <>{children}</>;
 }

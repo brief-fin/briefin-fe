@@ -40,10 +40,11 @@ export function useRecentNews(page = 1) {
 }
 
 // 관심 기업 목록
-export function useWatchlist() {
+export function useWatchlist(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: userKeys.watchlist(),
     queryFn: fetchWatchlist,
+    enabled: options?.enabled,
   });
 }
 
