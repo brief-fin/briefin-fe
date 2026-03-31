@@ -1,2 +1,2 @@
-export const REELS_AUTO_ADVANCE_MS = 8000;
+export const REELS_AUTO_ADVANCE_MS = 5000;
 export const REELS_SCROLL_DEBOUNCE_MS = 80;
