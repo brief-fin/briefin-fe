@@ -71,9 +71,16 @@ export default function Page() {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}${TABS[activeTab].endpoint}`)
       .then(res => res.text())
       .then(text => {
-        if (!text) return;
-        const data = JSON.parse(text);
-        setCompanies(data.result ?? []);
+        if (!text) {
+          setCompanies([]);
+          return;
+        }
+        try {
+          const data = JSON.parse(text);
+          setCompanies(data.result ?? []);
+        } catch {
+          setCompanies([]);
+        }
       })
       .catch(console.error)
       .finally(() => setLoading(false));
