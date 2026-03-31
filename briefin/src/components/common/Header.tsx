@@ -81,7 +81,7 @@ export default function Header() {
             </Link>
 
             {/* 데스크탑 전용 nav */}
-            <nav className="hidden items-center gap-2 md:flex">
+            <nav className="hidden items-center gap-2 xl:flex">
               {NAV_ITEMS.map((item) => {
                 const isActive = isActivePath(item.href);
                 return (
@@ -103,7 +103,7 @@ export default function Header() {
           </div>
 
           {/* 데스크탑 전용 auth 버튼 */}
-          <div className="hidden shrink-0 items-center gap-2 md:flex">
+          <div className="hidden shrink-0 items-center gap-2 xl:flex">
             {isLoggedIn ? (
               <>
                 <span className="fonts-label">{userEmail}</span>
@@ -139,7 +139,7 @@ export default function Header() {
           <button
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-nav text-[#4B5563] hover:bg-[#F3F4F6] md:hidden"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-nav text-[#4B5563] hover:bg-[#F3F4F6] xl:hidden"
             aria-label="메뉴 열기">
             {isMenuOpen ? (
               /* X 아이콘 */
@@ -160,7 +160,7 @@ export default function Header() {
 
         {/* 모바일 드롭다운 메뉴 */}
         {isMenuOpen && (
-          <div className="border-t border-[#F1F5F9] px-20pxr pb-20pxr pt-12pxr sm:px-40pxr md:hidden">
+          <div className="border-t border-[#F1F5F9] px-20pxr pb-20pxr pt-12pxr sm:px-40pxr md:px-80pxr xl:hidden">
             <nav className="flex flex-col gap-4pxr">
               {NAV_ITEMS.map((item) => {
                 const isActive = isActivePath(item.href);

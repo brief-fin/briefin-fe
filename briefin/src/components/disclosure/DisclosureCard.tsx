@@ -5,36 +5,27 @@ import Label from '@/components/common/Label';
 import { DisclosureCardProps } from '@/types/disclosure';
 import { getCategoryLabel } from '@/constants/disclosureCategories';
 
-const SENTIMENT_STYLES = {
-  호재: 'bg-emerald-50 text-emerald-800',
-  악재: 'bg-red-100 text-red-800',
-  중립: 'bg-gray-200 text-gray-700',
-} as const;
 
 export default function DisclosureCard({ item, sourceLabel = 'DART 공시' }: DisclosureCardProps) {
   const { title, date, category, companyName, summaryPoints, sentiment } = item;
-
-  const hasLabels = category || companyName;
 
   return (
     <Link
       href={`/disclosure/${item.id}`}
       className="flex w-full cursor-pointer flex-col gap-14pxr rounded-card border border-surface-border bg-white px-25pxr py-28pxr">
-      {/* 출처 + 날짜 */}
-      <p className="fonts-label flex items-center gap-6pxr text-text-muted">
-        <span>{sourceLabel}</span>
-        <span>{date}</span>
-      </p>
-
-      {/* 제목 + 감성 태그 */}
-      <div className="flex items-start gap-8pxr">
-        <p className="fonts-cardTitle line-clamp-2 flex-1 text-text-primary">{title}</p>
-        {sentiment && (
-          <span className={`fonts-label mt-2pxr shrink-0 rounded-badge px-8pxr py-2pxr font-semibold ${SENTIMENT_STYLES[sentiment]}`}>
-            {sentiment}
-          </span>
-        )}
+      {/* 회사명 + 공시 유형 태그 / 출처 + 날짜 */}
+      <div className="flex items-center justify-between gap-8pxr">
+        <section className="flex flex-wrap gap-6pxr">
+          {companyName && <Label text={companyName} variant="company" />}
+          {category && <Label text={getCategoryLabel(category)} variant="category" />}
+        </section>
+        <p className="fonts-label shrink-0 text-text-muted">
+          {sourceLabel} {date}
+        </p>
       </div>
+
+      {/* 제목 */}
+      <p className="fonts-cardTitle line-clamp-2 text-text-primary">{title}</p>
 
       {/* 요약 */}
       {summaryPoints && summaryPoints.length > 0 && (
@@ -50,13 +41,7 @@ export default function DisclosureCard({ item, sourceLabel = 'DART 공시' }: Di
         </section>
       )}
 
-      {/* 태그: 공시 유형 + 회사 */}
-      {hasLabels && (
-        <section className="flex flex-wrap gap-6pxr">
-          {companyName && <Label key="company" text={companyName} variant="company" />}
-          {category && <Label key="category" text={getCategoryLabel(category)} variant="category" />}
-        </section>
-      )}
+
     </Link>
   );
 }
