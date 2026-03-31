@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Tabs from '@/components/common/Tabs';
 import MyPageHeader from '@/components/mypage/mypageheader';
@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { MyPageTab } from '@/types/mypage';
 import { TAB_FROM_QUERY, TAB_TO_QUERY, MY_PAGE_TABS } from '@/constants/mypage';
 import { useMyInfo, useScrappedNews, useRecentNews } from '@/hooks/useUser';
+import { useDeleteScrapNews } from '@/hooks/useNews';
 import { formatDateTime } from '@/utils/date';
 
 function MyPageContent() {
@@ -22,6 +23,8 @@ function MyPageContent() {
   const { data: userInfo } = useMyInfo();
   const { data: scrapsData, isLoading: scrapsLoading } = useScrappedNews();
   const { data: recentData, isLoading: recentLoading } = useRecentNews();
+  const { mutate: deleteScrap } = useDeleteScrapNews();
+  const [unscrappedIds, setUnscrappedIds] = useState<Set<number>>(new Set());
 
   const handleTabChange = (tab: MyPageTab) => {
     router.push(`/mypage?tab=${TAB_TO_QUERY[tab]}`);
@@ -40,9 +43,7 @@ function MyPageContent() {
         {activeTab === '관심 기업' && <WatchlistSection />}
         {activeTab === '스크랩 뉴스' && (
           <div className="flex flex-col gap-12pxr">
-            {scrapsLoading && (
-              <p className="py-40pxr text-center text-[14px] text-text-muted">불러오는 중...</p>
-            )}
+            {scrapsLoading && <p className="py-40pxr text-center text-[14px] text-text-muted">불러오는 중...</p>}
             {!scrapsLoading && (!scrapsData?.scrapList || scrapsData.scrapList.length === 0) && (
               <p className="py-40pxr text-center text-[14px] text-text-muted">스크랩한 뉴스가 없습니다.</p>
             )}
@@ -50,21 +51,31 @@ function MyPageContent() {
               <Link
                 key={news.newsId}
                 href={`/news/${news.newsId}`}
-                className="flex flex-col gap-6pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr hover:bg-surface-bg transition-colors">
-                <p className="text-[14px] font-bold text-text-primary">{news.title}</p>
-                {news.summary && (
-                  <p className="fonts-caption line-clamp-2 text-text-muted">{news.summary}</p>
-                )}
-                <p className="fonts-caption text-text-disabled">{news.source} · {formatDateTime(news.scrapedAt)}</p>
+                className="flex items-start gap-12pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr transition-colors hover:bg-surface-bg">
+                <div className="flex min-w-0 flex-1 flex-col gap-6pxr">
+                  <p className="text-[14px] font-bold text-text-primary">{news.title}</p>
+                  {news.summary && <p className="fonts-caption line-clamp-2 text-text-muted">{news.summary}</p>}
+                  <p className="fonts-caption text-text-disabled">
+                    {news.source} · {news.scrapedAt}
+                  </p>
+                </div>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    deleteScrap(news.newsId);
+                    setUnscrappedIds((prev) => new Set(prev).add(news.newsId));
+                  }}
+                  className={`shrink-0 text-[20px] transition-colors ${unscrappedIds.has(news.newsId) ? 'text-text-muted' : 'text-yellow-400'}`}>
+                  ★
+                </button>
               </Link>
             ))}
           </div>
         )}
         {activeTab === '최근 본 뉴스' && (
           <div className="flex flex-col gap-12pxr">
-            {recentLoading && (
-              <p className="py-40pxr text-center text-[14px] text-text-muted">불러오는 중...</p>
-            )}
+            {recentLoading && <p className="py-40pxr text-center text-[14px] text-text-muted">불러오는 중...</p>}
             {!recentLoading && (!recentData?.recentList || recentData.recentList.length === 0) && (
               <p className="py-40pxr text-center text-[14px] text-text-muted">최근 본 뉴스가 없습니다.</p>
             )}
@@ -72,12 +83,12 @@ function MyPageContent() {
               <Link
                 key={news.newsId}
                 href={`/news/${news.newsId}`}
-                className="flex flex-col gap-6pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr hover:bg-surface-bg transition-colors">
+                className="flex flex-col gap-6pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr transition-colors hover:bg-surface-bg">
                 <p className="text-[14px] font-bold text-text-primary">{news.title}</p>
-                {news.summary && (
-                  <p className="fonts-caption line-clamp-2 text-text-muted">{news.summary}</p>
-                )}
-                <p className="fonts-caption text-text-disabled">{news.source} · {formatDateTime(news.viewedAt)}</p>
+                {news.summary && <p className="fonts-caption line-clamp-2 text-text-muted">{news.summary}</p>}
+                <p className="fonts-caption text-text-disabled">
+                  {news.source} · {formatDateTime(news.viewedAt)}
+                </p>
               </Link>
             ))}
           </div>
