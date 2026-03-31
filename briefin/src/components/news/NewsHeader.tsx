@@ -26,6 +26,7 @@ export default function NewsHeader({
         </h1>
         {onToggleScrap && (
           <button
+            type="button"
             onClick={onToggleScrap}
             aria-label={isScrapped ? '스크랩 취소' : '스크랩'}
             className="mt-4pxr shrink-0 rounded-full p-6pxr transition-colors hover:bg-surface-bg">
