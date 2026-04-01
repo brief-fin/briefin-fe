@@ -90,7 +90,7 @@ function CompanyRow({ company, rank }: { company: PopularCompany; rank: number }
         {rank}
       </span>
       <div className="relative h-36pxr w-36pxr shrink-0 overflow-hidden rounded-full border border-surface-border bg-surface-bg">
-        <Image src={logoSrc} alt={company.name} fill className="object-cover" onError={() => setImgError(true)} />
+        <Image src={logoSrc} alt={company.name} fill className="object-cover" unoptimized onError={() => setImgError(true)} />
       </div>
       <div className="min-w-0 flex-1">
         <p className="truncate text-[13px] font-bold text-text-primary">{company.name}</p>
@@ -152,7 +152,20 @@ function RankingPanel() {
 
       {/* 목록 */}
       {isLoading ? (
-        <div className="py-40pxr text-center text-[13px] text-text-muted">로딩중...</div>
+        <div className="animate-pulse divide-y divide-surface-border">
+          {Array.from({ length: 7 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-12pxr px-20pxr py-12pxr">
+              <div className="h-14pxr w-14pxr shrink-0 rounded bg-gray-200" />
+              <div className="h-3 w-18pxr shrink-0 rounded bg-gray-200" />
+              <div className="h-36pxr w-36pxr shrink-0 rounded-full bg-gray-200" />
+              <div className="flex flex-1 flex-col gap-6pxr">
+                <div className="h-3 w-24 rounded bg-gray-200" />
+                <div className="h-3 w-16 rounded bg-gray-200" />
+              </div>
+              <div className="h-3 w-12 shrink-0 rounded bg-gray-200" />
+            </div>
+          ))}
+        </div>
       ) : companies.length === 0 ? (
         <div className="py-40pxr text-center text-[13px] text-text-muted">데이터가 없어요.</div>
       ) : (

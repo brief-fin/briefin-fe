@@ -1,5 +1,6 @@
 import { apiClient } from './client';
 import type { ReelNews } from '@/types/reelNews';
+import { formatDateTime } from '@/utils/date';
 
 export interface ReelsItem {
   newsId: string;
@@ -20,7 +21,7 @@ export function toReelNews(item: ReelsItem, index: number): ReelNews {
     badge: null,
     category: item.category ?? '',
     source: item.press ?? '',
-    time: item.publishedAt ?? '',
+    time: item.publishedAt ? formatDateTime(item.publishedAt) : '',
     title: item.title ?? '',
     highlight: lines[0] ?? '',
     summaryLines: lines,

@@ -23,6 +23,7 @@ function CompanyLogo({ company }: { company: WatchlistCompany }) {
         width={40}
         height={40}
         className="object-cover"
+        unoptimized
         onError={() => setImgError(true)}
       />
     );
