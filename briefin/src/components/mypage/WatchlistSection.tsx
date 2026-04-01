@@ -75,11 +75,14 @@ export default function WatchlistSection() {
           <div className="flex shrink-0 items-center gap-4pxr">
             <PushAlarmButton companyId={company.companyId} />
             <button
+              type="button"
               onClick={() => unwatch(company.companyId)}
               disabled={isPending}
+              aria-label="관심 기업 삭제"
               title="관심 기업 삭제"
               className="p-4pxr text-text-muted transition-colors hover:text-red-500 disabled:opacity-40">
               <svg
+                aria-hidden="true"
                 width="18"
                 height="18"
                 viewBox="0 0 24 24"
