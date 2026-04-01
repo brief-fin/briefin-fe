@@ -67,7 +67,18 @@ export default function SearchPage() {
       </div>
 
       {loading ? (
-        <div className="fonts-body py-100pxr text-center">데이터를 불러오는 중...</div>
+        <div className="mb-40pxr grid animate-pulse grid-cols-1 gap-16pxr sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-16pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr">
+              <div className="h-48pxr w-48pxr shrink-0 rounded-nav bg-gray-200" />
+              <div className="flex flex-col gap-8pxr">
+                <div className="h-4 w-28 rounded bg-gray-200" />
+                <div className="h-3 w-20 rounded bg-gray-200" />
+                <div className="h-3 w-12 rounded bg-gray-200" />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : results.length > 0 ? (
         <div className="mb-40pxr grid grid-cols-1 gap-16pxr sm:grid-cols-2 lg:grid-cols-3">
           {results.map((company) => (

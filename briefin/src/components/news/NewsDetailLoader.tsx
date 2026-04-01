@@ -37,8 +37,7 @@ export default function NewsDetailLoader({ id }: { id: string }) {
       );
     }
 
-    const message =
-      error instanceof Error ? error.message : '뉴스를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.';
+    const message = error instanceof Error ? error.message : '뉴스를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.';
 
     return (
       <div className="min-h-screen bg-surface-bg px-24pxr py-40pxr">
