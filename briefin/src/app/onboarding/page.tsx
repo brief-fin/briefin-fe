@@ -16,6 +16,7 @@ export default function OnboardingPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [selected, setSelected] = useState<Record<string, Pick<CompanyDetail, 'id' | 'name' | 'ticker'>>>({});
+  const selectedRef = useRef(selected);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [resetting, setResetting] = useState(false);
@@ -47,6 +48,10 @@ export default function OnboardingPage() {
   const isLoading = debouncedQ.length > 0 ? searchLoading : popularLoading;
 
   const selectedIds = useMemo(() => Object.keys(selected), [selected]);
+
+  useEffect(() => {
+    selectedRef.current = selected;
+  }, [selected]);
 
   // 온보딩 재진입 시: 서버 watchlist를 초기 선택으로 동기화
   useEffect(() => {
@@ -108,12 +113,31 @@ export default function OnboardingPage() {
     setSubmitting(true);
 
     try {
-      const ids = selectedIds.map((id) => Number(id)).filter((n) => Number.isFinite(n));
-      if (ids.length > 0) {
-        const results = await Promise.allSettled(ids.map((id) => watchCompany(id)));
-        const failed = results.filter((r) => r.status === 'rejected').length;
-        if (failed > 0) {
-          throw new Error('failed');
+      if (authStatus === 'authenticated') {
+        const desiredIds = Object.keys(selectedRef.current)
+          .map((id) => Number(id))
+          .filter((n) => Number.isFinite(n));
+
+        const currentIds = (watchlist ?? [])
+          .map((c) => Number(c.companyId))
+          .filter((n) => Number.isFinite(n));
+
+        const desiredSet = new Set(desiredIds);
+        const currentSet = new Set(currentIds);
+
+        const toWatch = desiredIds.filter((id) => !currentSet.has(id));
+        const toUnwatch = currentIds.filter((id) => !desiredSet.has(id));
+
+        if (toUnwatch.length > 0) {
+          const results = await Promise.allSettled(toUnwatch.map((id) => unwatchCompany(id)));
+          const failed = results.filter((r) => r.status === 'rejected').length;
+          if (failed > 0) throw new Error('failed');
+        }
+
+        if (toWatch.length > 0) {
+          const results = await Promise.allSettled(toWatch.map((id) => watchCompany(id)));
+          const failed = results.filter((r) => r.status === 'rejected').length;
+          if (failed > 0) throw new Error('failed');
         }
       }
 
