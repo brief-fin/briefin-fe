@@ -1,6 +1,6 @@
 import { authStore } from '@/store/authStore';
 import { authDebug } from '@/lib/authDebug';
-import { refreshAccessTokenSingleFlight } from '@/lib/refreshSession';
+import { markExplicitLogout, refreshAccessTokenSingleFlight } from '@/lib/refreshSession';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
 
@@ -60,6 +60,8 @@ async function request<T>(path: string, options?: RequestInit, canRetry = true):
     }
 
     authStore.clear();
+    // 여기까지 왔다는 건 "refresh로도 복구 불가" → 이후 refresh 네트워크 호출을 막는다.
+    markExplicitLogout();
     authDebug('api:redirect-login', { path, httpStatus: res.status });
     redirectToLoginWithCurrentPath();
     throw new ApiError(

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { logout as logoutApi } from '@/api/authApi';
+import { markExplicitLogout } from '@/lib/refreshSession';
 import { NAV_ITEMS } from '@/constants/header';
 import { useAuthSessionVersion } from '@/providers/AuthSessionProvider';
 import { authStore } from '@/store/authStore';
@@ -45,6 +46,7 @@ export default function Header() {
     } catch {
       /* 서버 오류여도 클라이언트 세션은 종료 */
     } finally {
+      markExplicitLogout();
       authStore.clear();
       setIsLoggedIn(false);
       setUserEmail(null);
