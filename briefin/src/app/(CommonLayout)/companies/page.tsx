@@ -90,7 +90,7 @@ function CompanyRow({ company, rank }: { company: PopularCompany; rank: number }
         {rank}
       </span>
       <div className="relative h-36pxr w-36pxr shrink-0 overflow-hidden rounded-full border border-surface-border bg-surface-bg">
-        <Image src={logoSrc} alt={company.name} fill className="object-cover" onError={() => setImgError(true)} />
+        <Image src={logoSrc} alt={company.name} fill className="object-cover" unoptimized onError={() => setImgError(true)} />
       </div>
       <div className="min-w-0 flex-1">
         <p className="truncate text-[13px] font-bold text-text-primary">{company.name}</p>

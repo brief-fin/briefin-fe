@@ -24,6 +24,7 @@ function CompanyLogo({ company }: { company: Company }) {
         width={20}
         height={20}
         className="object-cover"
+        unoptimized
         onError={() => setImgError(true)}
       />
     );
