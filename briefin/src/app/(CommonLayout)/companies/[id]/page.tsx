@@ -95,6 +95,7 @@ export default function CompanyDetailPage() {
               date: item.disclosedAt ? item.disclosedAt.slice(0, 10).replace(/-/g, '.') : '',
               category: item.category ?? '',
               companyName: item.companyName,
+              summaryPoints: item.keyPoints ?? [],
               sentiment: item.sentiment,
             })),
           );
