@@ -68,7 +68,7 @@ export function mapNewsItem(item: NewsListItem | FeedItem): NewsItem {
 export function mapReelsItem(item: ReelsItem, index: number): ReelNews {
   const primaryCompany = item.relatedCompanies[0] ?? '관련 기업';
   return {
-    id: Number(item.newsId),
+    id: String(item.newsId),
     badge: null,
     category: item.category,
     source: item.press,
