@@ -4,7 +4,6 @@ import DisclosureKeyPoints from '@/components/disclosure/DisclosureKeyPoints';
 import DisclosureDetailContent from '@/components/disclosure/DisclosureDetailContent';
 import DisclosureSidebar from '@/components/disclosure/DisclosureSideBar';
 import DisclosureBtn from '@/components/disclosure/DisclosureBtn';
-import BackButton from '@/components/common/BackButton';
 import { fetchDisclosureDetail, fetchDisclosureRecent } from '@/api/disclosureApi';
 import { ApiError } from '@/api/client';
 import { notFound } from 'next/navigation';
