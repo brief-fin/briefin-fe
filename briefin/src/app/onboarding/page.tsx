@@ -1,16 +1,28 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import CompanyCard from '@/components/onboarding/company-card';
-import { useCompanySearch, usePopularCompanies } from '@/hooks/useCompany';
+import { usePopularCompanies } from '@/hooks/useCompany';
 import type { CompanyDetail } from '@/types/company';
 import { unwatchCompany, watchCompany } from '@/api/userApi';
 import { useWatchlist } from '@/hooks/useUser';
 import { useAuthStatus } from '@/providers/AuthSessionProvider';
 import { useQueryClient } from '@tanstack/react-query';
+import { apiClient, type ApiResponse } from '@/api/client';
 
-const NEXT_PAGE = '/feed';
+const NEXT_PAGE = '/home';
+
+interface SearchResult {
+  id: number;
+  name: string;
+  ticker?: string;
+  logoUrl?: string | null;
+}
+
+interface SearchPage {
+  content: SearchResult[];
+}
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -21,37 +33,67 @@ export default function OnboardingPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [resetting, setResetting] = useState(false);
   const [resetError, setResetError] = useState<string | null>(null);
-  const [q, setQ] = useState('');
-  const [debouncedQ, setDebouncedQ] = useState('');
   const didInteractRef = useRef(false);
   const authStatus = useAuthStatus();
+
+  // 검색 자동완성 상태
+  const [q, setQ] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const isHydrated = useSyncExternalStore(
     () => () => {},
     () => true,
     () => false,
   );
 
+  // 검색 디바운스
   useEffect(() => {
-    const t = setTimeout(() => setDebouncedQ(q.trim()), 250);
-    return () => clearTimeout(t);
+    if (!q.trim()) {
+      setSearchResults([]);
+      setSearchOpen(false);
+      return;
+    }
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(async () => {
+      setSearchLoading(true);
+      setSearchOpen(true);
+      try {
+        const res = await apiClient.get<ApiResponse<SearchPage>>(
+          `/companies/search?q=${encodeURIComponent(q.trim())}&size=8`,
+        );
+        setSearchResults(res.result.content ?? []);
+      } catch {
+        setSearchResults([]);
+      } finally {
+        setSearchLoading(false);
+      }
+    }, 250);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
   }, [q]);
 
+  // 외부 클릭 시 드롭다운 닫기
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+        setSearchOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
   const { data: popular, isLoading: popularLoading } = usePopularCompanies();
-  const { data: searched, isLoading: searchLoading } = useCompanySearch(debouncedQ);
   const { data: watchlist } = useWatchlist({ enabled: authStatus === 'authenticated' });
 
-  const companies: CompanyDetail[] = useMemo(() => {
-    if (debouncedQ.length > 0) return searched?.content ?? [];
-    return (popular?.content ?? []).slice(0, 9);
-  }, [debouncedQ, popular, searched]);
+  const popularCompanies = (popular?.content ?? []).slice(0, 9);
 
-  const isLoading = debouncedQ.length > 0 ? searchLoading : popularLoading;
-
-  const selectedIds = useMemo(() => Object.keys(selected), [selected]);
-
-  useEffect(() => {
-    selectedRef.current = selected;
-  }, [selected]);
+  const selectedIds = Object.keys(selected);
 
   // 온보딩 재진입 시: 서버 watchlist를 초기 선택으로 동기화
   useEffect(() => {
@@ -79,6 +121,12 @@ export default function OnboardingPage() {
     });
   };
 
+  const handleSearchSelect = (company: SearchResult) => {
+    toggle({ id: company.id, name: company.name, ticker: company.ticker ?? '' });
+    setQ('');
+    setSearchOpen(false);
+  };
+
   const resetAll = async () => {
     if (resetting || submitting) return;
     setResetError(null);
@@ -86,20 +134,15 @@ export default function OnboardingPage() {
     didInteractRef.current = true;
 
     try {
-      // 서버에 이미 담긴 watchlist는 언워치까지 수행해 "진짜 초기화"
       if (authStatus === 'authenticated' && watchlist && watchlist.length > 0) {
         const ids = watchlist.map((c) => c.companyId);
         const results = await Promise.allSettled(ids.map((id) => unwatchCompany(id)));
         const failed = results.filter((r) => r.status === 'rejected').length;
-        if (failed > 0) {
-          throw new Error('failed');
-        }
+        if (failed > 0) throw new Error('failed');
         await queryClient.invalidateQueries({ queryKey: ['user', 'watchlist'] });
       }
-
       setSelected({});
     } catch {
-      // 서버 초기화 실패여도 화면 선택은 비우되, 안내는 남김
       setSelected({});
       setResetError('관심 기업 초기화에 실패했습니다. 잠시 후 다시 시도해주세요.');
     } finally {
@@ -113,40 +156,16 @@ export default function OnboardingPage() {
     setSubmitting(true);
 
     try {
-      if (authStatus === 'authenticated') {
-        const desiredIds = Object.keys(selectedRef.current)
-          .map((id) => Number(id))
-          .filter((n) => Number.isFinite(n));
-
-        const currentIds = (watchlist ?? [])
-          .map((c) => Number(c.companyId))
-          .filter((n) => Number.isFinite(n));
-
-        const desiredSet = new Set(desiredIds);
-        const currentSet = new Set(currentIds);
-
-        const toWatch = desiredIds.filter((id) => !currentSet.has(id));
-        const toUnwatch = currentIds.filter((id) => !desiredSet.has(id));
-
-        if (toUnwatch.length > 0) {
-          const results = await Promise.allSettled(toUnwatch.map((id) => unwatchCompany(id)));
-          const failed = results.filter((r) => r.status === 'rejected').length;
-          if (failed > 0) throw new Error('failed');
-        }
-
-        if (toWatch.length > 0) {
-          const results = await Promise.allSettled(toWatch.map((id) => watchCompany(id)));
-          const failed = results.filter((r) => r.status === 'rejected').length;
-          if (failed > 0) throw new Error('failed');
-        }
+      const ids = selectedIds.map((id) => Number(id)).filter((n) => Number.isFinite(n));
+      if (ids.length > 0) {
+        const results = await Promise.allSettled(ids.map((id) => watchCompany(id)));
+        const failed = results.filter((r) => r.status === 'rejected').length;
+        if (failed > 0) throw new Error('failed');
       }
-
-      // 저장 직후 UI 반영이 느리지 않도록 캐시 갱신
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['user', 'watchlist'] }),
         queryClient.invalidateQueries({ queryKey: ['feed'] }),
       ]);
-
       router.push(NEXT_PAGE);
     } catch {
       setSubmitError('관심 기업 저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
@@ -159,9 +178,7 @@ export default function OnboardingPage() {
     router.push(NEXT_PAGE);
   };
 
-  if (!isHydrated) {
-    return null;
-  }
+  if (!isHydrated) return null;
 
   return (
     <main className="min-h-screen bg-surface-bg py-36pxr">
@@ -173,35 +190,11 @@ export default function OnboardingPage() {
               <p className="text-[34px] leading-none text-text-primary">🏢</p>
               <h1 className="fonts-heading2 mt-14pxr text-text-primary">관심 기업 선택</h1>
               <p className="mt-10pxr text-[14px] leading-relaxed text-text-muted">
-                선택한 기업의 뉴스·공시를 맞춤으로 보여드려요. 인기 기업 9개를 먼저 보여드리고, 검색으로 더 추가할 수 있어요.
-              </p>
-            </div>
-
-            <div className="mt-16pxr">
-              <p className="mb-8pxr text-[12px] font-bold text-text-secondary">기업 검색</p>
-              <div className="flex w-full items-center gap-8pxr rounded-input border border-surface-border bg-surface-white px-16pxr py-12pxr">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#9CA3AF"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.35-4.35" />
-                </svg>
-                <input
-                  className="w-full bg-transparent p-5pxr text-text-primary placeholder:text-text-muted focus:outline-none"
-                  type="text"
-                  placeholder="기업명, 티커를 검색해 추가하세요"
-                  value={q}
-                  onChange={(e) => setQ(e.currentTarget.value)}
-                />
-              </div>
-              <p className="mt-8pxr text-[12px] text-text-muted">
-                {debouncedQ.length > 0 ? `검색 결과 ${companies.length}개` : '인기 기업 9개를 표시 중'}
+                선택한 기업의 공시 뉴스를 맞춤으로 보여드려요.
+                <br />
+                인기 기업 9개를 먼저 보여드리고,
+                <br />
+                검색으로 더 추가할 수 있어요.
               </p>
             </div>
 
@@ -219,8 +212,7 @@ export default function OnboardingPage() {
                   {selectedIds.slice(0, 6).map((id) => (
                     <span
                       key={id}
-                      className="inline-flex items-center rounded-full border border-surface-border bg-surface-white px-10pxr py-6pxr text-[12px] font-bold text-text-secondary"
-                    >
+                      className="inline-flex items-center rounded-full border border-surface-border bg-surface-white px-10pxr py-6pxr text-[12px] font-bold text-text-secondary">
                       {selected[id]?.name ?? `#${id}`}
                     </span>
                   ))}
@@ -236,33 +228,26 @@ export default function OnboardingPage() {
                   type="button"
                   onClick={resetAll}
                   disabled={selectedIds.length === 0 || resetting || submitting}
-                  className="h-38pxr flex-1 rounded-button border border-surface-border bg-surface-white text-[13px] font-bold text-text-secondary transition-colors hover:bg-surface-bg disabled:cursor-not-allowed disabled:opacity-60"
-                >
+                  className="h-38pxr flex-1 rounded-button border border-surface-border bg-surface-white text-[13px] font-bold text-text-secondary transition-colors hover:bg-surface-bg disabled:cursor-not-allowed disabled:opacity-60">
                   {resetting ? '초기화 중…' : '선택 초기화'}
                 </button>
                 <button
                   type="button"
                   onClick={goNext}
                   disabled={submitting}
-                  className="h-38pxr flex-1 rounded-button bg-primary text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-                >
+                  className="h-38pxr flex-1 rounded-button bg-primary text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
                   {submitting ? '저장 중…' : '시작하기'}
                 </button>
               </div>
-              {submitError && (
-                <p className="mt-10pxr text-[13px] font-bold text-semantic-red">{submitError}</p>
-              )}
-              {resetError && (
-                <p className="mt-10pxr text-[13px] font-bold text-semantic-red">{resetError}</p>
-              )}
+              {submitError && <p className="mt-10pxr text-[13px] font-bold text-semantic-red">{submitError}</p>}
+              {resetError && <p className="mt-10pxr text-[13px] font-bold text-semantic-red">{resetError}</p>}
             </div>
 
             <div className="mt-16pxr">
               <button
                 type="button"
                 onClick={handleLater}
-                className="w-full text-[13px] font-bold text-text-muted transition-colors hover:text-text-secondary focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-surface-border"
-              >
+                className="w-full text-[13px] font-bold text-text-muted transition-colors hover:text-text-secondary focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-surface-border">
                 나중에 하기
               </button>
             </div>
@@ -270,25 +255,98 @@ export default function OnboardingPage() {
 
           {/* Right content */}
           <section className="rounded-card border border-surface-border bg-surface-white p-24pxr">
-            <div className="flex flex-col gap-8pxr sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="text-[12px] font-bold text-text-secondary">
-                  {debouncedQ.length > 0 ? '검색 결과' : '인기 기업'}
-                </p>
-                <h2 className="mt-6pxr text-[18px] font-black text-text-primary">
-                  {debouncedQ.length > 0 ? '원하는 기업을 추가해보세요' : '지금 많이 담는 기업'}
-                </h2>
+            {/* 검색창 */}
+            <div ref={searchContainerRef} className="relative mb-24pxr">
+              <div className="flex w-full items-center gap-8pxr rounded-input border border-gray-300 bg-surface-white px-16pxr py-12pxr">
+                <input
+                  className="w-full bg-transparent p-5pxr text-text-primary placeholder:text-text-muted focus:outline-none"
+                  type="text"
+                  placeholder="기업명, 티커를 검색해 추가하세요"
+                  value={q}
+                  onChange={(e) => setQ(e.currentTarget.value)}
+                  onFocus={() => {
+                    if (q.trim() && searchResults.length > 0) setSearchOpen(true);
+                  }}
+                />
+                {q ? (
+                  <button
+                    onClick={() => {
+                      setQ('');
+                      setSearchOpen(false);
+                    }}
+                    className="shrink-0 text-text-muted hover:text-text-primary">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 10 10"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round">
+                      <line x1="1" y1="1" x2="9" y2="9" />
+                      <line x1="9" y1="1" x2="1" y2="9" />
+                    </svg>
+                  </button>
+                ) : (
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#9CA3AF"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                  </svg>
+                )}
               </div>
-              <p className="text-[12px] text-text-muted">선택됨: {selectedIds.length}개</p>
+
+              {/* 자동완성 드롭다운 */}
+              {searchOpen && q.trim() && (
+                <div className="absolute left-0 right-0 top-full z-50 mt-4pxr overflow-hidden rounded-card border border-surface-border bg-surface-white shadow-lg">
+                  {searchLoading ? (
+                    <p className="py-16pxr text-center text-[13px] text-text-muted">검색 중...</p>
+                  ) : searchResults.length === 0 ? (
+                    <p className="py-16pxr text-center text-[13px] text-text-muted">검색 결과가 없어요.</p>
+                  ) : (
+                    <ul className="divide-y divide-surface-border overflow-y-auto" style={{ maxHeight: 52 * 6 }}>
+                      {searchResults.map((company) => {
+                        const isSelected = !!selected[String(company.id)];
+                        return (
+                          <li key={company.id}>
+                            <button
+                              onClick={() => handleSearchSelect(company)}
+                              className="flex w-full items-center gap-12pxr px-16pxr py-10pxr text-left transition-colors hover:bg-surface-bg">
+                              <div className="min-w-0 flex-1">
+                                <p className="truncate text-[13px] font-bold text-text-primary">
+                                  {company.name}
+                                  {company.ticker ? ` · ${company.ticker}` : ''}
+                                </p>
+                              </div>
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </div>
+              )}
             </div>
 
-            <div className="mt-16pxr grid grid-cols-2 gap-12pxr sm:grid-cols-3 lg:grid-cols-3 lg:gap-12pxr">
-              {isLoading ? (
+            {/* 인기 기업 헤더 */}
+            <div className="mb-16pxr">
+              <p className="text-[12px] font-bold text-text-secondary">인기 기업</p>
+            </div>
+
+            {/* 기업 카드 그리드 */}
+            <div className="grid grid-cols-2 gap-12pxr sm:grid-cols-3 lg:grid-cols-3 lg:gap-12pxr">
+              {popularLoading ? (
                 [...Array(9)].map((_, i) => (
                   <div
                     key={`skeleton-${i}`}
-                    className="flex h-80pxr w-full items-center rounded-xl border border-surface-border bg-surface-bg px-16pxr"
-                  >
+                    className="flex h-80pxr w-full items-center rounded-xl border border-surface-border bg-surface-bg px-16pxr">
                     <div className="size-[44px] animate-pulse rounded-xl bg-surface-border" />
                     <div className="ml-12pxr flex-1 space-y-6pxr">
                       <div className="h-12pxr w-24 animate-pulse rounded bg-surface-border" />
@@ -296,13 +354,12 @@ export default function OnboardingPage() {
                     </div>
                   </div>
                 ))
-              ) : companies.length === 0 ? (
+              ) : popularCompanies.length === 0 ? (
                 <div className="col-span-2 rounded-xl border border-surface-border bg-surface-bg p-20pxr text-center sm:col-span-3">
-                  <p className="text-[14px] font-bold text-text-primary">기업이 없습니다.</p>
-                  <p className="mt-6pxr text-[13px] text-text-muted">다른 키워드로 검색해보세요.</p>
+                  <p className="text-[14px] font-bold text-text-primary">인기 기업 정보가 없습니다.</p>
                 </div>
               ) : (
-                companies.map((company) => (
+                popularCompanies.map((company) => (
                   <CompanyCard
                     key={company.id}
                     company={company}

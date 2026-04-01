@@ -24,18 +24,20 @@ export function useMyInfo() {
 }
 
 // 스크랩한 뉴스 목록
-export function useScrappedNews(page = 1) {
+export function useScrappedNews(page = 1, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: userKeys.scraps(page),
     queryFn: () => fetchScrappedNews(page),
+    enabled: options?.enabled ?? true,
   });
 }
 
 // 최근 본 뉴스 목록
-export function useRecentNews(page = 1) {
+export function useRecentNews(page = 1, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: userKeys.recent(page),
     queryFn: () => fetchRecentNews(page),
+    enabled: options?.enabled ?? true,
   });
 }
 

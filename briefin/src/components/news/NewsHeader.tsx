@@ -21,15 +21,13 @@ export default function NewsHeader({
         </div>
       </div>
       <div className="flex items-start justify-between gap-12pxr">
-        <h1 className="break-keep text-[24px] font-black leading-[38px] tracking-[-0.6px] text-text-primary">
-          {title}
-        </h1>
+        <h1 className="leading-38pxr break-keep text-[24px] font-black tracking-[-0.6px] text-text-primary">{title}</h1>
         {onToggleScrap && (
           <button
             type="button"
             onClick={onToggleScrap}
             aria-label={isScrapped ? '스크랩 취소' : '스크랩'}
-            className="mt-4pxr shrink-0 rounded-full p-6pxr transition-colors hover:bg-surface-bg">
+            className="-mr-6pxr mt-4pxr shrink-0 rounded-full p-6pxr transition-colors hover:bg-surface-bg">
             <svg
               width="22"
               height="22"

@@ -10,7 +10,6 @@ interface SubscribedCompany {
   companyId: number;
   name: string;
   ticker: string;
-  logoUrl: string | null;
 }
 
 function BellUnsubscribeButton({ loading, onClick }: { loading: boolean; onClick: () => void }) {
@@ -22,11 +21,11 @@ function BellUnsubscribeButton({ loading, onClick }: { loading: boolean; onClick
       title="알림 해제"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="shrink-0 p-4pxr disabled:opacity-40">
+      className="flex items-center p-4pxr disabled:opacity-40">
       {loading ? (
-        <span className="block h-18pxr w-18pxr animate-pulse rounded-full bg-gray-200" />
+        <span className="block h-22pxr w-22pxr animate-pulse rounded-full bg-gray-200" />
       ) : (
-        <img src="/bell-yellow.svg" alt="" width={18} height={18} />
+        <img src={hovered ? '/bell-outline-gray.svg' : '/bell-yellow.svg'} alt="" width={22} height={22} />
       )}
     </button>
   );
@@ -37,15 +36,15 @@ function CompanyLogo({ company }: { company: SubscribedCompany }) {
   const tossUrl = company.ticker
     ? `https://thumb.tossinvest.com/image/resized/96x0/https%3A%2F%2Fstatic.toss.im%2Fpng-icons%2Fsecurities%2Ficn-sec-fill-${company.ticker}.png`
     : null;
-  const src = !imgError && (company.logoUrl || tossUrl) ? (company.logoUrl || tossUrl)! : null;
+  const src = !imgError && tossUrl ? tossUrl : null;
 
   if (src) {
     return (
       <Image
         src={src}
         alt={company.name}
-        width={40}
-        height={40}
+        width={52}
+        height={52}
         className="object-cover"
         unoptimized
         onError={() => setImgError(true)}
@@ -94,13 +93,15 @@ export default function SubscribedCompaniesSection() {
     return (
       <div className="flex animate-pulse flex-col gap-12pxr">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="flex items-center gap-12pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr">
-            <div className="h-40pxr w-40pxr shrink-0 rounded-button bg-gray-200" />
+          <div
+            key={i}
+            className="flex items-center gap-12pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr">
+            <div className="h-52pxr w-52pxr shrink-0 rounded-button bg-gray-200" />
             <div className="flex flex-1 flex-col gap-6pxr">
               <div className="h-4 w-32 rounded bg-gray-200" />
               <div className="h-3 w-16 rounded bg-gray-200" />
             </div>
-            <div className="h-18pxr w-18pxr rounded bg-gray-200" />
+            <div className="h-22pxr w-22pxr rounded bg-gray-200" />
           </div>
         ))}
       </div>
@@ -109,14 +110,14 @@ export default function SubscribedCompaniesSection() {
 
   if (hasError) {
     return (
-      <p className="py-40pxr text-center text-[14px] text-text-muted">목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
+      <p className="py-40pxr text-center text-[14px] text-text-muted">
+        목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.
+      </p>
     );
   }
 
   if (companies.length === 0) {
-    return (
-      <p className="py-40pxr text-center text-[14px] text-text-muted">공시 알림을 신청한 기업이 없습니다.</p>
-    );
+    return <p className="py-40pxr text-center text-[14px] text-text-muted">공시 알림을 신청한 기업이 없습니다.</p>;
   }
 
   return (
@@ -124,18 +125,19 @@ export default function SubscribedCompaniesSection() {
       {companies.map((company) => (
         <div
           key={company.companyId}
-          className="flex items-center gap-12pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr">
-          <div className="flex h-40pxr w-40pxr shrink-0 items-center justify-center overflow-hidden rounded-button bg-surface-bg">
+          className="flex items-center gap-15pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr">
+          <div className="flex h-52pxr w-52pxr shrink-0 items-center justify-center overflow-hidden rounded-button bg-surface-bg">
             <CompanyLogo company={company} />
           </div>
           <Link href={`/companies/${company.companyId}`} className="min-w-0 flex-1 hover:opacity-70">
-            <p className="text-[14px] font-bold text-text-primary">{company.name}</p>
-            {company.ticker && <p className="fonts-caption text-text-muted">{company.ticker}</p>}
+            <p className="text-[16px] font-bold text-text-primary">{company.name}</p>
           </Link>
-          <BellUnsubscribeButton
-            loading={unsubscribingIds.has(company.companyId)}
-            onClick={() => handleUnsubscribe(company.companyId)}
-          />
+          <div className="flex shrink-0 items-center gap-4pxr">
+            <BellUnsubscribeButton
+              loading={unsubscribingIds.has(company.companyId)}
+              onClick={() => handleUnsubscribe(company.companyId)}
+            />
+          </div>
         </div>
       ))}
     </div>

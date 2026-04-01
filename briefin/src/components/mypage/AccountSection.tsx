@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import WithdrawConfirmModal from '@/components/auth/WithdrawConfirmModal';
 import { deleteMyAccount } from '@/api/userApi';
 import { markExplicitLogout } from '@/lib/refreshSession';
@@ -10,6 +11,7 @@ import { useMyInfo } from '@/hooks/useUser';
 
 export default function AccountSection() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { data: userInfo } = useMyInfo();
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -24,6 +26,7 @@ export default function AccountSection() {
       await deleteMyAccount();
       markExplicitLogout();
       authStore.clear();
+      queryClient.clear();
       setShowWithdrawModal(false);
       router.replace('/');
     } catch {

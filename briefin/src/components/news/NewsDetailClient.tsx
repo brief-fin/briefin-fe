@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import type { NewsDetailResponse } from '@/api/newsApi';
-import { scrapNews, deleteScrapNews, fetchRelatedNews, fetchNewsTerms } from '@/api/newsApi';
+import { fetchRelatedNews, fetchNewsTerms } from '@/api/newsApi';
 import NewsHeader from '@/components/news/NewsHeader';
 import NewsSummary from '@/components/news/NewsSummary';
 import NewsDetail from '@/components/news/NewsDetail';
@@ -12,32 +12,25 @@ import NewsSidebar from '@/components/news/NewsSidebar';
 import NewsTimeline from '@/components/common/NewsTimeline';
 import NewsRelatedCompanies from '@/components/news/NewsRelatedCompanies';
 import NewsActions from '@/components/news/NewsActions';
-import { useNewsTimeline } from '@/hooks/useNews';
+import { useNewsTimeline, useScrapNews, useDeleteScrapNews } from '@/hooks/useNews';
 import type { NewsTimelineItem } from '@/types/timeline';
 
 export default function NewsDetailClient({ data }: { data: NewsDetailResponse }) {
   const [activeTimelineTag, setActiveTimelineTag] = useState('');
   const [isScrapped, setIsScrapped] = useState(data.isScraped ?? false);
 
-  const scrapMutation = useMutation({
-    mutationFn: () => scrapNews(data.newsId),
-    onSuccess: () => setIsScrapped(true),
-  });
-
-  const unscrapMutation = useMutation({
-    mutationFn: () => deleteScrapNews(data.newsId),
-    onSuccess: () => setIsScrapped(false),
-  });
+  const scrapMutation = useScrapNews();
+  const unscrapMutation = useDeleteScrapNews();
 
   const handleToggleScrap = () => {
     if (isScrapped) {
-      unscrapMutation.mutate();
+      unscrapMutation.mutate(data.newsId, { onSuccess: () => setIsScrapped(false) });
     } else {
-      scrapMutation.mutate();
+      scrapMutation.mutate(data.newsId, { onSuccess: () => setIsScrapped(true) });
     }
   };
 
-  const { data: relatedNewsData } = useQuery({
+  const { data: relatedNewsData, isLoading: relatedNewsLoading } = useQuery({
     queryKey: ['news', data.newsId, 'related'],
     queryFn: () => fetchRelatedNews(data.newsId),
   });
@@ -125,7 +118,7 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
             items={timelineItems}
             loading={timelineLoading}
           />
-          <NewsSidebar relatedNews={relatedNews} relatedCompanies={relatedCompanies} />
+          <NewsSidebar relatedNews={relatedNews} relatedCompanies={relatedCompanies} relatedNewsLoading={relatedNewsLoading} />
         </div>
       </div>
     </div>

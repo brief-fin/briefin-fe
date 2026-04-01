@@ -17,10 +17,10 @@ import type { NewsItem } from '@/types/news';
 import type { DisclosureListItem } from '@/types/disclosure';
 import { TIMELINE_TAGS, MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
 import { useStockPrice } from '@/api/hook/useStockPrice';
-import { apiClient } from '@/api/client';
-import { useAuthSessionVersion } from '@/providers/AuthSessionProvider';
+import { useAuthSessionVersion, useAuthStatus } from '@/providers/AuthSessionProvider';
 import CompanyDetailSkeleton from '@/components/companies/CompanyDetailSkeleton';
 import { getSubscriptionStatus, subscribePush, unsubscribePush } from '@/lib/pushNotification';
+import { useWatchlist, useWatchCompany, useUnwatchCompany } from '@/hooks/useUser';
 
 export default function CompanyDetailPage() {
   const { id } = useParams();
@@ -28,8 +28,6 @@ export default function CompanyDetailPage() {
   const [company, setCompany] = useState<CompanyDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTimelineTag, setActiveTimelineTag] = useState(TIMELINE_TAGS[0]);
-  const [isWatchlisted, setIsWatchlisted] = useState(false);
-  const [watchlistLoading, setWatchlistLoading] = useState(false);
   const [news, setNews] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState(false);
   const [disclosures, setDisclosures] = useState<DisclosureListItem[]>([]);
@@ -38,6 +36,16 @@ export default function CompanyDetailPage() {
   const [alertLoading, setAlertLoading] = useState(true);
 
   const sessionVersion = useAuthSessionVersion();
+  const authStatus = useAuthStatus();
+
+  const { data: watchlist } = useWatchlist({ enabled: authStatus === 'authenticated' });
+  const { mutate: doWatch, isPending: watchPending } = useWatchCompany();
+  const { mutate: doUnwatch, isPending: unwatchPending } = useUnwatchCompany();
+  const watchlistLoading = watchPending || unwatchPending;
+
+  const isWatchlisted = watchlist != null
+    ? watchlist.some((c) => c.companyId === Number(id))
+    : (company?.watchlisted ?? false);
 
   const stockPrice = useStockPrice(company?.ticker ?? null);
 
@@ -47,7 +55,6 @@ export default function CompanyDetailPage() {
       fetchCompanyDetail(Number(id))
         .then((data) => {
           setCompany(data);
-          setIsWatchlisted(data.watchlisted ?? false);
           try {
             const key = 'company_recent_viewed';
             const prev = JSON.parse(localStorage.getItem(key) ?? '[]');
@@ -157,22 +164,12 @@ export default function CompanyDetailPage() {
     }
   };
 
-  const handleToggleWatchlist = async () => {
+  const handleToggleWatchlist = () => {
     if (!company || watchlistLoading) return;
-
-    setWatchlistLoading(true);
-    try {
-      if (isWatchlisted) {
-        await apiClient.delete(`/api/users/${company.id}/watch`);
-      } else {
-        await apiClient.post(`/api/users/${company.id}/watch`);
-      }
-      setIsWatchlisted((prev) => !prev);
-    } catch (e) {
-      console.error('관심 기업 처리 실패:', e);
-      alert('요청에 실패했어요. 다시 시도해 주세요.');
-    } finally {
-      setWatchlistLoading(false);
+    if (isWatchlisted) {
+      doUnwatch(company.id);
+    } else {
+      doWatch(company.id);
     }
   };
 

@@ -1,10 +1,20 @@
 import Link from 'next/link';
 import { NewsSidebarProps } from '@/types/news';
 
-export default function NewsSidebar({ relatedNews, relatedCompanies }: NewsSidebarProps) {
+export default function NewsSidebar({ relatedNews, relatedCompanies, relatedNewsLoading }: NewsSidebarProps) {
   return (
     <aside className="flex w-full flex-col gap-16pxr lg:w-[320px]">
-      {relatedNews && relatedNews.length > 0 && (
+      {relatedNewsLoading ? (
+        <div className="animate-pulse rounded-card border border-surface-border bg-surface-white p-20pxr shadow-hero-card">
+          <div className="mb-16pxr h-5 w-24 rounded bg-gray-200" />
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="mb-14pxr flex flex-col gap-6pxr">
+              <div className="h-4 w-full rounded bg-gray-200" />
+              <div className="h-3 w-1/2 rounded bg-gray-200" />
+            </div>
+          ))}
+        </div>
+      ) : relatedNews && relatedNews.length > 0 ? (
         <div className="rounded-card border border-surface-border bg-surface-white p-20pxr shadow-hero-card">
           <p className="fonts-label mb-16pxr text-text-primary">🔗 관련 뉴스</p>
           <div className="flex flex-col gap-12pxr">
@@ -21,7 +31,7 @@ export default function NewsSidebar({ relatedNews, relatedCompanies }: NewsSideb
             ))}
           </div>
         </div>
-      )}
+      ) : null}
 
       <div className="rounded-card bg-primary p-20pxr shadow-hero-card">
         <p className="fonts-label mb-8pxr text-white">🔔 {relatedCompanies[0]?.name ?? '기업'} 소식 받기</p>

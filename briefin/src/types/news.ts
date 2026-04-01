@@ -153,6 +153,7 @@ export interface RelatedNews {
 export interface NewsSidebarProps {
   relatedNews: RelatedNews[];
   relatedCompanies: Company[];
+  relatedNewsLoading?: boolean;
 }
 
 export interface NewsSummaryProps {

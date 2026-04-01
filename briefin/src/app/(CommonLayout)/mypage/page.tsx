@@ -12,6 +12,7 @@ import { MyPageTab } from '@/types/mypage';
 import { TAB_FROM_QUERY, TAB_TO_QUERY, MY_PAGE_TABS } from '@/constants/mypage';
 import { useMyInfo, useScrappedNews, useRecentNews } from '@/hooks/useUser';
 import { useDeleteScrapNews } from '@/hooks/useNews';
+import { useAuthStatus } from '@/providers/AuthSessionProvider';
 import { formatDateTime } from '@/utils/date';
 
 function MyPageContent() {
@@ -21,9 +22,12 @@ function MyPageContent() {
   const tabParam = searchParams.get('tab');
   const activeTab: MyPageTab = tabParam && TAB_FROM_QUERY[tabParam] ? TAB_FROM_QUERY[tabParam] : '관심 기업';
 
+  const authStatus = useAuthStatus();
+  const isAuthenticated = authStatus === 'authenticated';
+
   const { data: userInfo } = useMyInfo();
-  const { data: scrapsData, isLoading: scrapsLoading } = useScrappedNews();
-  const { data: recentData, isLoading: recentLoading } = useRecentNews();
+  const { data: scrapsData, isLoading: scrapsLoading } = useScrappedNews(1, { enabled: isAuthenticated });
+  const { data: recentData, isLoading: recentLoading } = useRecentNews(1, { enabled: isAuthenticated });
   const { mutate: deleteScrap } = useDeleteScrapNews();
   const [unscrappedIds, setUnscrappedIds] = useState<Set<number>>(new Set());
 
