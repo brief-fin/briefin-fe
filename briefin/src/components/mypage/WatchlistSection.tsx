@@ -80,11 +80,11 @@ export default function WatchlistSection() {
               disabled={isPending}
               aria-label="관심 기업 삭제"
               title="관심 기업 삭제"
-              className="p-4pxr text-text-muted transition-colors hover:text-red-500 disabled:opacity-40">
+              className="flex items-center p-4pxr text-text-muted transition-colors hover:text-red-500 disabled:opacity-40">
               <svg
                 aria-hidden="true"
-                width="18"
-                height="18"
+                width="22"
+                height="22"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"

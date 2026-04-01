@@ -71,8 +71,8 @@ export function useScrapNews() {
   return useMutation({
     mutationFn: (id: string | number) => scrapNews(id),
     onSuccess: (_, id) => {
-      // 해당 뉴스 상세 캐시 무효화 → 자동으로 최신 데이터 다시 불러옴
       queryClient.invalidateQueries({ queryKey: newsKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: ['user', 'scraps'] });
     },
   });
 }
@@ -84,6 +84,7 @@ export function useDeleteScrapNews() {
     mutationFn: (id: string | number) => deleteScrapNews(id),
     onSuccess: (_, id) => {
       queryClient.invalidateQueries({ queryKey: newsKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: ['user', 'scraps'] });
     },
   });
 }

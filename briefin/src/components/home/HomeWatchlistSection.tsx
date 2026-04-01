@@ -47,7 +47,6 @@ export default function HomeWatchlistSection() {
               <div className="h-40pxr w-40pxr shrink-0 animate-pulse rounded-full bg-surface-border" />
               <div className="flex-1 space-y-6pxr">
                 <div className="h-12pxr w-24 animate-pulse rounded bg-surface-border" />
-                <div className="h-10pxr w-16 animate-pulse rounded bg-surface-border" />
               </div>
             </li>
           ))}
@@ -58,26 +57,25 @@ export default function HomeWatchlistSection() {
         <p className="py-20pxr text-center text-[13px] text-text-muted">로그인하면 관심 기업을 볼 수 있어요</p>
       )}
 
-      {isLoading && (
+      {status === 'authenticated' && isLoading && (
         <ul className="mt-8pxr divide-y divide-surface-border">
           {[...Array(3)].map((_, i) => (
             <li key={i} className="flex items-center gap-12pxr py-12pxr">
               <div className="h-40pxr w-40pxr shrink-0 animate-pulse rounded-full bg-surface-border" />
               <div className="flex-1 space-y-6pxr">
                 <div className="h-12pxr w-24 animate-pulse rounded bg-surface-border" />
-                <div className="h-10pxr w-16 animate-pulse rounded bg-surface-border" />
               </div>
             </li>
           ))}
         </ul>
       )}
 
-      {!isLoading && (!watchlist || watchlist.length === 0) && (
+      {status === 'authenticated' && !isLoading && (!watchlist || watchlist.length === 0) && (
         <p className="py-20pxr text-center text-[13px] text-text-muted">등록된 관심 기업이 없습니다.</p>
       )}
 
-      {!isLoading && watchlist && watchlist.length > 0 && (
-        <ul className="mt-8pxr divide-y divide-surface-border">
+      {status === 'authenticated' && !isLoading && watchlist && watchlist.length > 0 && (
+        <ul className="mt-8pxr max-h-[268px] divide-y divide-surface-border overflow-y-auto">
           {watchlist.map((company) => (
             <li key={company.companyId}>
               <Link
@@ -86,12 +84,9 @@ export default function HomeWatchlistSection() {
                 <div className="flex h-40pxr w-40pxr shrink-0 items-center justify-center overflow-hidden rounded-full border border-surface-border bg-surface-bg">
                   <CompanyLogo company={company} />
                 </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-[14px] font-bold text-text-primary">
-                    {company.companyName ?? company.name ?? ''}
-                  </p>
-                  {(company.ticker ?? '').trim() && <p className="fonts-caption text-text-muted">{company.ticker}</p>}
-                </div>
+                <p className="truncate text-[14px] font-bold text-text-primary">
+                  {company.companyName ?? company.name ?? ''}
+                </p>
               </Link>
             </li>
           ))}

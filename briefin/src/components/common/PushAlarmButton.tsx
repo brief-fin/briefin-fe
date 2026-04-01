@@ -39,11 +39,9 @@ export default function PushAlarmButton({ companyId }: Props) {
 
   if (typeof window !== 'undefined' && !('serviceWorker' in navigator)) return null;
 
-  const iconSrc = hovered
-    ? '/bell-yellow.svg'
-    : isSubscribed
-      ? '/bell-filled-gray.svg'
-      : '/bell-outline-gray.svg';
+  const iconSrc = isSubscribed
+    ? (hovered ? '/bell-outline-gray.svg' : '/bell-yellow.svg')
+    : '/bell-outline-gray.svg';
 
   return (
     <button
@@ -52,11 +50,11 @@ export default function PushAlarmButton({ companyId }: Props) {
       title={isSubscribed ? '알림 해제' : '알림 받기'}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="shrink-0 p-4pxr disabled:opacity-40">
+      className="flex shrink-0 items-center p-4pxr disabled:opacity-40">
       {loading ? (
-        <span className="block h-18pxr w-18pxr animate-pulse rounded-full bg-gray-200" />
+        <span className="block h-22pxr w-22pxr animate-pulse rounded-full bg-gray-200" />
       ) : (
-        <img src={iconSrc} alt="" width={18} height={18} />
+        <img src={iconSrc} alt="" width={22} height={22} />
       )}
     </button>
   );
