@@ -19,6 +19,7 @@ import { useStockPrice } from '@/api/hook/useStockPrice';
 import { apiClient } from '@/api/client';
 import { useAuthSessionVersion } from '@/providers/AuthSessionProvider';
 import CompanyDetailSkeleton from '@/components/companies/CompanyDetailSkeleton';
+import { getSubscriptionStatus, subscribePush, unsubscribePush } from '@/lib/pushNotification';
 
 export default function CompanyDetailPage() {
   const { id } = useParams();
@@ -32,6 +33,8 @@ export default function CompanyDetailPage() {
   const [newsLoading, setNewsLoading] = useState(false);
   const [disclosures, setDisclosures] = useState<DisclosureListItem[]>([]);
   const [disclosuresLoading, setDisclosuresLoading] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [alertLoading, setAlertLoading] = useState(true);
 
   const sessionVersion = useAuthSessionVersion();
 
@@ -105,6 +108,48 @@ export default function CompanyDetailPage() {
       cancelled = true;
     };
   }, [id, sessionVersion]);
+
+  useEffect(() => {
+    if (!company || sessionVersion === 0) return;
+    let cancelled = false;
+    setAlertLoading(true);
+    getSubscriptionStatus(company.id)
+      .then((value) => {
+        if (!cancelled) setIsSubscribed(value);
+      })
+      .catch(() => {
+        if (!cancelled) setIsSubscribed(false);
+      })
+      .finally(() => {
+        if (!cancelled) setAlertLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [company, sessionVersion]);
+
+  const handleAlertClick = async () => {
+    if (!company) return;
+    if (!('serviceWorker' in navigator)) {
+      alert('이 브라우저는 알림을 지원하지 않습니다.');
+      return;
+    }
+    setAlertLoading(true);
+    try {
+      if (isSubscribed) {
+        await unsubscribePush(company.id);
+        setIsSubscribed(false);
+      } else {
+        const success = await subscribePush(company.id);
+        if (success) setIsSubscribed(true);
+      }
+    } catch (error) {
+      console.error('알림 설정 실패:', error);
+      alert('알림 설정에 실패했습니다.');
+    } finally {
+      setAlertLoading(false);
+    }
+  };
 
   const handleToggleWatchlist = async () => {
     if (!company || watchlistLoading) return;
@@ -199,8 +244,10 @@ export default function CompanyDetailPage() {
         <div className="flex w-full flex-col gap-14pxr lg:w-96">
           <AlertBanner
             title="🔔 공시 알림 받기"
-            description="이 기업의 새 공시·뉴스를 실시간으로 받아보세요."
-            buttonLabel="알림 설정하기"
+            description={`${company.name.replace(/\s*주식회사\s*$/, '')}의 새 공시가 올라오면 즉시 알려드려요.`}
+            loading={alertLoading}
+            buttonLabel={isSubscribed ? '알림 해제하기' : '알림 설정하기'}
+            onButtonClick={handleAlertClick}
           />
           <NewsTimeline
             tags={TIMELINE_TAGS}
