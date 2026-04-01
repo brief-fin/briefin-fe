@@ -83,6 +83,7 @@ export default function CompanyDetailPage() {
   useEffect(() => {
     if (!id || !sessionVersion) return;
     let cancelled = false;
+    setDisclosures([]);
     setDisclosuresLoading(true);
     fetchDisclosureList({ companyId: Number(id) })
       .then((data) => {
@@ -100,7 +101,10 @@ export default function CompanyDetailPage() {
         }
       })
       .catch((e) => {
-        if (!cancelled) console.error(e);
+        if (!cancelled) {
+          setDisclosures([]);
+          console.error(e);
+        }
       })
       .finally(() => {
         if (!cancelled) setDisclosuresLoading(false);
