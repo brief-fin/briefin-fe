@@ -39,11 +39,8 @@ export default function PushAlarmButton({ companyId }: Props) {
 
   if (typeof window !== 'undefined' && !('serviceWorker' in navigator)) return null;
 
-  const iconSrc = hovered
-    ? '/bell-yellow.svg'
-    : isSubscribed
-      ? '/bell-filled-gray.svg'
-      : '/bell-outline-gray.svg';
+  // 알림이 설정된 상태는 항상 노란색으로 표시
+  const iconSrc = isSubscribed ? '/bell-yellow.svg' : hovered ? '/bell-yellow.svg' : '/bell-outline-gray.svg';
 
   return (
     <button

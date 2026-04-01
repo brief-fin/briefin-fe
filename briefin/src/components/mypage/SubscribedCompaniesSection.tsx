@@ -26,7 +26,7 @@ function BellUnsubscribeButton({ loading, onClick }: { loading: boolean; onClick
       {loading ? (
         <span className="block h-18pxr w-18pxr animate-pulse rounded-full bg-gray-200" />
       ) : (
-        <img src={hovered ? '/bell-yellow.svg' : '/bell-filled-gray.svg'} alt="" width={18} height={18} />
+        <img src="/bell-yellow.svg" alt="" width={18} height={18} />
       )}
     </button>
   );
