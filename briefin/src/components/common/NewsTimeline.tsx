@@ -3,9 +3,7 @@
 import Link from 'next/link';
 import { NewsTimelineProps } from '@/types/timeline';
 
-export default function NewsTimeline({ tags, activeTag, onTagChange, items, loading }: NewsTimelineProps) {
-  const filtered = items.filter((item) => item.tag === activeTag);
-
+export default function NewsTimeline({ items, loading }: NewsTimelineProps) {
   return (
     <div className="rounded-card border border-[#E5E7EB] bg-surface-white">
       {/* Header */}
@@ -13,40 +11,16 @@ export default function NewsTimeline({ tags, activeTag, onTagChange, items, load
         <p className="text-[15px] font-bold text-text-primary">뉴스 히스토리</p>
       </div>
 
-      {/*
-        태그 잘림 방지: overflow-x 컨테이너가 overflow-y도 암묵적으로 clip하므로
-        outer div에 py 여유를 두고 inner에서 실제 overflow-x를 처리
-      */}
-      <div className="mt-12pxr px-20pxr py-4pxr">
-        <div className="flex gap-8pxr overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {tags.map((tag) => {
-            const isActive = tag === activeTag;
-            return (
-              <button
-                key={tag}
-                type="button"
-                onClick={() => onTagChange(tag)}
-                className={[
-                  'shrink-0 rounded-pill border px-12pxr py-6pxr text-[12px] font-bold transition-colors',
-                  isActive ? 'border-primary bg-primary text-white' : 'border-[#E5E7EB] bg-[#F9FAFB] text-text-sub',
-                ].join(' ')}>
-                {tag}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Timeline */}
-      <div className="border-t border-[#E5E7EB] px-20pxr py-16pxr">
+      <div className="border-t border-[#E5E7EB] mt-12pxr px-20pxr py-16pxr">
         {loading ? (
           <TimelineSkeleton />
-        ) : filtered.length === 0 ? (
+        ) : items.length === 0 ? (
           <p className="py-12pxr text-center text-[12px] text-text-muted">관련 뉴스가 없습니다.</p>
         ) : (
           <div className="flex flex-col">
-            {filtered.map((item, idx) => {
-              const isLast = idx === filtered.length - 1;
+            {items.map((item, idx) => {
+              const isLast = idx === items.length - 1;
               const rowKey = item.newsId ?? `${item.date}-${idx}`;
 
               const inner = (

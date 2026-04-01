@@ -15,7 +15,7 @@ import { fetchCompanyNews, toNewsItem } from '@/api/newsApi';
 import { fetchDisclosureList } from '@/api/disclosureApi';
 import type { NewsItem } from '@/types/news';
 import type { DisclosureListItem } from '@/types/disclosure';
-import { TIMELINE_TAGS, MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
+import { MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
 import { useStockPrice } from '@/api/hook/useStockPrice';
 import { useAuthSessionVersion, useAuthStatus } from '@/providers/AuthSessionProvider';
 import CompanyDetailSkeleton from '@/components/companies/CompanyDetailSkeleton';
@@ -27,7 +27,6 @@ export default function CompanyDetailPage() {
   const [activeTab, setActiveTab] = useState<CompanyDetailTab>('관련 뉴스');
   const [company, setCompany] = useState<CompanyDetail | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTimelineTag, setActiveTimelineTag] = useState(TIMELINE_TAGS[0]);
   const [news, setNews] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState(false);
   const [disclosures, setDisclosures] = useState<DisclosureListItem[]>([]);
@@ -256,12 +255,7 @@ export default function CompanyDetailPage() {
             buttonLabel={isSubscribed ? '알림 해제하기' : '알림 설정하기'}
             onButtonClick={handleAlertClick}
           />
-          <NewsTimeline
-            tags={TIMELINE_TAGS}
-            activeTag={activeTimelineTag}
-            onTagChange={setActiveTimelineTag}
-            items={MOCK_TIMELINE_ITEMS}
-          />
+          <NewsTimeline items={MOCK_TIMELINE_ITEMS} />
         </div>
       </div>
     </div>
