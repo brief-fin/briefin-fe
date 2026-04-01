@@ -8,11 +8,12 @@ import NewsCard from '@/components/news/NewsCard';
 import AlertBanner from '@/components/common/AlertBanner';
 import NewsTimeline from '@/components/common/NewsTimeline';
 import DisclosureList from '@/components/disclosure/DisclosureList';
-import { MOCK_COMPANY_DISCLOSURES } from '@/mocks/disclosureDetail';
 import { COMPANY_DETAIL_TABS, type CompanyDetailTab } from '@/constants/companyDetail';
 import { CompanyDetail, fetchCompanyDetail } from '@/api/companyApi';
 import { fetchCompanyNews, toNewsItem } from '@/api/newsApi';
+import { fetchDisclosureList } from '@/api/disclosureApi';
 import type { NewsItem } from '@/types/news';
+import type { DisclosureListItem } from '@/types/disclosure';
 import { TIMELINE_TAGS, MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
 import { useStockPrice } from '@/api/hook/useStockPrice';
 import { apiClient } from '@/api/client';
@@ -29,6 +30,8 @@ export default function CompanyDetailPage() {
   const [watchlistLoading, setWatchlistLoading] = useState(false);
   const [news, setNews] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState(false);
+  const [disclosures, setDisclosures] = useState<DisclosureListItem[]>([]);
+  const [disclosuresLoading, setDisclosuresLoading] = useState(false);
 
   const sessionVersion = useAuthSessionVersion();
 
@@ -67,6 +70,36 @@ export default function CompanyDetailPage() {
       })
       .finally(() => {
         if (!cancelled) setNewsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id, sessionVersion]);
+
+  useEffect(() => {
+    if (!id || !sessionVersion) return;
+    let cancelled = false;
+    setDisclosuresLoading(true);
+    fetchDisclosureList({ companyId: Number(id) })
+      .then((data) => {
+        if (!cancelled) {
+          setDisclosures(
+            (data?.content ?? []).map((item) => ({
+              id: String(item.disclosureId),
+              title: item.title,
+              date: item.disclosedAt ? item.disclosedAt.slice(0, 10).replace(/-/g, '.') : '',
+              category: item.category ?? '',
+              companyName: item.companyName,
+              sentiment: item.sentiment,
+            })),
+          );
+        }
+      })
+      .catch((e) => {
+        if (!cancelled) console.error(e);
+      })
+      .finally(() => {
+        if (!cancelled) setDisclosuresLoading(false);
       });
     return () => {
       cancelled = true;
@@ -148,7 +181,19 @@ export default function CompanyDetailPage() {
             ) : (
               news.map((item) => <NewsCard key={item.id} news={item} />)
             ))}
-          {activeTab === '공시' && <DisclosureList items={MOCK_COMPANY_DISCLOSURES} />}
+          {activeTab === '공시' &&
+            (disclosuresLoading ? (
+              <div className="flex flex-col gap-0 overflow-hidden rounded-card border border-surface-border bg-surface-white shadow-hero-card">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="animate-pulse border-b border-surface-border px-22pxr py-20pxr last:border-0">
+                    <div className="mb-8pxr h-4 w-full rounded bg-gray-200" />
+                    <div className="h-3 w-32 rounded bg-gray-200" />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <DisclosureList items={disclosures} />
+            ))}
         </div>
 
         <div className="flex w-full flex-col gap-14pxr lg:w-96">
