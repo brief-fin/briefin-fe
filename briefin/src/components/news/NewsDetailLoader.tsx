@@ -5,6 +5,7 @@ import { ApiError } from '@/api/client';
 import { useNewsDetail } from '@/hooks/useNews';
 import { useAuthSessionVersion } from '@/providers/AuthSessionProvider';
 import NewsDetailClient from '@/components/news/NewsDetailClient';
+import NewsDetailSkeleton from '@/components/news/NewsDetailSkeleton';
 
 export default function NewsDetailLoader({ id }: { id: string }) {
   const authVersion = useAuthSessionVersion();
@@ -13,11 +14,7 @@ export default function NewsDetailLoader({ id }: { id: string }) {
   });
 
   if (authVersion === 0 || isLoading) {
-    return (
-      <div className="min-h-screen bg-surface-bg px-24pxr py-40pxr">
-        <p className="fonts-label text-center text-text-muted">뉴스를 불러오는 중...</p>
-      </div>
-    );
+    return <NewsDetailSkeleton />;
   }
 
   if (isError || !data) {
