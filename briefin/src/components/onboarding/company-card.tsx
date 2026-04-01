@@ -47,6 +47,7 @@ export default function CompanyCard({ company, selected, onToggle }: CompanyCard
             width={32}
             height={32}
             className="h-9 w-9 object-contain transition-transform duration-200 group-hover:scale-[1.04]"
+            unoptimized
             onError={() => setImgError(true)}
           />
         ) : (

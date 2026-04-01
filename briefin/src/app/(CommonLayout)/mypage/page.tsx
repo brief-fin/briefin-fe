@@ -6,7 +6,8 @@ import Tabs from '@/components/common/Tabs';
 import MyPageHeader from '@/components/mypage/mypageheader';
 import AccountSection from '@/components/mypage/AccountSection';
 import WatchlistSection from '@/components/mypage/WatchlistSection';
-import Link from 'next/link';
+import SubscribedCompaniesSection from '@/components/mypage/SubscribedCompaniesSection';
+import MyPageNewsCard from '@/components/mypage/MyPageNewsCard';
 import { MyPageTab } from '@/types/mypage';
 import { TAB_FROM_QUERY, TAB_TO_QUERY, MY_PAGE_TABS } from '@/constants/mypage';
 import { useMyInfo, useScrappedNews, useRecentNews } from '@/hooks/useUser';
@@ -41,6 +42,7 @@ function MyPageContent() {
 
       <div className="pt-28pxr">
         {activeTab === '관심 기업' && <WatchlistSection />}
+        {activeTab === '공시 알림 기업' && <SubscribedCompaniesSection />}
         {activeTab === '스크랩 뉴스' && (
           <div className="flex flex-col gap-12pxr">
             {scrapsLoading && <p className="py-40pxr text-center text-[14px] text-text-muted">불러오는 중...</p>}
@@ -48,28 +50,38 @@ function MyPageContent() {
               <p className="py-40pxr text-center text-[14px] text-text-muted">스크랩한 뉴스가 없습니다.</p>
             )}
             {scrapsData?.scrapList?.map((news) => (
-              <Link
+              <MyPageNewsCard
                 key={news.newsId}
-                href={`/news/${news.newsId}`}
-                className="flex items-start gap-12pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr transition-colors hover:bg-surface-bg">
-                <div className="flex min-w-0 flex-1 flex-col gap-6pxr">
-                  <p className="text-[14px] font-bold text-text-primary">{news.title}</p>
-                  {news.summary && <p className="fonts-caption line-clamp-2 text-text-muted">{news.summary}</p>}
-                  <p className="fonts-caption text-text-disabled">
-                    {news.source} · {news.scrapedAt}
-                  </p>
-                </div>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    deleteScrap(news.newsId);
-                    setUnscrappedIds((prev) => new Set(prev).add(news.newsId));
-                  }}
-                  className={`shrink-0 text-[20px] transition-colors ${unscrappedIds.has(news.newsId) ? 'text-text-muted' : 'text-yellow-400'}`}>
-                  ★
-                </button>
-              </Link>
+                newsId={news.newsId}
+                title={news.title}
+                summary={news.summary}
+                source={news.source}
+                date={formatDateTime(news.scrapedAt)}
+                thumbnailUrl={news.thumbnailUrl}
+                topLeftSlot={
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      deleteScrap(news.newsId);
+                      setUnscrappedIds((prev) => new Set(prev).add(news.newsId));
+                    }}
+                    aria-label="스크랩 취소"
+                    className="shrink-0 rounded-full pb-6pxr pr-6pxr transition-colors hover:bg-surface-bg">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill={unscrappedIds.has(news.newsId) ? 'none' : '#1E3A8A'}
+                      stroke={unscrappedIds.has(news.newsId) ? '#9CA3AF' : '#1E3A8A'}
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round">
+                      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                    </svg>
+                  </button>
+                }
+              />
             ))}
           </div>
         )}
@@ -80,16 +92,15 @@ function MyPageContent() {
               <p className="py-40pxr text-center text-[14px] text-text-muted">최근 본 뉴스가 없습니다.</p>
             )}
             {recentData?.recentList?.map((news) => (
-              <Link
+              <MyPageNewsCard
                 key={news.newsId}
-                href={`/news/${news.newsId}`}
-                className="flex flex-col gap-6pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr transition-colors hover:bg-surface-bg">
-                <p className="text-[14px] font-bold text-text-primary">{news.title}</p>
-                {news.summary && <p className="fonts-caption line-clamp-2 text-text-muted">{news.summary}</p>}
-                <p className="fonts-caption text-text-disabled">
-                  {news.source} · {formatDateTime(news.viewedAt)}
-                </p>
-              </Link>
+                newsId={news.newsId}
+                title={news.title}
+                summary={news.summary}
+                source={news.source}
+                date={formatDateTime(news.viewedAt)}
+                thumbnailUrl={news.thumbnailUrl}
+              />
             ))}
           </div>
         )}

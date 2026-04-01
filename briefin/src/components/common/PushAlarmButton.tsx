@@ -5,14 +5,14 @@ import { getSubscriptionStatus, subscribePush, unsubscribePush } from '@/lib/pus
 
 interface Props {
   companyId: number;
-  companyName: string;
+  companyName?: string;
 }
 
-export default function PushAlarmButton({ companyId, companyName }: Props) {
+export default function PushAlarmButton({ companyId }: Props) {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [hovered, setHovered] = useState(false);
 
-  // 초기 구독 상태 조회
   useEffect(() => {
     getSubscriptionStatus(companyId)
       .then(setIsSubscribed)
@@ -37,20 +37,27 @@ export default function PushAlarmButton({ companyId, companyName }: Props) {
     }
   };
 
-  // Service Worker 미지원 브라우저 처리
-  if (typeof window !== 'undefined' && !('serviceWorker' in navigator)) {
-    return null;
-  }
+  if (typeof window !== 'undefined' && !('serviceWorker' in navigator)) return null;
+
+  const iconSrc = hovered
+    ? '/bell-yellow.svg'
+    : isSubscribed
+      ? '/bell-filled-gray.svg'
+      : '/bell-outline-gray.svg';
 
   return (
     <button
       onClick={handleClick}
       disabled={loading}
-      style={!isSubscribed ? { background: 'linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%)' } : undefined}
-      className={`rounded-lg px-4 py-2 text-sm font-medium transition-opacity ${
-        isSubscribed ? 'bg-gray-100 text-gray-700 hover:opacity-70' : 'text-white hover:opacity-80'
-      }`}>
-      {loading ? '처리 중...' : isSubscribed ? '🔔 알림 해제' : '🔔 알림 받기'}
+      title={isSubscribed ? '알림 해제' : '알림 받기'}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="shrink-0 p-4pxr disabled:opacity-40">
+      {loading ? (
+        <span className="block h-18pxr w-18pxr animate-pulse rounded-full bg-gray-200" />
+      ) : (
+        <img src={iconSrc} alt="" width={18} height={18} />
+      )}
     </button>
   );
 }

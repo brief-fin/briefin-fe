@@ -5,18 +5,22 @@ import { useParams } from 'next/navigation';
 import Tabs from '@/components/common/Tabs';
 import CompanyHero from '@/components/companies/CompanyHero';
 import NewsCard from '@/components/news/NewsCard';
+import NewsCardSkeleton from '@/components/news/NewsCardSkeleton';
 import AlertBanner from '@/components/common/AlertBanner';
 import NewsTimeline from '@/components/common/NewsTimeline';
 import DisclosureList from '@/components/disclosure/DisclosureList';
-import { MOCK_COMPANY_DISCLOSURES } from '@/mocks/disclosureDetail';
 import { COMPANY_DETAIL_TABS, type CompanyDetailTab } from '@/constants/companyDetail';
 import { CompanyDetail, fetchCompanyDetail } from '@/api/companyApi';
 import { fetchCompanyNews, toNewsItem } from '@/api/newsApi';
+import { fetchDisclosureList } from '@/api/disclosureApi';
 import type { NewsItem } from '@/types/news';
+import type { DisclosureListItem } from '@/types/disclosure';
 import { TIMELINE_TAGS, MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
 import { useStockPrice } from '@/api/hook/useStockPrice';
 import { apiClient } from '@/api/client';
 import { useAuthSessionVersion } from '@/providers/AuthSessionProvider';
+import CompanyDetailSkeleton from '@/components/companies/CompanyDetailSkeleton';
+import { getSubscriptionStatus, subscribePush, unsubscribePush } from '@/lib/pushNotification';
 
 export default function CompanyDetailPage() {
   const { id } = useParams();
@@ -28,6 +32,10 @@ export default function CompanyDetailPage() {
   const [watchlistLoading, setWatchlistLoading] = useState(false);
   const [news, setNews] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState(false);
+  const [disclosures, setDisclosures] = useState<DisclosureListItem[]>([]);
+  const [disclosuresLoading, setDisclosuresLoading] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [alertLoading, setAlertLoading] = useState(true);
 
   const sessionVersion = useAuthSessionVersion();
 
@@ -72,6 +80,83 @@ export default function CompanyDetailPage() {
     };
   }, [id, sessionVersion]);
 
+  useEffect(() => {
+    if (!id || !sessionVersion) return;
+    let cancelled = false;
+    setDisclosures([]);
+    setDisclosuresLoading(true);
+    fetchDisclosureList({ companyId: Number(id) })
+      .then((data) => {
+        if (!cancelled) {
+          setDisclosures(
+            (data?.content ?? []).map((item) => ({
+              id: String(item.disclosureId),
+              title: item.title,
+              date: item.disclosedAt ? item.disclosedAt.slice(0, 10).replace(/-/g, '.') : '',
+              category: item.category ?? '',
+              companyName: item.companyName,
+              summaryPoints: item.keyPoints ?? [],
+              sentiment: item.sentiment,
+            })),
+          );
+        }
+      })
+      .catch((e) => {
+        if (!cancelled) {
+          setDisclosures([]);
+          console.error(e);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setDisclosuresLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id, sessionVersion]);
+
+  useEffect(() => {
+    if (!company || sessionVersion === 0) return;
+    let cancelled = false;
+    setAlertLoading(true);
+    getSubscriptionStatus(company.id)
+      .then((value) => {
+        if (!cancelled) setIsSubscribed(value);
+      })
+      .catch(() => {
+        if (!cancelled) setIsSubscribed(false);
+      })
+      .finally(() => {
+        if (!cancelled) setAlertLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [company, sessionVersion]);
+
+  const handleAlertClick = async () => {
+    if (!company) return;
+    if (!('serviceWorker' in navigator)) {
+      alert('이 브라우저는 알림을 지원하지 않습니다.');
+      return;
+    }
+    setAlertLoading(true);
+    try {
+      if (isSubscribed) {
+        await unsubscribePush(company.id);
+        setIsSubscribed(false);
+      } else {
+        const success = await subscribePush(company.id);
+        if (success) setIsSubscribed(true);
+      }
+    } catch (error) {
+      console.error('알림 설정 실패:', error);
+      alert('알림 설정에 실패했습니다.');
+    } finally {
+      setAlertLoading(false);
+    }
+  };
+
   const handleToggleWatchlist = async () => {
     if (!company || watchlistLoading) return;
 
@@ -91,7 +176,7 @@ export default function CompanyDetailPage() {
     }
   };
 
-  if (loading) return <div className="min-h-screen bg-surface-bg py-36pxr">로딩중...</div>;
+  if (loading) return <CompanyDetailSkeleton />;
   if (!company) return <div className="min-h-screen bg-surface-bg py-36pxr">기업 정보를 찾을 수 없어요.</div>;
 
   const stats = [
@@ -137,7 +222,11 @@ export default function CompanyDetailPage() {
         <div className="flex min-w-0 flex-1 flex-col gap-14pxr">
           {activeTab === '관련 뉴스' &&
             (newsLoading ? (
-              <div>뉴스 로딩중...</div>
+              <>
+                <NewsCardSkeleton />
+                <NewsCardSkeleton />
+                <NewsCardSkeleton />
+              </>
             ) : news.length === 0 ? (
               <div className="flex flex-col items-center justify-center gap-8pxr py-60pxr text-center text-text-secondary">
                 <span className="text-32pxr">📭</span>
@@ -147,14 +236,28 @@ export default function CompanyDetailPage() {
             ) : (
               news.map((item) => <NewsCard key={item.id} news={item} />)
             ))}
-          {activeTab === '공시' && <DisclosureList items={MOCK_COMPANY_DISCLOSURES} />}
+          {activeTab === '공시' &&
+            (disclosuresLoading ? (
+              <div className="flex flex-col gap-0 overflow-hidden rounded-card border border-surface-border bg-surface-white shadow-hero-card">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="animate-pulse border-b border-surface-border px-22pxr py-20pxr last:border-0">
+                    <div className="mb-8pxr h-4 w-full rounded bg-gray-200" />
+                    <div className="h-3 w-32 rounded bg-gray-200" />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <DisclosureList items={disclosures} />
+            ))}
         </div>
 
         <div className="flex w-full flex-col gap-14pxr lg:w-96">
           <AlertBanner
             title="🔔 공시 알림 받기"
-            description="이 기업의 새 공시·뉴스를 실시간으로 받아보세요."
-            buttonLabel="알림 설정하기"
+            description={`${company.name.replace(/\s*주식회사\s*$/, '')}의 새 공시가 올라오면 즉시 알려드려요.`}
+            loading={alertLoading}
+            buttonLabel={isSubscribed ? '알림 해제하기' : '알림 설정하기'}
+            onButtonClick={handleAlertClick}
           />
           <NewsTimeline
             tags={TIMELINE_TAGS}

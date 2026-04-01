@@ -46,7 +46,17 @@ export default function SearchContent() {
       )}
 
       {isLoading && (
-        <p className="py-40pxr text-center text-[14px] text-text-muted">불러오는 중...</p>
+        <div className="mb-30pxr mt-20pxr flex animate-pulse flex-col gap-12pxr">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="flex flex-col gap-8pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr">
+              <div className="h-4 w-full rounded bg-gray-200" />
+              <div className="h-4 w-3/4 rounded bg-gray-200" />
+              <div className="h-3 w-full rounded bg-gray-200" />
+              <div className="h-3 w-1/2 rounded bg-gray-200" />
+              <div className="h-3 w-32 rounded bg-gray-200" />
+            </div>
+          ))}
+        </div>
       )}
 
       {!isLoading && results.length > 0 && (

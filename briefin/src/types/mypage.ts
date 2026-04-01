@@ -1,4 +1,4 @@
-export type MyPageTab = '관심 기업' | '스크랩 뉴스' | '최근 본 뉴스' | '계정 관리';
+export type MyPageTab = '관심 기업' | '공시 알림 기업' | '스크랩 뉴스' | '최근 본 뉴스' | '계정 관리';
 
 // API 응답 타입
 export interface UserInfo {
@@ -13,6 +13,7 @@ export interface ScrapedNews {
   summary: string;
   source: string;
   scrapedAt: string;
+  thumbnailUrl?: string | null;
 }
 
 export interface WatchlistCompany {
@@ -30,4 +31,5 @@ export interface RecentNews {
   summary: string;
   source: string;
   viewedAt: string;
+  thumbnailUrl?: string | null;
 }
