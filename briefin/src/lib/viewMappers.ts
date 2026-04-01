@@ -44,7 +44,7 @@ export function mapWatchlistToPopularCompany(company: WatchlistCompany, index = 
   const visual = pickVisual(index);
   return {
     id: company.companyId,
-    name: company.companyName,
+    name: company.companyName ?? '',
     sector: company.ticker,
     emoji: visual.emoji,
     bgColor: visual.bgColor,
