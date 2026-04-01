@@ -17,6 +17,7 @@ import { TIMELINE_TAGS, MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
 import { useStockPrice } from '@/api/hook/useStockPrice';
 import { apiClient } from '@/api/client';
 import { useAuthSessionVersion } from '@/providers/AuthSessionProvider';
+import CompanyDetailSkeleton from '@/components/companies/CompanyDetailSkeleton';
 
 export default function CompanyDetailPage() {
   const { id } = useParams();
@@ -91,7 +92,7 @@ export default function CompanyDetailPage() {
     }
   };
 
-  if (loading) return <div className="min-h-screen bg-surface-bg py-36pxr">로딩중...</div>;
+  if (loading) return <CompanyDetailSkeleton />;
   if (!company) return <div className="min-h-screen bg-surface-bg py-36pxr">기업 정보를 찾을 수 없어요.</div>;
 
   const stats = [
