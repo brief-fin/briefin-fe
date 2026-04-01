@@ -58,12 +58,19 @@ function CompanyLogo({ company }: { company: SubscribedCompany }) {
 export default function SubscribedCompaniesSection() {
   const [companies, setCompanies] = useState<SubscribedCompany[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const [unsubscribingIds, setUnsubscribingIds] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     fetchSubscribedCompanies()
-      .then((data) => setCompanies(data ?? []))
-      .catch(() => setCompanies([]))
+      .then((data) => {
+        setCompanies(data ?? []);
+        setHasError(false);
+      })
+      .catch(() => {
+        setHasError(true);
+        setCompanies([]);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -97,6 +104,12 @@ export default function SubscribedCompaniesSection() {
           </div>
         ))}
       </div>
+    );
+  }
+
+  if (hasError) {
+    return (
+      <p className="py-40pxr text-center text-[14px] text-text-muted">목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
     );
   }
 
