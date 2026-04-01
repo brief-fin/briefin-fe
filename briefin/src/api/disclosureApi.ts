@@ -43,3 +43,9 @@ export const postSubscribe = (body: { companyId: number; endpoint: string; p256d
 // 구독 취소
 export const deleteUnsubscribe = (companyId: number) =>
   apiClient.delete<ApiResponse<null>>(`/api/push/unsubscribe?companyId=${companyId}`);
+
+// 구독 중인 기업 목록
+export const fetchSubscribedCompanies = () =>
+  apiClient
+    .get<ApiResponse<{ companyId: number; name: string; ticker: string; logoUrl: string | null }[]>>('/api/push/subscriptions')
+    .then((res) => res.result);

@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Tabs from '@/components/common/Tabs';
 import CompanyHero from '@/components/companies/CompanyHero';
 import NewsCard from '@/components/news/NewsCard';
+import NewsCardSkeleton from '@/components/news/NewsCardSkeleton';
 import AlertBanner from '@/components/common/AlertBanner';
 import NewsTimeline from '@/components/common/NewsTimeline';
 import DisclosureList from '@/components/disclosure/DisclosureList';
@@ -216,7 +217,11 @@ export default function CompanyDetailPage() {
         <div className="flex min-w-0 flex-1 flex-col gap-14pxr">
           {activeTab === '관련 뉴스' &&
             (newsLoading ? (
-              <div>뉴스 로딩중...</div>
+              <>
+                <NewsCardSkeleton />
+                <NewsCardSkeleton />
+                <NewsCardSkeleton />
+              </>
             ) : news.length === 0 ? (
               <div className="flex flex-col items-center justify-center gap-8pxr py-60pxr text-center text-text-secondary">
                 <span className="text-32pxr">📭</span>

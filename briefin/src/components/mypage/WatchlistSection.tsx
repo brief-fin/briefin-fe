@@ -1,14 +1,59 @@
 'use client';
 
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import PushAlarmButton from '@/components/common/PushAlarmButton';
 import { useUnwatchCompany, useWatchlist } from '@/hooks/useUser';
+import type { WatchlistCompany } from '@/types/mypage';
+
+function CompanyLogo({ company }: { company: WatchlistCompany }) {
+  const [imgError, setImgError] = useState(false);
+  const tossUrl = company.ticker
+    ? `https://thumb.tossinvest.com/image/resized/96x0/https%3A%2F%2Fstatic.toss.im%2Fpng-icons%2Fsecurities%2Ficn-sec-fill-${company.ticker}.png`
+    : null;
+  const src = !imgError && (company.logoUrl || tossUrl) ? (company.logoUrl || tossUrl)! : null;
+
+  if (src) {
+    return (
+      <Image
+        src={src}
+        alt={company.companyName ?? company.name ?? ''}
+        width={52}
+        height={52}
+        className="object-cover"
+        unoptimized
+        onError={() => setImgError(true)}
+      />
+    );
+  }
+  return <span className="text-[18px]">🏢</span>;
+}
 
 export default function WatchlistSection() {
   const { data: watchlist, isLoading } = useWatchlist();
   const { mutate: unwatch, isPending } = useUnwatchCompany();
 
   if (isLoading) {
-    return <p className="py-40pxr text-center text-[14px] text-text-muted">불러오는 중...</p>;
+    return (
+      <div className="flex animate-pulse flex-col gap-12pxr">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="flex items-center gap-12pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr">
+            <div className="h-52pxr w-52pxr shrink-0 rounded-button bg-gray-200" />
+            <div className="flex flex-1 flex-col gap-6pxr">
+              <div className="h-4 w-32 rounded bg-gray-200" />
+              <div className="h-3 w-16 rounded bg-gray-200" />
+            </div>
+            <div className="flex gap-8pxr">
+              <div className="h-18pxr w-18pxr rounded bg-gray-200" />
+              <div className="h-18pxr w-18pxr rounded bg-gray-200" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (!watchlist || watchlist.length === 0) {
@@ -20,21 +65,37 @@ export default function WatchlistSection() {
       {watchlist.map((company) => (
         <div
           key={company.companyId}
-          className="flex items-center gap-12pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr">
-          <div className="flex h-40pxr w-40pxr shrink-0 items-center justify-center rounded-button bg-surface-bg text-[18px]">
-            🏢
+          className="flex items-center gap-15pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr">
+          <div className="flex h-52pxr w-52pxr shrink-0 items-center justify-center overflow-hidden rounded-button bg-surface-bg">
+            <CompanyLogo company={company} />
           </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-[14px] font-bold text-text-primary">{company.name}</p>
-            {(company.ticker ?? '').trim() && <p className="fonts-caption text-text-muted">{company.ticker}</p>}
+          <Link href={`/companies/${company.companyId}`} className="min-w-0 flex-1 hover:opacity-70">
+            <p className="text-[16px] font-bold text-text-primary">{company.companyName ?? company.name}</p>
+          </Link>
+          <div className="flex shrink-0 items-center gap-4pxr">
+            <PushAlarmButton companyId={company.companyId} />
+            <button
+              onClick={() => unwatch(company.companyId)}
+              disabled={isPending}
+              title="관심 기업 삭제"
+              className="p-4pxr text-text-muted transition-colors hover:text-red-500 disabled:opacity-40">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                <path d="M10 11v6" />
+                <path d="M14 11v6" />
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+              </svg>
+            </button>
           </div>
-          <PushAlarmButton companyId={company.companyId} companyName={company.companyName} />
-          <button
-            onClick={() => unwatch(company.companyId)}
-            disabled={isPending}
-            className="shrink-0 rounded-lg px-4 py-2 text-sm font-medium text-text-muted hover:bg-surface-bg hover:text-red-500 disabled:opacity-50">
-            삭제
-          </button>
         </div>
       ))}
     </div>
