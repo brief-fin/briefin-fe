@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import WithdrawConfirmModal from '@/components/auth/WithdrawConfirmModal';
 import { deleteMyAccount } from '@/api/userApi';
+import { markExplicitLogout } from '@/lib/refreshSession';
 import { authStore } from '@/store/authStore';
 import { useMyInfo } from '@/hooks/useUser';
 
@@ -21,6 +22,7 @@ export default function AccountSection() {
 
     try {
       await deleteMyAccount();
+      markExplicitLogout();
       authStore.clear();
       setShowWithdrawModal(false);
       router.replace('/');

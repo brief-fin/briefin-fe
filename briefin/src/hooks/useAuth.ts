@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { login, signup } from '@/api/authApi';
+import { clearExplicitLogout, markMayHaveRefresh } from '@/lib/refreshSession';
 import { authStore } from '@/store/authStore';
 
 export function useLogin(redirectTo?: string) {
@@ -8,6 +9,8 @@ export function useLogin(redirectTo?: string) {
   return useMutation({
     mutationFn: login,
     onSuccess: (data) => {
+      clearExplicitLogout();
+      markMayHaveRefresh();
       authStore.setAccessToken(data.accessToken);
       const target = redirectTo && redirectTo.startsWith('/') ? redirectTo : '/';
       router.push(target);
