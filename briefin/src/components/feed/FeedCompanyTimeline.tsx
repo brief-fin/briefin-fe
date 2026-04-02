@@ -31,7 +31,7 @@ export default function FeedCompanyTimeline({ companies }: Props) {
             id: `${company.companyId}-${item.id}`,
             date: item.date ? item.date.replace(/-/g, '.') : '',
             title: item.title,
-            source: company.companyName,
+            source: company.companyName ?? '',
             tag: item.category ?? item.type,
             newsId: item.type === '뉴스' ? item.id : undefined,
             publishedAt: item.date ?? '',
