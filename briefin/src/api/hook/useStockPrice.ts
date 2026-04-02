@@ -43,7 +43,7 @@ export function useStockPrice(ticker: string | null) {
      * 커스텀 이벤트 핸들러에서는 e가 Event 타입으로 추론되므로 
      * MessageEvent인지 확인하는 타입 가드가 필요합니다.
      */
-    eventSource.addEventListener('realtime-price', (e: Event) => {
+    eventSource.addEventListener(ticker, (e: Event) => {
       if (e instanceof MessageEvent) {
         updatePrice(e.data);
       }
