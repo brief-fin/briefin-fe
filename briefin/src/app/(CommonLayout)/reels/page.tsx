@@ -1,5 +1,7 @@
 import ReelsClient from '@/components/reels/ReelsClient';
 
+export const dynamic = 'force-dynamic';
+
 export default function ReelsPage() {
   return (
     <div className="w-full pb-24pxr">
