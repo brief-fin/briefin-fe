@@ -39,10 +39,35 @@ function MyPageContent() {
     console.log('로그아웃');
   };
 
+  const tabIcons: Partial<Record<MyPageTab, React.ReactNode>> = {
+    '관심 기업': (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+      </svg>
+    ),
+    '공시 알림 기업': (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+      </svg>
+    ),
+    '스크랩 뉴스': (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+      </svg>
+    ),
+    '최근 본 뉴스': (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 6 12 12 16 14" />
+      </svg>
+    ),
+  };
+
   return (
     <div className="min-h-screen bg-surface-bg py-36pxr">
       <MyPageHeader email={userInfo?.email ?? ''} onLogout={handleLogout} />
-      <Tabs tabs={MY_PAGE_TABS} activeTab={activeTab} onTabChange={handleTabChange} />
+      <Tabs tabs={MY_PAGE_TABS} activeTab={activeTab} onTabChange={handleTabChange} tabIcons={tabIcons} />
 
       <div className="pt-28pxr">
         {activeTab === '관심 기업' && <WatchlistSection />}
@@ -51,7 +76,15 @@ function MyPageContent() {
           <div className="flex flex-col gap-12pxr">
             {scrapsLoading && <p className="py-40pxr text-center text-[14px] text-text-muted">불러오는 중...</p>}
             {!scrapsLoading && (!scrapsData?.scrapList || scrapsData.scrapList.length === 0) && (
-              <p className="py-40pxr text-center text-[14px] text-text-muted">스크랩한 뉴스가 없습니다.</p>
+              <div className="flex flex-col items-center gap-12pxr py-60pxr text-center">
+                <div className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#E5E7EB]">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                  </svg>
+                </div>
+                <p className="fonts-body font-medium text-text-primary">스크랩한 뉴스가 없어요</p>
+                <p className="fonts-label text-text-muted">뉴스를 스크랩하면 여기서 모아볼 수 있어요.</p>
+              </div>
             )}
             {scrapsData?.scrapList?.map((news) => (
               <MyPageNewsCard
@@ -93,7 +126,16 @@ function MyPageContent() {
           <div className="flex flex-col gap-12pxr">
             {recentLoading && <p className="py-40pxr text-center text-[14px] text-text-muted">불러오는 중...</p>}
             {!recentLoading && (!recentData?.recentList || recentData.recentList.length === 0) && (
-              <p className="py-40pxr text-center text-[14px] text-text-muted">최근 본 뉴스가 없습니다.</p>
+              <div className="flex flex-col items-center gap-12pxr py-60pxr text-center">
+                <div className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#E5E7EB]">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                </div>
+                <p className="fonts-body font-medium text-text-primary">최근 본 뉴스가 없어요</p>
+                <p className="fonts-label text-text-muted">뉴스를 읽으면 자동으로 여기에 기록돼요.</p>
+              </div>
             )}
             {recentData?.recentList?.map((news) => (
               <MyPageNewsCard
