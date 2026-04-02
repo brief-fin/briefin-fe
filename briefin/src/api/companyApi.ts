@@ -42,3 +42,19 @@ export const searchCompanies = (q: string, page = 0, size = 10) =>
   apiClient
     .get<ApiResponse<unknown>>(`/companies/search?q=${encodeURIComponent(q)}&page=${page}&size=${size}`)
     .then((res) => normalizeCompanyPage(res.result));
+
+// 기업 타임라인
+export interface CompanyTimelineItem {
+  type: '공시' | '뉴스';
+  id: string;
+  title: string;
+  summary: string | null;
+  category: string | null;
+  date: string | null;
+  sentiment: string | null;
+}
+
+export const fetchCompanyTimeline = async (id: number): Promise<CompanyTimelineItem[]> => {
+  const res = await apiClient.get<ApiResponse<CompanyTimelineItem[]>>(`/companies/${id}/timeline`);
+  return res.result ?? [];
+};

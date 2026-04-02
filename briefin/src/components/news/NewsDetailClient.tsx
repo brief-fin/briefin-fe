@@ -42,18 +42,18 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
 
   const { data: timelineData, isLoading: timelineLoading } = useNewsTimeline(data.newsId);
 
-  const timelineItems: NewsTimelineItem[] = (timelineData ?? []).map((item) => ({
-    id: item.newsId,
-    date: item.publishedAt ? item.publishedAt.slice(0, 10).replace(/-/g, '.') : '',
-    title: item.title,
-    source: item.press,
-    tag: item.category ?? '기타',
-    isLatest: item.isCurrent,
-    newsId: item.newsId,
-  }));
-
-  const timelineTags = [...new Set(timelineItems.map((i) => i.tag))];
-  const effectiveTag = timelineTags.includes(activeTimelineTag) ? activeTimelineTag : (timelineTags[0] ?? '');
+  const timelineItems: NewsTimelineItem[] = (timelineData ?? [])
+    .map((item) => ({
+      id: item.newsId,
+      date: item.publishedAt ? item.publishedAt.slice(0, 10).replace(/-/g, '.') : '',
+      title: item.title,
+      source: item.press,
+      tag: item.category ?? '기타',
+      isLatest: item.isCurrent,
+      newsId: item.newsId,
+      publishedAt: item.publishedAt ?? '',
+    }))
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 
   const relatedCompanies = (data.relatedCompanies ?? []).map((company) => ({
     id: company.companyId,
@@ -111,13 +111,7 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
         </article>
 
         <div className="flex w-full flex-col gap-16pxr lg:w-[320px] lg:shrink-0">
-          <NewsTimeline
-            tags={timelineTags}
-            activeTag={effectiveTag}
-            onTagChange={setActiveTimelineTag}
-            items={timelineItems}
-            loading={timelineLoading}
-          />
+          <NewsTimeline items={timelineItems} loading={timelineLoading} />
           <NewsSidebar relatedNews={relatedNews} relatedCompanies={relatedCompanies} relatedNewsLoading={relatedNewsLoading} />
         </div>
       </div>

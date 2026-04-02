@@ -10,12 +10,12 @@ import AlertBanner from '@/components/common/AlertBanner';
 import NewsTimeline from '@/components/common/NewsTimeline';
 import DisclosureList from '@/components/disclosure/DisclosureList';
 import { COMPANY_DETAIL_TABS, type CompanyDetailTab } from '@/constants/companyDetail';
-import { CompanyDetail, fetchCompanyDetail } from '@/api/companyApi';
+import { CompanyDetail, fetchCompanyDetail, fetchCompanyTimeline } from '@/api/companyApi';
 import { fetchCompanyNews, toNewsItem } from '@/api/newsApi';
 import { fetchDisclosureList } from '@/api/disclosureApi';
 import type { NewsItem } from '@/types/news';
 import type { DisclosureListItem } from '@/types/disclosure';
-import { TIMELINE_TAGS, MOCK_TIMELINE_ITEMS } from '@/mocks/timelineData';
+import type { NewsTimelineItem } from '@/types/timeline';
 import { useStockPrice } from '@/api/hook/useStockPrice';
 import { useAuthSessionVersion, useAuthStatus } from '@/providers/AuthSessionProvider';
 import CompanyDetailSkeleton from '@/components/companies/CompanyDetailSkeleton';
@@ -27,11 +27,12 @@ export default function CompanyDetailPage() {
   const [activeTab, setActiveTab] = useState<CompanyDetailTab>('관련 뉴스');
   const [company, setCompany] = useState<CompanyDetail | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTimelineTag, setActiveTimelineTag] = useState(TIMELINE_TAGS[0]);
   const [news, setNews] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState(false);
   const [disclosures, setDisclosures] = useState<DisclosureListItem[]>([]);
   const [disclosuresLoading, setDisclosuresLoading] = useState(false);
+  const [timeline, setTimeline] = useState<NewsTimelineItem[]>([]);
+  const [timelineLoading, setTimelineLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [alertLoading, setAlertLoading] = useState(true);
 
@@ -120,6 +121,30 @@ export default function CompanyDetailPage() {
     return () => {
       cancelled = true;
     };
+  }, [id, sessionVersion]);
+
+  useEffect(() => {
+    if (!id || !sessionVersion) return;
+    let cancelled = false;
+    setTimelineLoading(true);
+    fetchCompanyTimeline(Number(id))
+      .then((data) => {
+        if (!cancelled) {
+          const items: NewsTimelineItem[] = data.map((item, idx) => ({
+            id: item.id,
+            date: item.date ? item.date.replace(/-/g, '.') : '',
+            title: item.title,
+            source: item.type,
+            tag: item.category ?? item.type,
+            isLatest: idx === data.length - 1,
+            newsId: item.type === '뉴스' ? item.id : undefined,
+          }));
+          setTimeline(items);
+        }
+      })
+      .catch(() => { if (!cancelled) setTimeline([]); })
+      .finally(() => { if (!cancelled) setTimelineLoading(false); });
+    return () => { cancelled = true; };
   }, [id, sessionVersion]);
 
   useEffect(() => {
@@ -256,12 +281,7 @@ export default function CompanyDetailPage() {
             buttonLabel={isSubscribed ? '알림 해제하기' : '알림 설정하기'}
             onButtonClick={handleAlertClick}
           />
-          <NewsTimeline
-            tags={TIMELINE_TAGS}
-            activeTag={activeTimelineTag}
-            onTagChange={setActiveTimelineTag}
-            items={MOCK_TIMELINE_ITEMS}
-          />
+          <NewsTimeline items={timeline} loading={timelineLoading} />
         </div>
       </div>
     </div>
