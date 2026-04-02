@@ -6,6 +6,7 @@ import { useState } from 'react';
 import AlertBanner from '@/components/common/AlertBanner';
 import FeedHeroCard from '@/components/feed/FeedHeroCard';
 import FeedGridCard from '@/components/feed/FeedGridCard';
+import FeedWatchlistBanner from '@/components/feed/FeedWatchlistBanner';
 import { useFeed } from '@/hooks/useFeed';
 import { useWatchlist } from '@/hooks/useUser';
 import { useAuthStatus } from '@/providers/AuthSessionProvider';
@@ -116,7 +117,7 @@ export default function FeedPage() {
       )}
 
       {data && data.length > 0 && (
-        <div className="flex flex-col gap-16pxr lg:flex-row lg:items-start">
+        <div className="flex flex-col gap-16pxr lg:flex-row">
           {/* 메인 콘텐츠 */}
           <div className="flex flex-1 flex-col gap-14pxr">
             {hero && <FeedHeroCard item={hero} />}
@@ -130,45 +131,43 @@ export default function FeedPage() {
           </div>
 
           {/* 사이드바 */}
-          <div className="flex flex-col gap-16pxr lg:w-80 lg:shrink-0">
-            <AlertBanner
-              title="관심 기업을 더 추가해보세요"
-              description="더 많은 기업을 등록할수록 내 피드가 풍성해져요."
-              buttonLabel="관심 기업 추가하기"
-              buttonHref="/onboarding"
-            />
+          <div className="hidden lg:block lg:w-260pxr lg:shrink-0">
+            <div className="sticky top-24pxr flex flex-col gap-16pxr">
+              {/* 관심 기업 목록 */}
+              <div className="rounded-card border border-surface-border bg-surface-white">
+                <div className="flex items-center justify-between px-16pxr pt-16pxr">
+                  <p className="text-[14px] font-bold text-text-primary">관심 기업</p>
+                  <Link href="/mypage?tab=watchlist" className="text-[12px] text-text-muted hover:text-primary">
+                    전체보기
+                  </Link>
+                </div>
 
-            {/* 관심 기업 목록 */}
-            <div className="rounded-card border border-surface-border bg-surface-white">
-              <div className="flex items-center justify-between px-16pxr pt-16pxr">
-                <p className="text-[14px] font-bold text-text-primary">관심 기업</p>
-                <Link href="/mypage?tab=watchlist" className="text-[12px] text-text-muted hover:text-primary">
-                  전체보기
-                </Link>
+                <div className="mt-8pxr px-4pxr pb-8pxr">
+                  {watchlistLoading && (
+                    <div className="flex flex-col gap-4pxr px-12pxr py-8pxr">
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="flex items-center gap-10pxr">
+                          <div className="bg-surface-muted h-36pxr w-36pxr animate-pulse rounded-button" />
+                          <div className="bg-surface-muted h-4 flex-1 animate-pulse rounded" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {!watchlistLoading && (!watchlist || watchlist.length === 0) && (
+                    <p className="px-12pxr py-16pxr text-[13px] text-text-muted">등록된 관심 기업이 없어요.</p>
+                  )}
+                  {watchlist && watchlist.length > 0 && (
+                    <div className="max-h-71.25 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                      {watchlist.map((company) => (
+                        <WatchlistCompanyItem key={company.companyId} company={company} />
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
-              <div className="mt-8pxr px-4pxr pb-8pxr">
-                {watchlistLoading && (
-                  <div className="flex flex-col gap-4pxr px-12pxr py-8pxr">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="flex items-center gap-10pxr">
-                        <div className="bg-surface-muted h-36pxr w-36pxr animate-pulse rounded-button" />
-                        <div className="bg-surface-muted h-4 flex-1 animate-pulse rounded" />
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {!watchlistLoading && (!watchlist || watchlist.length === 0) && (
-                  <p className="px-12pxr py-16pxr text-[13px] text-text-muted">등록된 관심 기업이 없어요.</p>
-                )}
-                {watchlist && watchlist.length > 0 && (
-                  <div className="max-h-71.25 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                    {watchlist.map((company) => (
-                      <WatchlistCompanyItem key={company.companyId} company={company} />
-                    ))}
-                  </div>
-                )}
-              </div>
+              {/* 관심 기업 추가 배너 */}
+              <FeedWatchlistBanner />
             </div>
           </div>
         </div>

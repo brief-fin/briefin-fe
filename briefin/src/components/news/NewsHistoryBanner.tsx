@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 export default function NewsHistoryBanner() {
   return (
     <div className="rounded-card border border-surface-border bg-surface-white p-20pxr shadow-hero-card">
@@ -17,19 +15,8 @@ export default function NewsHistoryBanner() {
       {/* 텍스트 */}
       <p className="text-[14px] font-bold text-text-primary">이벤트 히스토리</p>
       <p className="mt-6pxr text-[12px] leading-relaxed text-text-muted">
-        뉴스 상세에서 해당 뉴스가 다루는 주요 이벤트의 전체 흐름을 한눈에 확인해보세요.
+        뉴스를 클릭하면 해당 이벤트의 전체 흐름을 한눈에 확인할 수 있어요.
       </p>
-
-      {/* CTA */}
-      <Link
-        href="/news"
-        className="mt-14pxr flex items-center gap-4pxr text-[12px] font-semibold text-primary hover:underline"
-      >
-        뉴스 상세에서 확인하기
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-          <path d="M4.5 2.5L8 6l-3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </Link>
     </div>
   );
 }
