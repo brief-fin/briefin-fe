@@ -133,20 +133,26 @@ export default function CompanySearchInput({ onSearch }: { onSearch?: () => void
                 {results.map((company) => {
                   const isRise = (company.changeRate ?? 0) > 0;
                   const isFall = (company.changeRate ?? 0) < 0;
-                  const logoSrc = !imgErrors[company.id] && company.logoUrl ? company.logoUrl : '/default-company.png';
+                  const hasLogo = !!company.logoUrl && !imgErrors[company.id];
                   return (
                     <li key={company.id}>
                       <button
                         onClick={() => handleSelect(company)}
                         className="flex w-full items-center gap-12pxr px-16pxr py-10pxr text-left transition-colors hover:bg-surface-bg">
-                        <div className="relative h-32pxr w-32pxr shrink-0 overflow-hidden rounded-full border border-surface-border bg-surface-bg">
-                          <Image
-                            src={logoSrc}
-                            alt={company.name}
-                            fill
-                            className="object-cover"
-                            onError={() => setImgErrors(prev => ({ ...prev, [company.id]: true }))}
-                          />
+                        <div className="relative h-32pxr w-32pxr shrink-0 overflow-hidden rounded-full border border-surface-border">
+                          {hasLogo ? (
+                            <Image
+                              src={company.logoUrl!}
+                              alt={company.name}
+                              fill
+                              className="object-cover"
+                              onError={() => setImgErrors(prev => ({ ...prev, [company.id]: true }))}
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary to-primary-dark">
+                              <span className="text-[13px] font-black text-white">{company.name.charAt(0)}</span>
+                            </div>
+                          )}
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-[13px] font-bold text-text-primary">{company.name}</p>

@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Label from '@/components/common/Label';
 import type { FeedItem } from '@/api/feedApi';
 
-export default function FeedHeroCard({ item }: { item: FeedItem }) {
+export default function FeedHeroCard({ item, logoUrl }: { item: FeedItem; logoUrl?: string | null }) {
+  const [logoError, setLogoError] = useState(false);
+
   return (
     <Link
       href={`/news/${item.newsId}`}
@@ -18,6 +21,18 @@ export default function FeedHeroCard({ item }: { item: FeedItem }) {
           unoptimized
           priority
         />
+      ) : logoUrl && !logoError ? (
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary-light to-surface-bg">
+          <Image
+            src={logoUrl}
+            alt={item.relatedCompanies?.[0] ?? ''}
+            width={80}
+            height={80}
+            className="rounded-full object-cover opacity-80"
+            unoptimized
+            onError={() => setLogoError(true)}
+          />
+        </div>
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-primary/80 to-primary-dark/90" />
       )}

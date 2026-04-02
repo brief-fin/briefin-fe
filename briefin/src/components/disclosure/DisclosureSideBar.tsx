@@ -70,7 +70,15 @@ export default function DisclosureSidebar({
   return (
     <aside className="flex w-full flex-col gap-20pxr lg:w-340pxr lg:shrink-0">
       <AlertBanner
-        title="🔔 공시 알림 받기"
+        title={
+          <span className="flex items-center gap-8pxr">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+            공시 알림 받기
+          </span>
+        }
         description={`${companyName}의 새 공시가 올라오면 즉시 알려드려요.`}
         loading={loading}
         buttonLabel={isSubscribed ? '알림 해제하기' : '알림 설정하기'}

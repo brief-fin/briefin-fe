@@ -1,5 +1,7 @@
+import type { ReactNode } from 'react';
+
 export interface AlertBannerProps {
-  title: string;
+  title: ReactNode;
   description: string;
   buttonLabel: string;
   /** true면 버튼 자리를 스켈레톤으로 대체 */

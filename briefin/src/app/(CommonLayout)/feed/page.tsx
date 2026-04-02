@@ -1,10 +1,13 @@
 'use client';
 
+import { useMemo } from 'react';
 import Link from 'next/link';
-import AlertBanner from '@/components/common/AlertBanner';
 import FeedHeroCard from '@/components/feed/FeedHeroCard';
 import FeedGridCard from '@/components/feed/FeedGridCard';
+import FeedCompanyTimeline from '@/components/feed/FeedCompanyTimeline';
 import { useFeed } from '@/hooks/useFeed';
+import { useWatchlist } from '@/hooks/useUser';
+import type { FeedItem } from '@/api/feedApi';
 
 function FeedSkeleton() {
   return (
@@ -28,6 +31,27 @@ function FeedSkeleton() {
 
 export default function FeedPage() {
   const { data, isLoading, isError } = useFeed();
+  const { data: watchlist } = useWatchlist();
+
+  const companyLogoMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const c of (watchlist ?? [])) {
+      const name = c.companyName;
+      if (!name) continue;
+      const logo =
+        c.logoUrl ||
+        (c.ticker
+          ? `https://thumb.tossinvest.com/image/resized/96x0/https%3A%2F%2Fstatic.toss.im%2Fpng-icons%2Fsecurities%2Ficn-sec-fill-${c.ticker}.png`
+          : null);
+      if (logo) map[name] = logo;
+    }
+    return map;
+  }, [watchlist]);
+
+  const getItemLogo = (item: FeedItem): string | null => {
+    const firstName = item.relatedCompanies?.[0];
+    return firstName ? (companyLogoMap[firstName] ?? null) : null;
+  };
 
   const hero = data?.[0];
   const grid = data?.slice(1) ?? [];
@@ -53,11 +77,6 @@ export default function FeedPage() {
           </div>
           <p className="fonts-body font-medium text-text-primary">아직 관심 기업이 없어요</p>
           <p className="fonts-label text-text-muted">기업을 등록하면 맞춤 뉴스를 받아볼 수 있어요.</p>
-          <Link
-            href="/onboarding"
-            className="mt-4pxr rounded-button bg-primary px-20pxr py-10pxr text-[14px] font-semibold text-white hover:opacity-80">
-            관심 기업 추가하기
-          </Link>
         </div>
       )}
 
@@ -65,11 +84,11 @@ export default function FeedPage() {
         <div className="flex flex-col gap-16pxr lg:flex-row lg:items-start">
           {/* 메인 콘텐츠 */}
           <div className="flex flex-1 flex-col gap-14pxr">
-            {hero && <FeedHeroCard item={hero} />}
+            {hero && <FeedHeroCard item={hero} logoUrl={getItemLogo(hero)} />}
             {grid.length > 0 && (
               <div className="grid grid-cols-2 gap-14pxr sm:grid-cols-3">
                 {grid.map((item) => (
-                  <FeedGridCard key={item.newsId} item={item} />
+                  <FeedGridCard key={item.newsId} item={item} logoUrl={getItemLogo(item)} />
                 ))}
               </div>
             )}
@@ -77,15 +96,20 @@ export default function FeedPage() {
 
           {/* 사이드바 */}
           <div className="flex flex-col gap-16pxr lg:w-80 lg:shrink-0">
-            <AlertBanner
-              title="관심 기업을 더 추가해보세요"
-              description="더 많은 기업을 등록할수록 내 피드가 풍성해져요."
-              buttonLabel="관심 기업 추가하기"
-              buttonHref="/onboarding"
-            />
+            <FeedCompanyTimeline companies={watchlist ?? []} />
           </div>
         </div>
       )}
+
+      {/* 플로팅 버튼 - 관심 기업 추가 */}
+      <Link
+        href="/onboarding"
+        title="관심 기업 추가하기"
+        className="fixed bottom-24pxr right-24pxr z-50 flex h-56pxr w-56pxr items-center justify-center rounded-full bg-primary shadow-lg transition-opacity hover:opacity-80">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      </Link>
     </main>
   );
 }

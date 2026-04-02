@@ -13,14 +13,14 @@ export default function NewsCard({ news }: NewsCardProps) {
   return (
     <Link
       href={`/news/${id}`}
-      className="group flex max-w-1028pxr flex-col gap-10pxr rounded-card border border-surface-border bg-white px-24pxr py-22pxr transition-shadow hover:shadow-news-hover sm:flex-row sm:gap-20pxr">
+      className="group flex max-w-1028pxr flex-col gap-10pxr rounded-card border border-surface-border bg-white px-24pxr py-22pxr sm:flex-row sm:gap-20pxr">
 
       {/* 콘텐츠 영역 */}
       <div className="flex flex-1 flex-col gap-10pxr overflow-hidden">
 
         {/* 태그: 데스크탑만 */}
         {hasLabels && (
-          <section className="hidden flex-wrap gap-6pxr sm:flex">
+          <section className="flex flex-wrap gap-6pxr">
             {categories.map((cat) => (
               <Label key={cat} text={cat} variant="category" />
             ))}
