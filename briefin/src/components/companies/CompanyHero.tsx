@@ -26,7 +26,8 @@ export default function CompanyHero({ industry, name, logoUrl, ticker, stats, is
   const tossUrl = ticker
     ? `https://thumb.tossinvest.com/image/resized/96x0/https%3A%2F%2Fstatic.toss.im%2Fpng-icons%2Fsecurities%2Ficn-sec-fill-${ticker}.png`
     : null;
-  const logoSrc = !imgError && (logoUrl || tossUrl) ? (logoUrl || tossUrl)! : '/default-company.png';
+  const resolvedLogoUrl = logoUrl || tossUrl;
+  const hasLogo = !!resolvedLogoUrl && !imgError;
 
   return (
     <div
@@ -37,14 +38,20 @@ export default function CompanyHero({ industry, name, logoUrl, ticker, stats, is
         {/* 왼쪽: 로고 + 기업명 */}
         <div className="min-w-0">
           <div className="relative h-44pxr w-44pxr shrink-0 overflow-hidden rounded-full border border-surface-border bg-surface-white md:h-56pxr md:w-56pxr">
-            <Image
-              src={logoSrc}
-              alt={name}
-              fill
-              className="object-cover"
-              unoptimized
-              onError={() => setImgError(true)}
-            />
+            {hasLogo ? (
+              <Image
+                src={resolvedLogoUrl!}
+                alt={name}
+                fill
+                className="object-cover"
+                unoptimized
+                onError={() => setImgError(true)}
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-primary to-primary-dark">
+                <span className="text-[18px] font-black text-white md:text-[22px]">{name.charAt(0)}</span>
+              </div>
+            )}
           </div>
           <h1 className="mt-10pxr text-[22px] font-black tracking-[-0.5px] text-text-primary md:mt-14pxr md:text-[32px] md:tracking-[-1px]">
             {name}

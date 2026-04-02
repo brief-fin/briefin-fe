@@ -189,21 +189,27 @@ function RecentViewedCompanies({ companies }: { companies: RecentCompany[] }) {
           const tossUrl = company.ticker
             ? `https://thumb.tossinvest.com/image/resized/96x0/https%3A%2F%2Fstatic.toss.im%2Fpng-icons%2Fsecurities%2Ficn-sec-fill-${company.ticker}.png`
             : null;
-          const logoSrc = !imgErrors[company.id] && tossUrl ? tossUrl : '/default-company.png';
+          const hasLogo = !!tossUrl && !imgErrors[company.id];
           return (
             <button
               key={company.id}
               onClick={() => router.push(`/companies/${company.id}`)}
               className="flex shrink-0 flex-col items-center gap-8pxr transition-opacity hover:opacity-70">
               <div className="relative h-80pxr w-80pxr overflow-hidden rounded-full border border-surface-border bg-surface-bg">
-                <Image
-                  src={logoSrc}
-                  alt={company.name}
-                  fill
-                  className="object-cover"
-                  unoptimized
-                  onError={() => setImgErrors(prev => ({ ...prev, [company.id]: true }))}
-                />
+                {hasLogo ? (
+                  <Image
+                    src={tossUrl!}
+                    alt={company.name}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                    onError={() => setImgErrors(prev => ({ ...prev, [company.id]: true }))}
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-primary to-primary-dark">
+                    <span className="text-[28px] font-black text-white">{company.name.charAt(0)}</span>
+                  </div>
+                )}
               </div>
               <p className="w-80pxr truncate text-center text-[12px] font-bold text-text-primary">{company.name}</p>
               {company.ticker && (
