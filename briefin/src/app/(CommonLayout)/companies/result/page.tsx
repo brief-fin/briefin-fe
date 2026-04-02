@@ -1,10 +1,12 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { SearchComponent } from '@/components/common/SearchComponent';
-import { apiClient, type ApiResponse } from '@/api/client';
 import { CompanyCard } from '@/components/companies/CompanyCard';
+import { searchCompanies } from '@/api/companyApi';
+
+const PAGE_SIZE = 20;
 
 interface CompanyItem {
   id: number;
@@ -14,9 +16,17 @@ interface CompanyItem {
   changeRate: number | null;
 }
 
-interface CompanyPage {
-  content: CompanyItem[];
-  totalElements: number;
+function SkeletonCard() {
+  return (
+    <div className="flex items-center gap-16pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr">
+      <div className="h-48pxr w-48pxr shrink-0 rounded-nav bg-gray-200" />
+      <div className="flex flex-col gap-8pxr">
+        <div className="h-4 w-28 rounded bg-gray-200" />
+        <div className="h-3 w-20 rounded bg-gray-200" />
+        <div className="h-3 w-12 rounded bg-gray-200" />
+      </div>
+    </div>
+  );
 }
 
 function SearchPageContent() {
@@ -26,31 +36,68 @@ function SearchPageContent() {
 
   const [results, setResults] = useState<CompanyItem[]>([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
 
+  const pageRef = useRef(0);
+  const isFetchingRef = useRef(false);
+  const hasMoreRef = useRef(false);
+  const currentQueryRef = useRef(query);
+
+  // sentinel은 항상 DOM에 존재해야 observer가 감지할 수 있음
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  const fetchPage = useCallback(async (q: string, page: number, replace: boolean) => {
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
+    if (page === 0) setInitialLoading(true);
+    else setLoadingMore(true);
+    try {
+      const data = await searchCompanies(q, page, PAGE_SIZE);
+      if (currentQueryRef.current !== q) return; // stale 응답 무시
+      const items = data.content as CompanyItem[];
+      setResults((prev) => (replace ? items : [...prev, ...items]));
+      setTotalCount(data.totalElements);
+      pageRef.current = page;
+      hasMoreRef.current = (page + 1) * PAGE_SIZE < data.totalElements;
+    } catch {
+      if (page === 0) setResults([]);
+    } finally {
+      isFetchingRef.current = false;
+      if (page === 0) setInitialLoading(false);
+      else setLoadingMore(false);
+    }
+  }, []);
+
+  // 쿼리 변경 시 초기화 후 첫 페이지 로드
   useEffect(() => {
-    const fetchResults = async () => {
-      setLoading(true);
-      try {
-        const res = await apiClient.get<ApiResponse<CompanyPage>>(
-          `/companies/search?q=${encodeURIComponent(query)}&size=20`,
-        );
-        setResults(res.result.content);
-        setTotalCount(res.result.totalElements);
-      } catch (error) {
-        console.error('기업 데이터 로드 실패:', error);
-        setResults([]);
-        setTotalCount(0);
-      } finally {
-        setLoading(false);
-      }
-    };
+    currentQueryRef.current = query;
+    pageRef.current = 0;
+    isFetchingRef.current = false;
+    hasMoreRef.current = false;
+    setResults([]);
+    setTotalCount(0);
+    fetchPage(query, 0, true);
+  }, [query, fetchPage]);
 
-    fetchResults();
-  }, [query]);
+  // sentinel이 뷰포트에 진입하면 다음 페이지 로드
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMoreRef.current && !isFetchingRef.current) {
+          fetchPage(currentQueryRef.current, pageRef.current + 1, false);
+        }
+      },
+      { threshold: 0 },
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [fetchPage]);
 
   return (
-    <main className="relative mx-auto flex h-full w-full max-w-screen-xl flex-col px-20pxr py-36pxr">
+    <main className="relative mx-auto flex h-full w-full max-w-7xl flex-col px-20pxr py-36pxr">
       <div className="mb-40pxr text-center">
         <h1 className="fonts-heading2 mb-20pxr text-text-primary">기업 찾기</h1>
         <SearchComponent
@@ -66,21 +113,14 @@ function SearchPageContent() {
           : `전체 기업 ${totalCount}건`}
       </div>
 
-      {loading ? (
+      {initialLoading ? (
         <div className="mb-40pxr grid animate-pulse grid-cols-1 gap-16pxr sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-16pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr">
-              <div className="h-48pxr w-48pxr shrink-0 rounded-nav bg-gray-200" />
-              <div className="flex flex-col gap-8pxr">
-                <div className="h-4 w-28 rounded bg-gray-200" />
-                <div className="h-3 w-20 rounded bg-gray-200" />
-                <div className="h-3 w-12 rounded bg-gray-200" />
-              </div>
-            </div>
+            <SkeletonCard key={i} />
           ))}
         </div>
       ) : results.length > 0 ? (
-        <div className="mb-40pxr grid grid-cols-1 gap-16pxr sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mb-16pxr grid grid-cols-1 gap-16pxr sm:grid-cols-2 lg:grid-cols-3">
           {results.map((company) => (
             <CompanyCard key={company.id} company={company} />
           ))}
@@ -108,6 +148,17 @@ function SearchPageContent() {
           </button>
         </div>
       )}
+
+      {loadingMore && (
+        <div className="mb-16pxr grid animate-pulse grid-cols-1 gap-16pxr sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
+      )}
+
+      {/* sentinel: 항상 DOM에 존재해야 IntersectionObserver가 감지 가능 */}
+      <div ref={sentinelRef} className="h-1" />
     </main>
   );
 }

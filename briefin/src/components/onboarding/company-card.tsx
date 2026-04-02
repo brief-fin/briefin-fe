@@ -31,8 +31,8 @@ export default function CompanyCard({ company, selected, onToggle }: CompanyCard
       }`}
     >
       <div
-        className={`flex size-44pxr shrink-0 items-center justify-center overflow-hidden rounded-xl border border-surface-border ${
-          hasImageLogo ? 'bg-white' : 'bg-surface-muted'
+        className={`flex size-44pxr shrink-0 items-center justify-center overflow-hidden ${
+          hasImageLogo ? '' : 'bg-surface-muted rounded-xl'
         }`}
       >
         {hasImageLogo ? (
