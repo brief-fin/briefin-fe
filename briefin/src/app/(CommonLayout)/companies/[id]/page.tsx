@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
+import { SUBSCRIBED_COMPANIES_KEY } from '@/components/mypage/SubscribedCompaniesSection';
 import Tabs from '@/components/common/Tabs';
 import CompanyHero from '@/components/companies/CompanyHero';
 import NewsCard from '@/components/news/NewsCard';
@@ -24,6 +26,7 @@ import { useWatchlist, useWatchCompany, useUnwatchCompany } from '@/hooks/useUse
 
 export default function CompanyDetailPage() {
   const { id } = useParams();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<CompanyDetailTab>('관련 뉴스');
   const [company, setCompany] = useState<CompanyDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -181,6 +184,7 @@ export default function CompanyDetailPage() {
         const success = await subscribePush(company.id);
         if (success) setIsSubscribed(true);
       }
+      queryClient.invalidateQueries({ queryKey: SUBSCRIBED_COMPANIES_KEY });
     } catch (error) {
       console.error('알림 설정 실패:', error);
       alert('알림 설정에 실패했습니다.');
