@@ -1,24 +1,24 @@
 interface MyPageHeaderProps {
   email?: string;
   watchlistCount?: number;
+  alertCount?: number;
   scrapCount?: number;
-  recentCount?: number;
   onLogout?: () => void;
 }
 
 export default function MyPageHeader({
   email = '',
   watchlistCount,
+  alertCount,
   scrapCount,
-  recentCount,
   onLogout,
 }: MyPageHeaderProps) {
   const initial = email ? email[0].toUpperCase() : '?';
 
   const stats = [
     { label: '관심 기업', value: watchlistCount },
+    { label: '공시 알림', value: alertCount },
     { label: '스크랩', value: scrapCount },
-    { label: '최근 뉴스', value: recentCount },
   ];
 
   return (
@@ -46,7 +46,7 @@ export default function MyPageHeader({
       </div>
 
       {/* 통계 */}
-      {(watchlistCount !== undefined || scrapCount !== undefined || recentCount !== undefined) && (
+      {(watchlistCount !== undefined || alertCount !== undefined || scrapCount !== undefined) && (
         <div className="mt-20pxr flex gap-0 divide-x divide-white/20 rounded-xl bg-white/10 px-4pxr py-12pxr">
           {stats.map((s) => (
             <div key={s.label} className="flex flex-1 flex-col items-center gap-2pxr">

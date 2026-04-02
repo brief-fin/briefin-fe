@@ -1,11 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchSubscribedCompanies } from '@/api/disclosureApi';
 import { AlertIcon } from '@/constants/mypageIcons';
 import { unsubscribePush } from '@/lib/pushNotification';
+
+export const SUBSCRIBED_COMPANIES_KEY = ['subscribed-companies'];
 
 interface SubscribedCompany {
   companyId: number;
@@ -69,29 +72,22 @@ function CompanyLogo({ company }: { company: SubscribedCompany }) {
 }
 
 export default function SubscribedCompaniesSection() {
-  const [companies, setCompanies] = useState<SubscribedCompany[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
+  const queryClient = useQueryClient();
   const [unsubscribingIds, setUnsubscribingIds] = useState<Set<number>>(new Set());
 
-  useEffect(() => {
-    fetchSubscribedCompanies()
-      .then((data) => {
-        setCompanies(data ?? []);
-        setHasError(false);
-      })
-      .catch(() => {
-        setHasError(true);
-        setCompanies([]);
-      })
-      .finally(() => setLoading(false));
-  }, []);
+  const { data: companies, isLoading, isError } = useQuery({
+    queryKey: SUBSCRIBED_COMPANIES_KEY,
+    queryFn: fetchSubscribedCompanies,
+  });
 
   const handleUnsubscribe = async (companyId: number) => {
     setUnsubscribingIds((prev) => new Set(prev).add(companyId));
     try {
       await unsubscribePush(companyId);
-      setCompanies((prev) => prev.filter((c) => c.companyId !== companyId));
+      queryClient.setQueryData<SubscribedCompany[]>(
+        SUBSCRIBED_COMPANIES_KEY,
+        (prev) => (prev ?? []).filter((c) => c.companyId !== companyId),
+      );
     } catch {
       alert('알림 해제에 실패했습니다.');
     } finally {
@@ -103,7 +99,7 @@ export default function SubscribedCompaniesSection() {
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex animate-pulse flex-col gap-12pxr">
         {[1, 2, 3].map((i) => (
@@ -122,7 +118,7 @@ export default function SubscribedCompaniesSection() {
     );
   }
 
-  if (hasError) {
+  if (isError) {
     return (
       <p className="py-40pxr text-center text-[14px] text-text-muted">
         목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.
@@ -130,10 +126,10 @@ export default function SubscribedCompaniesSection() {
     );
   }
 
-  if (companies.length === 0) {
+  if (!companies || companies.length === 0) {
     return (
       <div className="flex flex-col items-center gap-12pxr py-60pxr text-center">
-        <div className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#E5E7EB]">
+        <div className="flex h-13 w-13 items-center justify-center rounded-full bg-[#E5E7EB]">
           <AlertIcon size={22} stroke="#9CA3AF" strokeWidth="2.2" />
         </div>
         <p className="fonts-body font-medium text-text-primary">공시 알림 신청한 기업이 없어요</p>

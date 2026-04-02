@@ -12,6 +12,9 @@ import { TAB_FROM_QUERY, TAB_TO_QUERY, MY_PAGE_TABS } from '@/constants/mypage';
 import { WatchlistIcon, AlertIcon, ScrapIcon, RecentIcon, AccountIcon } from '@/constants/mypageIcons';
 import { useMyInfo, useScrappedNews, useRecentNews, useWatchlist } from '@/hooks/useUser';
 import { useDeleteScrapNews } from '@/hooks/useNews';
+import { useQuery } from '@tanstack/react-query';
+import { fetchSubscribedCompanies } from '@/api/disclosureApi';
+import { SUBSCRIBED_COMPANIES_KEY } from '@/components/mypage/SubscribedCompaniesSection';
 import { useAuthStatus } from '@/providers/AuthSessionProvider';
 import { formatDateTime } from '@/utils/date';
 
@@ -44,6 +47,11 @@ function MyPageContent() {
   const { data: watchlist } = useWatchlist({ enabled: isAuthenticated });
   const { data: scrapsData, isLoading: scrapsLoading } = useScrappedNews(1, { enabled: isAuthenticated });
   const { data: recentData, isLoading: recentLoading } = useRecentNews(1, { enabled: isAuthenticated });
+  const { data: subscribedCompanies } = useQuery({
+    queryKey: SUBSCRIBED_COMPANIES_KEY,
+    queryFn: fetchSubscribedCompanies,
+    enabled: isAuthenticated,
+  });
   const { mutate: deleteScrap } = useDeleteScrapNews();
   const [unscrappedIds, setUnscrappedIds] = useState<Set<number>>(new Set());
 
@@ -63,8 +71,8 @@ function MyPageContent() {
           email={userInfo?.email ?? ''}
           onLogout={handleLogout}
           watchlistCount={watchlist?.length}
+          alertCount={subscribedCompanies?.length}
           scrapCount={scrapsData?.totalCount}
-          recentCount={recentData?.totalCount}
         />
       </div>
 
@@ -75,8 +83,8 @@ function MyPageContent() {
             email={userInfo?.email ?? ''}
             onLogout={handleLogout}
             watchlistCount={watchlist?.length}
+            alertCount={subscribedCompanies?.length}
             scrapCount={scrapsData?.totalCount}
-            recentCount={recentData?.totalCount}
           />
           <nav className="flex flex-col gap-2pxr">
             {MY_PAGE_TABS.map((tab) => {
