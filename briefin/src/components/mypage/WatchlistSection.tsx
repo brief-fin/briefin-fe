@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useUnwatchCompany, useWatchlist } from '@/hooks/useUser';
+import { WatchlistIcon } from '@/constants/mypageIcons';
 import type { WatchlistCompany } from '@/types/mypage';
 
 function CompanyLogo({ company }: { company: WatchlistCompany }) {
@@ -59,12 +60,10 @@ export default function WatchlistSection() {
     return (
       <div className="flex flex-col items-center gap-12pxr py-60pxr text-center">
         <div className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#E5E7EB]">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-          </svg>
+          <WatchlistIcon size={22} stroke="#9CA3AF" />
         </div>
         <p className="fonts-body font-medium text-text-primary">관심 기업이 없어요</p>
-        <p className="fonts-label text-text-muted">기업 페이지에서 별 아이콘을 누르면 여기에 저장돼요.</p>
+        <p className="fonts-label text-text-muted">기업 페이지에서 하트 아이콘을 누르면 여기에 저장돼요.</p>
       </div>
     );
   }
