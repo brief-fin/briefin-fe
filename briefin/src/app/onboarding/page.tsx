@@ -27,7 +27,7 @@ interface SearchResult {
 export default function OnboardingPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [selected, setSelected] = useState<Record<string, Pick<CompanyDetail, 'id' | 'name' | 'ticker'>>>({});
+  const [selected, setSelected] = useState<Record<string, Pick<CompanyDetail, 'id' | 'name' | 'ticker'> & { logoUrl?: string }>>({});
 const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const didInteractRef = useRef(false);
@@ -106,19 +106,19 @@ const [submitting, setSubmitting] = useState(false);
     queueMicrotask(() => setSelected(next));
   }, [authStatus, selected, watchlist]);
 
-  const toggle = (company: Pick<CompanyDetail, 'id' | 'name' | 'ticker'>) => {
+  const toggle = (company: Pick<CompanyDetail, 'id' | 'name' | 'ticker'> & { logoUrl?: string }) => {
     const id = String(company.id);
     didInteractRef.current = true;
     setSelected((prev) => {
       const next = { ...prev };
       if (next[id]) delete next[id];
-      else next[id] = { id: company.id, name: company.name, ticker: company.ticker };
+      else next[id] = { id: company.id, name: company.name, ticker: company.ticker, logoUrl: company.logoUrl };
       return next;
     });
   };
 
   const handleSearchSelect = (company: SearchResult) => {
-    toggle({ id: company.id, name: company.name, ticker: company.ticker ?? '' });
+    toggle({ id: company.id, name: company.name, ticker: company.ticker ?? '', logoUrl: company.logoUrl ?? '' });
     setQ('');
     setSearchOpen(false);
   };
@@ -152,9 +152,11 @@ const [submitting, setSubmitting] = useState(false);
   };
 
   const rankedCompanies = [...popularCompanies].sort((a, b) => (b.marketCap ?? 0) - (a.marketCap ?? 0));
+  const popularIds = new Set(popularCompanies.map((c) => String(c.id)));
+  const extraSelected = selectedIds.filter((id) => !popularIds.has(id));
   const scrollList = [...rankedCompanies, ...rankedCompanies];
   const ITEM_H = 44;
-  const VISIBLE = 5;
+  const VISIBLE = 9;
 
   if (!isHydrated) return null;
 
@@ -226,22 +228,6 @@ const [submitting, setSubmitting] = useState(false);
               </div>
             </div>
 
-            <div className="mt-16pxr flex flex-col gap-10pxr">
-              <button
-                type="button"
-                onClick={goNext}
-                disabled={submitting}
-                className="h-42pxr w-full rounded-button bg-primary text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
-                {submitting ? '저장 중…' : '시작하기'}
-              </button>
-              {submitError && <p className="text-[13px] font-bold text-semantic-red">{submitError}</p>}
-              <button
-                type="button"
-                onClick={handleLater}
-                className="w-full text-[13px] font-bold text-text-muted transition-colors hover:text-text-secondary focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-surface-border">
-                나중에 하기
-              </button>
-            </div>
           </aside>
 
           {/* Right content */}
@@ -386,15 +372,45 @@ const [submitting, setSubmitting] = useState(false);
                   <p className="text-[14px] font-bold text-text-primary">인기 기업 정보가 없습니다.</p>
                 </div>
               ) : (
-                popularCompanies.map((company) => (
-                  <CompanyCard
-                    key={company.id}
-                    company={company}
-                    selected={selectedIds.includes(String(company.id))}
-                    onToggle={() => toggle(company)}
-                  />
-                ))
+                <>
+                  {popularCompanies.map((company) => (
+                    <CompanyCard
+                      key={company.id}
+                      company={company}
+                      selected={selectedIds.includes(String(company.id))}
+                      onToggle={() => toggle(company)}
+                    />
+                  ))}
+                  {extraSelected.map((id) => (
+                    <CompanyCard
+                      key={id}
+                      company={{ id: Number(id), name: selected[id]?.name ?? '', ticker: selected[id]?.ticker ?? '', logoUrl: selected[id]?.logoUrl ?? '' }}
+                      selected={true}
+                      onToggle={() => toggle(selected[id])}
+                    />
+                  ))}
+                </>
               )}
+            </div>
+
+            <div className="mt-24pxr flex flex-col gap-10pxr">
+              <button
+                type="button"
+                onClick={goNext}
+                disabled={submitting}
+                className="flex h-42pxr w-full items-center rounded-button bg-primary px-16pxr text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
+                <span className="flex-1 text-center">{submitting ? '저장 중…' : '시작하기'}</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </button>
+              {submitError && <p className="text-[13px] font-bold text-semantic-red">{submitError}</p>}
+              <button
+                type="button"
+                onClick={handleLater}
+                className="w-full text-[13px] font-bold text-text-muted transition-colors hover:text-text-secondary focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-surface-border">
+                나중에 하기
+              </button>
             </div>
           </section>
         </div>
