@@ -12,20 +12,33 @@ interface SubscribedCompany {
   ticker: string;
 }
 
-function BellUnsubscribeButton({ loading, onClick }: { loading: boolean; onClick: () => void }) {
-  const [hovered, setHovered] = useState(false);
+function TrashButton({ loading, onClick }: { loading: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
       disabled={loading}
       title="알림 해제"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="flex items-center p-4pxr disabled:opacity-40">
+      aria-label="알림 해제"
+      className="flex items-center p-4pxr text-text-muted transition-colors hover:text-red-500 disabled:opacity-40">
       {loading ? (
         <span className="block h-22pxr w-22pxr animate-pulse rounded-full bg-gray-200" />
       ) : (
-        <img src={hovered ? '/bell-outline-gray.svg' : '/bell-yellow.svg'} alt="" width={22} height={22} />
+        <svg
+          aria-hidden="true"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round">
+          <polyline points="3 6 5 6 21 6" />
+          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+          <path d="M10 11v6" />
+          <path d="M14 11v6" />
+          <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+        </svg>
       )}
     </button>
   );
@@ -133,7 +146,7 @@ export default function SubscribedCompaniesSection() {
             <p className="text-[16px] font-bold text-text-primary">{company.name}</p>
           </Link>
           <div className="flex shrink-0 items-center gap-4pxr">
-            <BellUnsubscribeButton
+            <TrashButton
               loading={unsubscribingIds.has(company.companyId)}
               onClick={() => handleUnsubscribe(company.companyId)}
             />
