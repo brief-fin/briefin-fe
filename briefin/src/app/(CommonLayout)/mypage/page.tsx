@@ -12,11 +12,14 @@ import { TAB_FROM_QUERY, TAB_TO_QUERY, MY_PAGE_TABS } from '@/constants/mypage';
 import { WatchlistIcon, AlertIcon, ScrapIcon, RecentIcon, AccountIcon } from '@/constants/mypageIcons';
 import { useMyInfo, useScrappedNews, useRecentNews, useWatchlist } from '@/hooks/useUser';
 import { useDeleteScrapNews } from '@/hooks/useNews';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchSubscribedCompanies } from '@/api/disclosureApi';
 import { SUBSCRIBED_COMPANIES_KEY } from '@/components/mypage/SubscribedCompaniesSection';
 import { useAuthStatus } from '@/providers/AuthSessionProvider';
 import { formatDateTime } from '@/utils/date';
+import { logout as logoutApi } from '@/api/authApi';
+import { authStore } from '@/store/authStore';
+import { markExplicitLogout } from '@/lib/refreshSession';
 
 const NAV_ICONS: Record<MyPageTab, React.ReactNode> = {
   '관심 기업': <WatchlistIcon />,
@@ -36,6 +39,7 @@ const MOBILE_ICONS: Partial<Record<MyPageTab, React.ReactNode>> = {
 function MyPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
 
   const tabParam = searchParams.get('tab');
   const activeTab: MyPageTab = tabParam && TAB_FROM_QUERY[tabParam] ? TAB_FROM_QUERY[tabParam] : '관심 기업';
@@ -59,8 +63,17 @@ function MyPageContent() {
     router.push(`/mypage?tab=${TAB_TO_QUERY[tab]}`);
   };
 
-  const handleLogout = () => {
-    console.log('로그아웃');
+  const handleLogout = async () => {
+    try {
+      await logoutApi();
+    } catch {
+      /* 서버 오류여도 클라이언트 세션은 종료 */
+    } finally {
+      queryClient.clear();
+      markExplicitLogout();
+      authStore.clear();
+      router.push('/login');
+    }
   };
 
   return (
