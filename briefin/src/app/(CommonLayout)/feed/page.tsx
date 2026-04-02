@@ -13,15 +13,15 @@ import { useAuthStatus } from '@/providers/AuthSessionProvider';
 function FeedSkeleton() {
   return (
     <div className="flex flex-col gap-16pxr">
-      <div className="h-[300px] animate-pulse rounded-card bg-surface-muted sm:h-[380px]" />
+      <div className="bg-surface-muted h-[300px] animate-pulse rounded-card sm:h-[380px]" />
       <div className="grid grid-cols-2 gap-14pxr sm:grid-cols-3">
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <div key={i} className="flex flex-col overflow-hidden rounded-card border border-surface-border">
-            <div className="h-[140px] animate-pulse bg-surface-muted" />
+            <div className="bg-surface-muted h-[140px] animate-pulse" />
             <div className="flex flex-col gap-8pxr p-16pxr">
-              <div className="h-4 w-full animate-pulse rounded bg-surface-muted" />
-              <div className="h-4 w-3/4 animate-pulse rounded bg-surface-muted" />
-              <div className="mt-4pxr h-3 w-1/2 animate-pulse rounded bg-surface-muted" />
+              <div className="bg-surface-muted h-4 w-full animate-pulse rounded" />
+              <div className="bg-surface-muted h-4 w-3/4 animate-pulse rounded" />
+              <div className="bg-surface-muted mt-4pxr h-3 w-1/2 animate-pulse rounded" />
             </div>
           </div>
         ))}
@@ -30,7 +30,11 @@ function FeedSkeleton() {
   );
 }
 
-function WatchlistCompanyItem({ company }: { company: { companyId: number; name?: string; companyName?: string; ticker: string; logoUrl: string } }) {
+function WatchlistCompanyItem({
+  company,
+}: {
+  company: { companyId: number; name?: string; companyName?: string; ticker: string; logoUrl: string };
+}) {
   const [imgError, setImgError] = useState(false);
   const name = company.companyName ?? company.name ?? '';
   const tossUrl = company.ticker
@@ -41,16 +45,35 @@ function WatchlistCompanyItem({ company }: { company: { companyId: number; name?
   return (
     <Link
       href={`/companies/${company.companyId}`}
-      className="group flex items-center gap-10pxr rounded-xl px-12pxr py-10pxr transition-colors hover:bg-surface-muted">
+      className="hover:bg-surface-muted group flex items-center gap-10pxr rounded-xl px-12pxr py-10pxr transition-colors">
       <div className="flex h-36pxr w-36pxr shrink-0 items-center justify-center overflow-hidden rounded-button bg-surface-bg">
         {src ? (
-          <Image src={src} alt={name} width={36} height={36} className="object-cover" unoptimized onError={() => setImgError(true)} />
+          <Image
+            src={src}
+            alt={name}
+            width={36}
+            height={36}
+            className="object-cover"
+            unoptimized
+            onError={() => setImgError(true)}
+          />
         ) : (
           <span className="text-[14px]">🏢</span>
         )}
       </div>
-      <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-text-primary transition-colors group-hover:text-primary">{name}</span>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-text-muted transition-colors group-hover:text-primary">
+      <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-text-primary transition-colors group-hover:text-primary">
+        {name}
+      </span>
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="shrink-0 text-text-muted transition-colors group-hover:text-primary">
         <polyline points="9 18 15 12 9 6" />
       </svg>
     </Link>
@@ -75,9 +98,7 @@ export default function FeedPage() {
 
       {isLoading && <FeedSkeleton />}
 
-      {isError && (
-        <p className="fonts-label py-40pxr text-center text-text-muted">뉴스를 불러오지 못했습니다.</p>
-      )}
+      {isError && <p className="fonts-label py-40pxr text-center text-text-muted">뉴스를 불러오지 못했습니다.</p>}
 
       {data && data.length === 0 && (
         <div className="flex flex-col items-center justify-center gap-12pxr py-60pxr text-center">
@@ -131,8 +152,8 @@ export default function FeedPage() {
                   <div className="flex flex-col gap-4pxr px-12pxr py-8pxr">
                     {[1, 2, 3].map((i) => (
                       <div key={i} className="flex items-center gap-10pxr">
-                        <div className="h-36pxr w-36pxr animate-pulse rounded-button bg-surface-muted" />
-                        <div className="h-4 flex-1 animate-pulse rounded bg-surface-muted" />
+                        <div className="bg-surface-muted h-36pxr w-36pxr animate-pulse rounded-button" />
+                        <div className="bg-surface-muted h-4 flex-1 animate-pulse rounded" />
                       </div>
                     ))}
                   </div>
@@ -158,7 +179,15 @@ export default function FeedPage() {
         href="/onboarding"
         title="관심 기업 추가하기"
         className="fixed bottom-24pxr right-24pxr z-50 flex h-56pxr w-56pxr items-center justify-center rounded-full bg-primary shadow-lg transition-opacity hover:opacity-80">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round">
           <path d="M12 5v14M5 12h14" />
         </svg>
       </Link>
