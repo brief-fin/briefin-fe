@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import TickerNav from '@/components/news/TickerNav';
 import NewsList from '@/components/news/NewsList';
+import NewsHistoryBanner from '@/components/news/NewsHistoryBanner';
 import { SearchComponent } from '@/components/common/SearchComponent';
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
@@ -13,10 +14,17 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ c
       <Suspense>
         <TickerNav />
       </Suspense>
-      <div className="flex flex-col gap-16pxr lg:flex-row lg:items-start">
+      <div className="flex flex-col gap-16pxr lg:flex-row">
         {/* Left: news list */}
         <div className="flex flex-1 flex-col gap-14pxr">
           <NewsList category={category} />
+        </div>
+
+        {/* Right: sticky banner */}
+        <div className="hidden lg:block lg:w-260pxr lg:shrink-0">
+          <div className="sticky top-24pxr">
+            <NewsHistoryBanner />
+          </div>
         </div>
       </div>
     </main>

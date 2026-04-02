@@ -75,6 +75,7 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
   return (
     <div className="min-h-screen bg-surface-bg py-36pxr">
       <div className="mt-16pxr flex flex-col gap-16pxr lg:flex-row lg:items-start lg:gap-24pxr">
+
         <article className="min-w-0 flex-1 rounded-card border border-surface-border bg-surface-white p-24pxr shadow-hero-card sm:p-32pxr">
           <NewsHeader
             data={{
@@ -118,6 +119,7 @@ export default function NewsDetailClient({ data }: { data: NewsDetailResponse })
           <NewsSidebar relatedNews={relatedNews} relatedCompanies={relatedCompanies} relatedNewsLoading={relatedNewsLoading} />
         </div>
       </div>
+
     </div>
   );
 }
