@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import CompanySearchInput from '@/components/companies/CompanySearchInput';
-import { apiClient } from '@/api/client';
 import { useAuthStatus } from '@/providers/AuthSessionProvider';
+import { useWatchCompany, useUnwatchCompany } from '@/hooks/useUser';
 
 interface PopularCompany {
   id: number;
@@ -40,23 +40,17 @@ const VISIBLE_ROWS = 6.5;
 function StarButton({ companyId, initialWatchlisted }: { companyId: number; initialWatchlisted: boolean }) {
   const authStatus = useAuthStatus();
   const [watchlisted, setWatchlisted] = useState(initialWatchlisted);
-  const [loading, setLoading] = useState(false);
+  const { mutate: doWatch, isPending: watching } = useWatchCompany();
+  const { mutate: doUnwatch, isPending: unwatching } = useUnwatchCompany();
+  const loading = watching || unwatching;
 
-  const handleClick = async (e: React.MouseEvent) => {
+  const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (authStatus !== 'authenticated' || loading) return;
-    setLoading(true);
-    try {
-      if (watchlisted) {
-        await apiClient.delete(`/api/users/${companyId}/watch`);
-      } else {
-        await apiClient.post(`/api/users/${companyId}/watch`);
-      }
-      setWatchlisted(prev => !prev);
-    } catch {
-      alert('요청에 실패했어요. 다시 시도해 주세요.');
-    } finally {
-      setLoading(false);
+    if (watchlisted) {
+      doUnwatch(companyId, { onSuccess: () => setWatchlisted(false), onError: () => alert('요청에 실패했어요. 다시 시도해 주세요.') });
+    } else {
+      doWatch(companyId, { onSuccess: () => setWatchlisted(true), onError: () => alert('요청에 실패했어요. 다시 시도해 주세요.') });
     }
   };
 
