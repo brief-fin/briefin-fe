@@ -18,7 +18,8 @@ export async function subscribePush(companyId: number): Promise<boolean> {
     return false;
   }
 
-  const registration = await navigator.serviceWorker.register('/sw.js');
+  const existing = await navigator.serviceWorker.getRegistration('/sw.js');
+  const registration = existing ?? await navigator.serviceWorker.register('/sw.js');
   await navigator.serviceWorker.ready;
 
   const vapidPublicKey = await fetchVapidPublicKey();

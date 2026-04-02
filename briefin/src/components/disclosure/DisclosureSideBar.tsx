@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import AlertBanner from '@/components/common/AlertBanner';
 import { DisclosureSidebarProps } from '@/types/disclosure';
 import { getCategoryLabel } from '@/constants/disclosureCategories';
@@ -16,6 +17,7 @@ export default function DisclosureSidebar({
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [loading, setLoading] = useState(true);
   const authVersion = useAuthSessionVersion();
+  const router = useRouter();
 
   // auth 초기화 완료 후 구독 상태 조회 (authVersion === 0이면 토큰 미설정 상태)
   useEffect(() => {
@@ -57,7 +59,10 @@ export default function DisclosureSidebar({
         setIsSubscribed(false);
       } else {
         const success = await subscribePush(companyId);
-        if (success) setIsSubscribed(true);
+        if (success) {
+          setIsSubscribed(true);
+          if (companyId) router.push(`/companies/${companyId}`);
+        }
       }
     } catch (error) {
       console.error('알림 설정 실패:', error);
