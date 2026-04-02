@@ -3,6 +3,8 @@ import DisclosureAlertFab from '@/components/disclosure/DisclosureAlertFab';
 import { fetchDisclosureList } from '@/api/disclosureApi';
 import type { DisclosureApiItem, DisclosureListItem } from '@/types/disclosure';
 
+export const dynamic = 'force-dynamic';
+
 export default async function DisclosurePage() {
   let initialItems: DisclosureListItem[] = [];
   let totalPages = 1;
@@ -29,7 +31,7 @@ export default async function DisclosurePage() {
       {initialItems.length === 0 ? (
         <p className="text-text-secondary">공시 데이터가 없습니다.</p>
       ) : (
-        <DisclosureInfiniteList initialItems={initialItems} initialPage={0} totalPages={totalPages} />
+        <DisclosureInfiniteList key={initialItems[0]?.id} initialItems={initialItems} initialPage={0} totalPages={totalPages} />
       )}
       <DisclosureAlertFab />
     </div>
