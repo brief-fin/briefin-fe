@@ -155,7 +155,14 @@ export default function CompanySearchInput({ onSearch }: { onSearch?: () => void
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="truncate text-[13px] font-bold text-text-primary">{company.name}</p>
+                          <div className="flex items-center gap-6pxr">
+                            <p className="truncate text-[13px] font-bold text-text-primary">{company.name}</p>
+                            {company.ticker && (
+                              <span className="shrink-0 rounded bg-surface-muted px-5pxr py-1pxr text-[10px] font-semibold text-text-muted">
+                                {company.ticker}
+                              </span>
+                            )}
+                          </div>
                           <p className="text-[11px] text-text-muted">{company.sector ?? '기타'}</p>
                         </div>
                         {company.changeRate != null && (
