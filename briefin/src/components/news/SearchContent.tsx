@@ -1,10 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { SearchComponent } from '@/components/common/SearchComponent';
 import { useSearchParams } from 'next/navigation';
 import { useNewsSearch } from '@/hooks/useNews';
+import NewsCard from '@/components/news/NewsCard';
+import NewsCardSkeleton from '@/components/news/NewsCardSkeleton';
+import { toNewsItem } from '@/api/newsApi';
 
 export default function SearchContent() {
   const searchParams = useSearchParams();
@@ -46,15 +48,9 @@ export default function SearchContent() {
       )}
 
       {isLoading && (
-        <div className="mb-30pxr mt-20pxr flex animate-pulse flex-col gap-12pxr">
+        <div className="mb-30pxr mt-20pxr flex flex-col gap-12pxr">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex flex-col gap-8pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr">
-              <div className="h-4 w-full rounded bg-gray-200" />
-              <div className="h-4 w-3/4 rounded bg-gray-200" />
-              <div className="h-3 w-full rounded bg-gray-200" />
-              <div className="h-3 w-1/2 rounded bg-gray-200" />
-              <div className="h-3 w-32 rounded bg-gray-200" />
-            </div>
+            <NewsCardSkeleton key={i} />
           ))}
         </div>
       )}
@@ -62,14 +58,7 @@ export default function SearchContent() {
       {!isLoading && results.length > 0 && (
         <div className="mb-30pxr mt-20pxr flex flex-col gap-12pxr">
           {results.map((news) => (
-            <Link
-              key={news.newsId}
-              href={`/news/${news.newsId}`}
-              className="flex flex-col gap-6pxr rounded-card border border-surface-border bg-surface-white px-20pxr py-16pxr transition-colors hover:bg-surface-bg">
-              <p className="text-[14px] font-bold text-text-primary">{news.title}</p>
-              {news.summary && <p className="fonts-caption line-clamp-2 text-text-muted">{news.summary}</p>}
-              <p className="fonts-caption text-text-disabled">{news.press} · {news.publishedAt}</p>
-            </Link>
+            <NewsCard key={news.newsId} news={toNewsItem(news)} />
           ))}
 
           <div ref={bottomRef} className="py-4pxr">

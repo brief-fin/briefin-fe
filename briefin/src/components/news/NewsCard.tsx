@@ -17,7 +17,11 @@ export default function NewsCard({ news }: NewsCardProps) {
 
   const queryClient = useQueryClient();
   const cachedDetail = queryClient.getQueryData<NewsDetailResponse>(newsKeys.detail(id));
-  const cachedScraps = queryClient.getQueryData<{ scrapList: ScrapedNews[]; totalCount: number }>(['user', 'scraps', 1]);
+  const cachedScraps = queryClient.getQueryData<{ scrapList: ScrapedNews[]; totalCount: number }>([
+    'user',
+    'scraps',
+    1,
+  ]);
   const isInCache = cachedScraps?.scrapList?.some((s) => String(s.newsId) === String(id)) ?? false;
   const [scrapped, setScrapped] = useState(cachedDetail?.isScraped ?? isScraped ?? isInCache);
 
@@ -54,19 +58,17 @@ export default function NewsCard({ news }: NewsCardProps) {
 
       {/* 콘텐츠: pointer-events-none으로 Link 클릭 통과, 버튼만 pointer-events-auto */}
       <div className="pointer-events-none relative z-10 flex flex-col gap-10pxr px-24pxr py-22pxr sm:flex-row sm:gap-20pxr">
-
         <div className="flex flex-1 flex-col gap-10pxr overflow-hidden">
-
           {/* 스크랩 버튼 */}
           {authStatus === 'authenticated' && (
             <button
               onClick={handleScrap}
               disabled={isPending}
               aria-label={scrapped ? '스크랩 취소' : '스크랩'}
-              className="pointer-events-auto self-start p-2pxr text-text-muted transition-colors hover:text-primary disabled:opacity-50">
+              className="pointer-events-auto self-start p-0 text-text-muted transition-colors hover:text-primary disabled:opacity-50">
               <svg
-                width="16"
-                height="16"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill={scrapped ? '#1E3A8A' : 'none'}
                 stroke={scrapped ? '#1E3A8A' : 'currentColor'}
@@ -84,8 +86,8 @@ export default function NewsCard({ news }: NewsCardProps) {
               {categories.map((cat) => (
                 <Label key={cat} text={cat} variant="category" />
               ))}
-              {companies.map((company) => (
-                <Label key={company} text={company} variant="company" />
+              {companies.map((company, idx) => (
+                <Label key={`${company}-${idx}`} text={company} variant="company" />
               ))}
             </section>
           )}
