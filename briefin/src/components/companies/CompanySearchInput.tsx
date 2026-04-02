@@ -78,6 +78,7 @@ export default function CompanySearchInput({ onSearch }: { onSearch?: () => void
   }, []);
 
   const handleSelect = (company: CompanyItem) => {
+    saveRecentSearch(company.name);
     setOpen(false);
     setQuery('');
     router.push(`/companies/${company.id}`);
