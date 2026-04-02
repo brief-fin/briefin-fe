@@ -39,7 +39,7 @@ export default function SearchContent() {
   return (
     <main className="relative flex h-full w-full flex-col pt-36pxr">
       <div className="fonts-heading3 mb-16pxr">뉴스</div>
-      <SearchComponent searchPath="/news/search/result" />
+      <SearchComponent searchPath="/news/search/result" defaultValue={query} />
 
       {query && (
         <div className="fonts-caption mt-20pxr text-text-muted">
