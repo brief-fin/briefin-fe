@@ -169,7 +169,13 @@ function MyPageContent() {
 
   return (
     <div className="min-h-screen bg-surface-bg py-36pxr">
-      <MyPageHeader email={userInfo?.email ?? ''} onLogout={handleLogout} />
+      <MyPageHeader
+        email={userInfo?.email ?? ''}
+        onLogout={handleLogout}
+        watchlistCount={watchlist?.length}
+        scrapCount={scrapsData?.totalCount}
+        recentCount={recentData?.totalCount}
+      />
       <Tabs tabs={MY_PAGE_TABS} activeTab={activeTab} onTabChange={handleTabChange} tabIcons={tabIcons} />
 
       <div className="pt-28pxr">

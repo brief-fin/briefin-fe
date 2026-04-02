@@ -3,6 +3,7 @@ interface MyPageHeaderProps {
   watchlistCount?: number;
   scrapCount?: number;
   recentCount?: number;
+  onLogout?: () => void;
 }
 
 export default function MyPageHeader({
@@ -10,6 +11,7 @@ export default function MyPageHeader({
   watchlistCount,
   scrapCount,
   recentCount,
+  onLogout,
 }: MyPageHeaderProps) {
   const initial = email ? email[0].toUpperCase() : '?';
 
@@ -32,6 +34,15 @@ export default function MyPageHeader({
           <p className="text-[11px] font-medium uppercase tracking-widest text-white/60">My Account</p>
           <p className="mt-2pxr truncate text-[15px] font-bold text-white">{email || '로그인 필요'}</p>
         </div>
+
+        {/* 로그아웃 버튼 */}
+        {onLogout && (
+          <button
+            onClick={onLogout}
+            className="shrink-0 rounded-lg bg-white/20 px-12pxr py-6pxr text-[12px] font-medium text-white hover:bg-white/30">
+            로그아웃
+          </button>
+        )}
       </div>
 
       {/* 통계 */}
@@ -39,9 +50,7 @@ export default function MyPageHeader({
         <div className="mt-20pxr flex gap-0 divide-x divide-white/20 rounded-xl bg-white/10 px-4pxr py-12pxr">
           {stats.map((s) => (
             <div key={s.label} className="flex flex-1 flex-col items-center gap-2pxr">
-              <span className="text-[18px] font-bold text-white">
-                {s.value ?? '–'}
-              </span>
+              <span className="text-[18px] font-bold text-white">{s.value ?? '–'}</span>
               <span className="text-[11px] text-white/60">{s.label}</span>
             </div>
           ))}
