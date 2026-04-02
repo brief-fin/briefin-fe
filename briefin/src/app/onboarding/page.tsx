@@ -2,14 +2,15 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import CompanyCard from '@/components/onboarding/company-card';
 import { usePopularCompanies } from '@/hooks/useCompany';
 import type { CompanyDetail } from '@/types/company';
-import { unwatchCompany, watchCompany } from '@/api/userApi';
+import { watchCompany } from '@/api/userApi';
+import { searchCompanies } from '@/api/companyApi';
 import { useWatchlist } from '@/hooks/useUser';
 import { useAuthStatus } from '@/providers/AuthSessionProvider';
 import { useQueryClient } from '@tanstack/react-query';
-import { apiClient, type ApiResponse } from '@/api/client';
 
 const NEXT_PAGE = '/home';
 
@@ -18,21 +19,17 @@ interface SearchResult {
   name: string;
   ticker?: string;
   logoUrl?: string | null;
+  sector?: string | null;
+  changeRate?: number | null;
 }
 
-interface SearchPage {
-  content: SearchResult[];
-}
 
 export default function OnboardingPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [selected, setSelected] = useState<Record<string, Pick<CompanyDetail, 'id' | 'name' | 'ticker'>>>({});
-  const selectedRef = useRef(selected);
-  const [submitting, setSubmitting] = useState(false);
+const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [resetting, setResetting] = useState(false);
-  const [resetError, setResetError] = useState<string | null>(null);
   const didInteractRef = useRef(false);
   const authStatus = useAuthStatus();
 
@@ -41,6 +38,7 @@ export default function OnboardingPage() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [searchImgErrors, setSearchImgErrors] = useState<Record<number, boolean>>({});
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -62,16 +60,14 @@ export default function OnboardingPage() {
       setSearchLoading(true);
       setSearchOpen(true);
       try {
-        const res = await apiClient.get<ApiResponse<SearchPage>>(
-          `/companies/search?q=${encodeURIComponent(q.trim())}&size=8`,
-        );
-        setSearchResults(res.result.content ?? []);
+        const res = await searchCompanies(q.trim(), 0, 8);
+        setSearchResults(res.content);
       } catch {
         setSearchResults([]);
       } finally {
         setSearchLoading(false);
       }
-    }, 250);
+    }, 300);
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
@@ -127,29 +123,6 @@ export default function OnboardingPage() {
     setSearchOpen(false);
   };
 
-  const resetAll = async () => {
-    if (resetting || submitting) return;
-    setResetError(null);
-    setResetting(true);
-    didInteractRef.current = true;
-
-    try {
-      if (authStatus === 'authenticated' && watchlist && watchlist.length > 0) {
-        const ids = watchlist.map((c) => c.companyId);
-        const results = await Promise.allSettled(ids.map((id) => unwatchCompany(id)));
-        const failed = results.filter((r) => r.status === 'rejected').length;
-        if (failed > 0) throw new Error('failed');
-        await queryClient.invalidateQueries({ queryKey: ['user', 'watchlist'] });
-      }
-      setSelected({});
-    } catch {
-      setSelected({});
-      setResetError('관심 기업 초기화에 실패했습니다. 잠시 후 다시 시도해주세요.');
-    } finally {
-      setResetting(false);
-    }
-  };
-
   const goNext = async () => {
     if (submitting) return;
     setSubmitError(null);
@@ -178,6 +151,11 @@ export default function OnboardingPage() {
     router.push(NEXT_PAGE);
   };
 
+  const rankedCompanies = [...popularCompanies].sort((a, b) => (b.marketCap ?? 0) - (a.marketCap ?? 0));
+  const scrollList = [...rankedCompanies, ...rankedCompanies];
+  const ITEM_H = 44;
+  const VISIBLE = 5;
+
   if (!isHydrated) return null;
 
   return (
@@ -185,65 +163,78 @@ export default function OnboardingPage() {
       <div className="mx-auto w-full max-w-1600pxr px-20pxr sm:px-36pxr lg:px-130pxr">
         <div className="grid gap-16pxr lg:grid-cols-[360px_1fr] lg:gap-24pxr">
           {/* Left panel */}
-          <aside className="rounded-card border border-surface-border bg-surface-white p-24pxr lg:sticky lg:top-24pxr lg:h-fit">
+          <aside className="flex flex-col rounded-card border border-surface-border bg-surface-white p-24pxr lg:sticky lg:top-24pxr lg:h-fit lg:min-h-[560px]">
             <div>
-              <p className="text-[34px] leading-none text-text-primary">🏢</p>
               <h1 className="fonts-heading2 mt-14pxr text-text-primary">관심 기업 선택</h1>
               <p className="mt-10pxr text-[14px] leading-relaxed text-text-muted">
                 선택한 기업의 공시 뉴스를 맞춤으로 보여드려요.
                 <br />
-                인기 기업 9개를 먼저 보여드리고,
+                시가총액 상위 기업 9개를 먼저 보여드리고,
                 <br />
                 검색으로 더 추가할 수 있어요.
               </p>
             </div>
 
-            <div className="mt-14pxr rounded-xl border border-surface-border bg-surface-bg p-14pxr">
-              <div className="flex items-center justify-between">
-                <p className="text-[12px] font-bold text-text-secondary">선택한 기업</p>
-                <p className="text-[12px] font-bold text-text-muted">{selectedIds.length}개</p>
+            {/* 시가총액 순위 슬라이드 */}
+            <div className="mt-20pxr flex-1 overflow-hidden rounded-xl border border-surface-border bg-surface-bg">
+              <div className="border-b border-surface-border px-14pxr py-10pxr">
+                <p className="text-[11px] font-bold text-text-muted">시가총액 순위</p>
               </div>
-              {selectedIds.length === 0 ? (
-                <p className="mt-10pxr text-[13px] text-text-muted">
-                  아직 선택한 기업이 없어요. 인기 기업을 선택하거나 검색으로 추가해보세요.
-                </p>
-              ) : (
-                <div className="mt-10pxr flex flex-wrap gap-8pxr">
-                  {selectedIds.slice(0, 6).map((id) => (
-                    <span
-                      key={id}
-                      className="inline-flex items-center rounded-full border border-surface-border bg-surface-white px-10pxr py-6pxr text-[12px] font-bold text-text-secondary">
-                      {selected[id]?.name ?? `#${id}`}
-                    </span>
-                  ))}
-                  {selectedIds.length > 6 && (
-                    <span className="inline-flex items-center rounded-full border border-surface-border bg-surface-white px-10pxr py-6pxr text-[12px] font-bold text-text-muted">
-                      +{selectedIds.length - 6}
-                    </span>
-                  )}
-                </div>
-              )}
-              <div className="mt-12pxr flex items-center gap-10pxr">
-                <button
-                  type="button"
-                  onClick={resetAll}
-                  disabled={selectedIds.length === 0 || resetting || submitting}
-                  className="h-38pxr flex-1 rounded-button border border-surface-border bg-surface-white text-[13px] font-bold text-text-secondary transition-colors hover:bg-surface-bg disabled:cursor-not-allowed disabled:opacity-60">
-                  {resetting ? '초기화 중…' : '선택 초기화'}
-                </button>
-                <button
-                  type="button"
-                  onClick={goNext}
-                  disabled={submitting}
-                  className="h-38pxr flex-1 rounded-button bg-primary text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
-                  {submitting ? '저장 중…' : '시작하기'}
-                </button>
+              <div
+                className="overflow-hidden"
+                style={{ height: ITEM_H * VISIBLE }}
+              >
+                {popularLoading ? (
+                  <div className="flex flex-col">
+                    {[...Array(VISIBLE)].map((_, i) => (
+                      <div key={i} className="flex items-center gap-10pxr px-14pxr" style={{ height: ITEM_H }}>
+                        <div className="h-10pxr w-6 animate-pulse rounded bg-surface-border" />
+                        <div className="h-10pxr w-20 animate-pulse rounded bg-surface-border" />
+                        <div className="ml-auto h-10pxr w-12 animate-pulse rounded bg-surface-border" />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div
+                    className="flex flex-col"
+                    style={{
+                      animation: `scrollUp ${rankedCompanies.length * 1.8}s linear infinite`,
+                    }}
+                  >
+                    {scrollList.map((company, i) => {
+                      const rank = (i % rankedCompanies.length) + 1;
+                      const isRise = (company.changeRate ?? 0) > 0;
+                      const isFall = (company.changeRate ?? 0) < 0;
+                      return (
+                        <div
+                          key={`${company.id}-${i}`}
+                          className="flex shrink-0 items-center gap-10pxr px-14pxr"
+                          style={{ height: ITEM_H }}
+                        >
+                          <span className="w-16pxr shrink-0 text-[11px] font-bold text-text-muted">{rank}</span>
+                          <span className="min-w-0 flex-1 truncate text-[13px] font-bold text-text-primary">{company.name}</span>
+                          {company.changeRate != null && (
+                            <span className={`shrink-0 text-[12px] font-bold ${isRise ? 'text-semantic-red' : isFall ? 'text-semantic-blue' : 'text-text-secondary'}`}>
+                              {isRise ? '+' : ''}{company.changeRate.toFixed(2)}%
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-              {submitError && <p className="mt-10pxr text-[13px] font-bold text-semantic-red">{submitError}</p>}
-              {resetError && <p className="mt-10pxr text-[13px] font-bold text-semantic-red">{resetError}</p>}
             </div>
 
-            <div className="mt-16pxr">
+            <div className="mt-16pxr flex flex-col gap-10pxr">
+              <button
+                type="button"
+                onClick={goNext}
+                disabled={submitting}
+                className="h-42pxr w-full rounded-button bg-primary text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
+                {submitting ? '저장 중…' : '시작하기'}
+              </button>
+              {submitError && <p className="text-[13px] font-bold text-semantic-red">{submitError}</p>}
               <button
                 type="button"
                 onClick={handleLater}
@@ -254,10 +245,11 @@ export default function OnboardingPage() {
           </aside>
 
           {/* Right content */}
-          <section className="rounded-card border border-surface-border bg-surface-white p-24pxr">
+          <section className="rounded-card border border-surface-border bg-surface-white p-24pxr lg:min-h-[560px]">
+
             {/* 검색창 */}
             <div ref={searchContainerRef} className="relative mb-24pxr">
-              <div className="flex w-full items-center gap-8pxr rounded-input border border-gray-300 bg-surface-white px-16pxr py-12pxr">
+              <div className="flex w-full items-center gap-8pxr rounded-input border border-surface-border bg-surface-white px-16pxr py-12pxr">
                 <input
                   className="w-full bg-transparent p-5pxr text-text-primary placeholder:text-text-muted focus:outline-none"
                   type="text"
@@ -311,20 +303,43 @@ export default function OnboardingPage() {
                   ) : searchResults.length === 0 ? (
                     <p className="py-16pxr text-center text-[13px] text-text-muted">검색 결과가 없어요.</p>
                   ) : (
-                    <ul className="divide-y divide-surface-border overflow-y-auto" style={{ maxHeight: 52 * 6 }}>
+                    <ul className="scrollbar-hide divide-y divide-surface-border overflow-y-auto" style={{ maxHeight: 52 * 6.5 }}>
                       {searchResults.map((company) => {
-                        const isSelected = !!selected[String(company.id)];
+                        const isRise = (company.changeRate ?? 0) > 0;
+                        const isFall = (company.changeRate ?? 0) < 0;
+                        const hasLogo = !!company.logoUrl && !searchImgErrors[company.id];
                         return (
                           <li key={company.id}>
                             <button
                               onClick={() => handleSearchSelect(company)}
                               className="flex w-full items-center gap-12pxr px-16pxr py-10pxr text-left transition-colors hover:bg-surface-bg">
-                              <div className="min-w-0 flex-1">
-                                <p className="truncate text-[13px] font-bold text-text-primary">
-                                  {company.name}
-                                  {company.ticker ? ` · ${company.ticker}` : ''}
-                                </p>
+                              <div className="relative h-32pxr w-32pxr shrink-0 overflow-hidden rounded-full border border-surface-border">
+                                {hasLogo ? (
+                                  <Image
+                                    src={company.logoUrl!}
+                                    alt={company.name}
+                                    fill
+                                    className="object-cover"
+                                    unoptimized
+                                    onError={() => setSearchImgErrors((prev) => ({ ...prev, [company.id]: true }))}
+                                  />
+                                ) : (
+                                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary to-primary-dark">
+                                    <span className="text-[13px] font-black text-white">
+                                      {company.name.charAt(0)}
+                                    </span>
+                                  </div>
+                                )}
                               </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="truncate text-[13px] font-bold text-text-primary">{company.name}</p>
+                                <p className="text-[11px] text-text-muted">{company.sector ?? '기타'}</p>
+                              </div>
+                              {company.changeRate != null && (
+                                <p className={`shrink-0 text-[12px] font-bold ${isRise ? 'text-semantic-red' : isFall ? 'text-semantic-blue' : 'text-text-secondary'}`}>
+                                  {isRise ? '+' : ''}{company.changeRate.toFixed(2)}%
+                                </p>
+                              )}
                             </button>
                           </li>
                         );
@@ -335,10 +350,24 @@ export default function OnboardingPage() {
               )}
             </div>
 
-            {/* 인기 기업 헤더 */}
-            <div className="mb-16pxr">
-              <p className="text-[12px] font-bold text-text-secondary">인기 기업</p>
-            </div>
+            {/* 선택한 기업 태그 */}
+            {selectedIds.length > 0 && (
+              <div className="mb-20pxr flex flex-wrap gap-6pxr">
+                {selectedIds.map((id) => (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => toggle(selected[id])}
+                    className="inline-flex items-center gap-4pxr rounded-full border border-primary bg-primary-subtle px-10pxr py-5pxr text-[12px] font-bold text-primary transition-colors hover:bg-primary-light">
+                    {selected[id]?.name ?? `#${id}`}
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <line x1="1" y1="1" x2="9" y2="9" />
+                      <line x1="9" y1="1" x2="1" y2="9" />
+                    </svg>
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* 기업 카드 그리드 */}
             <div className="grid grid-cols-2 gap-12pxr sm:grid-cols-3 lg:grid-cols-3 lg:gap-12pxr">
