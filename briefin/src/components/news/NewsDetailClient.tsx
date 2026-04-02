@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import type { NewsDetailResponse } from '@/api/newsApi';
 import { fetchRelatedNews, fetchNewsTerms } from '@/api/newsApi';
@@ -12,12 +12,15 @@ import NewsSidebar from '@/components/news/NewsSidebar';
 import NewsTimeline from '@/components/common/NewsTimeline';
 import NewsRelatedCompanies from '@/components/news/NewsRelatedCompanies';
 import NewsActions from '@/components/news/NewsActions';
-import { useNewsTimeline, useScrapNews, useDeleteScrapNews } from '@/hooks/useNews';
+import { useNewsTimeline, useScrapNews, useDeleteScrapNews, newsKeys } from '@/hooks/useNews';
 import type { NewsTimelineItem } from '@/types/timeline';
 
 export default function NewsDetailClient({ data }: { data: NewsDetailResponse }) {
   const [activeTimelineTag, setActiveTimelineTag] = useState('');
-  const [isScrapped, setIsScrapped] = useState(data.isScraped ?? false);
+
+  const queryClient = useQueryClient();
+  const cachedDetail = queryClient.getQueryData<NewsDetailResponse>(newsKeys.detail(data.newsId));
+  const [isScrapped, setIsScrapped] = useState(cachedDetail?.isScraped ?? data.isScraped ?? false);
 
   const scrapMutation = useScrapNews();
   const unscrapMutation = useDeleteScrapNews();

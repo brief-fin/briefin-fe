@@ -5,19 +5,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Label from '../common/Label';
 import { NewsCardProps } from '@/types/news';
-import { useScrapNews, useDeleteScrapNews } from '@/hooks/useNews';
+import { useScrapNews, useDeleteScrapNews, newsKeys } from '@/hooks/useNews';
 import { useAuthStatus } from '@/providers/AuthSessionProvider';
 import { ApiError } from '@/api/client';
 import { useQueryClient } from '@tanstack/react-query';
 import type { ScrapedNews } from '@/types/mypage';
+import type { NewsDetailResponse } from '@/api/newsApi';
 
 export default function NewsCard({ news }: NewsCardProps) {
   const { id, source, time, title, summary, categories, companies, thumbnailUrl, isScraped } = news;
 
   const queryClient = useQueryClient();
+  const cachedDetail = queryClient.getQueryData<NewsDetailResponse>(newsKeys.detail(id));
   const cachedScraps = queryClient.getQueryData<{ scrapList: ScrapedNews[]; totalCount: number }>(['user', 'scraps', 1]);
   const isInCache = cachedScraps?.scrapList?.some((s) => String(s.newsId) === String(id)) ?? false;
-  const [scrapped, setScrapped] = useState(isScraped ?? isInCache);
+  const [scrapped, setScrapped] = useState(cachedDetail?.isScraped ?? isScraped ?? isInCache);
 
   const authStatus = useAuthStatus();
   const { mutate: doScrap, isPending: scrapping } = useScrapNews();
