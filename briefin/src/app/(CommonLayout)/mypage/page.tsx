@@ -3,6 +3,7 @@
 import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import MyPageHeader from '@/components/mypage/mypageheader';
+import Tabs from '@/components/common/Tabs';
 import AccountSection from '@/components/mypage/AccountSection';
 import WatchlistSection from '@/components/mypage/WatchlistSection';
 import SubscribedCompaniesSection from '@/components/mypage/SubscribedCompaniesSection';
