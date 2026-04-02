@@ -13,7 +13,11 @@ function CategoryBadge({ category }: { category: string }) {
 export default function DisclosureList({ items, sourceLabel = 'DART 공시' }: DisclosureListProps) {
   if (!items || items.length === 0) {
     return (
-      <p className="py-40pxr text-center text-[13px] text-text-muted">해당 기업의 최근 공시가 없습니다.</p>
+      <div className="flex flex-col items-center justify-center gap-8pxr py-60pxr text-center text-text-secondary">
+        <span className="text-32pxr">📭</span>
+        <p className="fonts-body font-medium">아직 등록된 공시가 없어요</p>
+        <p className="fonts-label text-text-tertiary">새로운 공시가 등록되면 이곳에 표시됩니다.</p>
+      </div>
     );
   }
 
