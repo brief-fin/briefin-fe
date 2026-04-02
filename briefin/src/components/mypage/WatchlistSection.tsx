@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import PushAlarmButton from '@/components/common/PushAlarmButton';
 import { useUnwatchCompany, useWatchlist } from '@/hooks/useUser';
 import type { WatchlistCompany } from '@/types/mypage';
 
@@ -73,7 +72,6 @@ export default function WatchlistSection() {
             <p className="text-[16px] font-bold text-text-primary">{company.companyName ?? company.name}</p>
           </Link>
           <div className="flex shrink-0 items-center gap-4pxr">
-            <PushAlarmButton companyId={company.companyId} />
             <button
               type="button"
               onClick={() => unwatch(company.companyId)}
