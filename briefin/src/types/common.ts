@@ -54,4 +54,5 @@ export interface TabsProps<T extends string> {
   activeTab: T;
   onTabChange: (tab: T) => void;
   className?: string;
+  tabIcons?: Partial<Record<T, React.ReactNode>>;
 }

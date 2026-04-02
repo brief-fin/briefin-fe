@@ -130,7 +130,26 @@ export default function SubscribedCompaniesSection() {
   }
 
   if (companies.length === 0) {
-    return <p className="py-40pxr text-center text-[14px] text-text-muted">공시 알림을 신청한 기업이 없습니다.</p>;
+    return (
+      <div className="flex flex-col items-center gap-12pxr py-60pxr text-center">
+        <div className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#E5E7EB]">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#9CA3AF"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+        </div>
+        <p className="fonts-body font-medium text-text-primary">공시 알림 신청한 기업이 없어요</p>
+        <p className="fonts-label text-text-muted">기업 페이지에서 벨 아이콘을 누르면 공시 알림을 받을 수 있어요.</p>
+      </div>
+    );
   }
 
   return (
