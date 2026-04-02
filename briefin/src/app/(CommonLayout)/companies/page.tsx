@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import CompanySearchInput from '@/components/companies/CompanySearchInput';
 import { useAuthStatus } from '@/providers/AuthSessionProvider';
-import { useWatchCompany, useUnwatchCompany } from '@/hooks/useUser';
+import { useWatchlist, useWatchCompany, useUnwatchCompany } from '@/hooks/useUser';
 
 interface PopularCompany {
   id: number;
@@ -37,9 +37,10 @@ const ROW_HEIGHT = 60;
 const VISIBLE_ROWS = 6.5;
 
 
-function StarButton({ companyId, initialWatchlisted }: { companyId: number; initialWatchlisted: boolean }) {
+function StarButton({ companyId }: { companyId: number }) {
   const authStatus = useAuthStatus();
-  const [watchlisted, setWatchlisted] = useState(initialWatchlisted);
+  const { data: watchlist } = useWatchlist({ enabled: authStatus === 'authenticated' });
+  const watchlisted = watchlist?.some((c) => c.companyId === companyId) ?? false;
   const { mutate: doWatch, isPending: watching } = useWatchCompany();
   const { mutate: doUnwatch, isPending: unwatching } = useUnwatchCompany();
   const loading = watching || unwatching;
@@ -48,9 +49,9 @@ function StarButton({ companyId, initialWatchlisted }: { companyId: number; init
     e.stopPropagation();
     if (authStatus !== 'authenticated' || loading) return;
     if (watchlisted) {
-      doUnwatch(companyId, { onSuccess: () => setWatchlisted(false), onError: () => alert('요청에 실패했어요. 다시 시도해 주세요.') });
+      doUnwatch(companyId, { onError: () => alert('요청에 실패했어요. 다시 시도해 주세요.') });
     } else {
-      doWatch(companyId, { onSuccess: () => setWatchlisted(true), onError: () => alert('요청에 실패했어요. 다시 시도해 주세요.') });
+      doWatch(companyId, { onError: () => alert('요청에 실패했어요. 다시 시도해 주세요.') });
     }
   };
 
@@ -79,7 +80,7 @@ function CompanyRow({ company, rank }: { company: PopularCompany; rank: number }
     <div
       onClick={() => router.push(`/companies/${company.id}`)}
       className="flex cursor-pointer items-center gap-12pxr px-20pxr py-12pxr transition-colors hover:bg-surface-bg">
-      <StarButton companyId={company.id} initialWatchlisted={company.watchlisted ?? false} />
+      <StarButton companyId={company.id} />
       <span className={`w-18pxr shrink-0 text-[13px] font-black ${rank <= 3 ? 'text-primary-dark' : 'text-text-tertiary'}`}>
         {rank}
       </span>
