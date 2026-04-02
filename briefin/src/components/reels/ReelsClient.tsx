@@ -13,9 +13,9 @@ export default function ReelsClient() {
 
   if (isLoading) {
     return (
-      <div className="flex h-[min(640px,calc(100dvh-240px))] w-full overflow-hidden rounded-card border border-surface-border bg-surface-white shadow-hero-card lg:h-[min(720px,calc(100dvh-200px))]">
+      <div className="flex h-[min(640px,calc(100dvh-240px))] w-full overflow-hidden rounded-card border border-white/5 bg-[#0d1117] shadow-hero-card lg:h-[min(720px,calc(100dvh-200px))]">
         {/* 슬라이드 영역 */}
-        <div className="relative min-w-0 flex-1 animate-pulse bg-gradient-to-b from-primary-light/40 to-surface-white">
+        <div className="relative min-w-0 flex-1 animate-pulse bg-[#0d1117]">
           <div className="absolute inset-0 flex flex-col justify-center pl-72pxr pr-120pxr sm:pl-80pxr sm:pr-128pxr">
             <div className="w-full max-w-2xl">
               {/* 배지 + 출처 */}
@@ -55,7 +55,7 @@ export default function ReelsClient() {
         </div>
 
         {/* 우측 패널 (lg 이상) */}
-        <div className="hidden animate-pulse flex-col gap-16pxr overflow-y-auto bg-surface-muted/50 px-24pxr py-28pxr lg:flex lg:w-[min(100%,520px)] lg:min-w-400pxr xl:min-w-460pxr">
+        <div className="hidden animate-pulse flex-col gap-16pxr overflow-y-auto bg-[#161b22] px-24pxr py-28pxr lg:flex lg:w-[min(100%,520px)] lg:min-w-400pxr xl:min-w-460pxr">
           <div className="h-3 w-20 rounded bg-gray-200" />
           {/* 기업 카드 */}
           <div className="rounded-hero border border-surface-border bg-surface-white p-20pxr">
@@ -86,7 +86,7 @@ export default function ReelsClient() {
   }
 
   return (
-    <div className="flex h-[min(640px,calc(100dvh-240px))] min-h-[min(640px,calc(100dvh-240px))] w-full overflow-hidden rounded-card border border-surface-border bg-surface-white shadow-hero-card lg:h-[min(720px,calc(100dvh-200px))] lg:min-h-[min(720px,calc(100dvh-200px))]">
+    <div className="flex h-[min(640px,calc(100dvh-240px))] min-h-[min(640px,calc(100dvh-240px))] w-full overflow-hidden rounded-card border border-white/5 bg-[#0d1117] shadow-hero-card lg:h-[min(720px,calc(100dvh-200px))] lg:min-h-[min(720px,calc(100dvh-200px))]">
       <div className="flex h-full w-full min-w-0 items-stretch">
         <ReelFeedPanel
           feedRef={feedRef}
@@ -99,7 +99,7 @@ export default function ReelsClient() {
           onMouseEnter={pause}
           onMouseLeave={resume}
         />
-        <ReelsRelatedPanel reel={reel} reels={reels} onGoTo={goTo} />
+        <ReelsRelatedPanel reel={reel} reels={reels} current={current} onGoTo={goTo} />
       </div>
     </div>
   );
