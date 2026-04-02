@@ -1,7 +1,7 @@
 import HomeBanner from '@/components/home/HomeBanner';
 import HomeNewsSection from '@/components/home/HomeNewsSection';
-import AlertBanner from '@/components/common/AlertBanner';
 import HomeWatchlistSection from '@/components/home/HomeWatchlistSection';
+import FeedWatchlistBanner from '@/components/feed/FeedWatchlistBanner';
 
 export default function HomePage() {
   return (
@@ -9,21 +9,18 @@ export default function HomePage() {
       <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
         <HomeBanner />
       </div>
-      <div className="flex flex-col gap-16pxr lg:flex-row lg:items-start">
+      <div className="flex flex-col gap-16pxr lg:flex-row">
         {/* Left: 뉴스 섹션 */}
         <div className="flex flex-1 flex-col gap-8">
           <HomeNewsSection />
         </div>
 
         {/* Right sidebar */}
-        <div className="flex flex-col gap-16pxr lg:w-96 lg:shrink-0">
-          <HomeWatchlistSection />
-          <AlertBanner
-            title="관심 기업을 더 추가해보세요"
-            description="더 많은 기업을 등록할수록 내 피드가 풍성해져요."
-            buttonLabel="관심 기업 추가하기"
-            buttonHref="/onboarding"
-          />
+        <div className="hidden lg:block lg:w-260pxr lg:shrink-0">
+          <div className="sticky top-24pxr flex flex-col gap-16pxr">
+            <HomeWatchlistSection />
+            <FeedWatchlistBanner />
+          </div>
         </div>
       </div>
     </main>
