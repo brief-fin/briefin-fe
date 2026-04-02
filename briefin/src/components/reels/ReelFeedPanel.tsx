@@ -49,8 +49,16 @@ export default function ReelFeedPanel({
           type="button"
           onClick={() => goTo(current - 1)}
           aria-label="이전"
-          className="absolute left-10pxr top-1/2 z-20 -translate-y-1/2 flex h-36pxr w-36pxr items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/70 opacity-0 backdrop-blur-sm transition-all hover:bg-white/25 hover:text-white group-hover/reelnav:opacity-100">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          className="absolute left-10pxr top-1/2 z-20 flex h-36pxr w-36pxr -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/70 opacity-0 backdrop-blur-sm transition-all hover:bg-white/25 hover:text-white group-hover/reelnav:opacity-100">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6" />
           </svg>
         </button>
@@ -62,15 +70,27 @@ export default function ReelFeedPanel({
           type="button"
           onClick={() => goTo(current + 1)}
           aria-label="다음"
-          className="absolute right-68pxr top-1/2 z-20 -translate-y-1/2 flex h-36pxr w-36pxr items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/70 opacity-0 backdrop-blur-sm transition-all hover:bg-white/25 hover:text-white group-hover/reelnav:opacity-100 sm:right-76pxr">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          className="absolute right-68pxr top-1/2 z-20 flex h-36pxr w-36pxr -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/70 opacity-0 backdrop-blur-sm transition-all hover:bg-white/25 hover:text-white group-hover/reelnav:opacity-100 sm:right-76pxr">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round">
             <polyline points="9 18 15 12 9 6" />
           </svg>
         </button>
       )}
 
       {reels[current] && (
-        <ReelsActionRail newsId={reels[current].id} isScrapped={scrapped.has(reels[current].id)} onToggleScrap={onToggleScrap} />
+        <ReelsActionRail
+          newsId={reels[current].id}
+          isScrapped={scrapped.has(reels[current].id)}
+          onToggleScrap={onToggleScrap}
+        />
       )}
     </div>
   );

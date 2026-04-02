@@ -23,12 +23,13 @@ interface SearchResult {
   changeRate?: number | null;
 }
 
-
 export default function OnboardingPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [selected, setSelected] = useState<Record<string, Pick<CompanyDetail, 'id' | 'name' | 'ticker'> & { logoUrl?: string }>>({});
-const [submitting, setSubmitting] = useState(false);
+  const [selected, setSelected] = useState<
+    Record<string, Pick<CompanyDetail, 'id' | 'name' | 'ticker'> & { logoUrl?: string }>
+  >({});
+  const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const didInteractRef = useRef(false);
   const authStatus = useAuthStatus();
@@ -165,7 +166,7 @@ const [submitting, setSubmitting] = useState(false);
       <div className="mx-auto w-full max-w-1600pxr px-20pxr sm:px-36pxr lg:px-130pxr">
         <div className="grid gap-16pxr lg:grid-cols-[360px_1fr] lg:gap-24pxr">
           {/* Left panel */}
-          <aside className="flex flex-col rounded-card border border-surface-border bg-surface-white p-24pxr lg:sticky lg:top-24pxr lg:h-fit lg:min-h-[560px]">
+          <aside className="flex flex-col rounded-card border border-surface-border bg-surface-white p-24pxr lg:sticky lg:top-24pxr lg:h-fit lg:min-h-560pxr">
             <div>
               <h1 className="fonts-heading2 mt-14pxr text-text-primary">관심 기업 선택</h1>
               <p className="mt-10pxr text-[14px] leading-relaxed text-text-muted">
@@ -182,10 +183,7 @@ const [submitting, setSubmitting] = useState(false);
               <div className="border-b border-surface-border px-14pxr py-10pxr">
                 <p className="text-[11px] font-bold text-text-muted">시가총액 순위</p>
               </div>
-              <div
-                className="overflow-hidden"
-                style={{ height: ITEM_H * VISIBLE }}
-              >
+              <div className="overflow-hidden" style={{ height: ITEM_H * VISIBLE }}>
                 {popularLoading ? (
                   <div className="flex flex-col">
                     {[...Array(VISIBLE)].map((_, i) => (
@@ -200,9 +198,11 @@ const [submitting, setSubmitting] = useState(false);
                   <div
                     className="flex flex-col"
                     style={{
-                      animation: rankedCompanies.length > 0 ? `scrollUp ${rankedCompanies.length * 1.8}s linear infinite` : 'none',
-                    }}
-                  >
+                      animation:
+                        rankedCompanies.length > 0
+                          ? `scrollUp ${rankedCompanies.length * 1.8}s linear infinite`
+                          : 'none',
+                    }}>
                     {scrollList.map((company, i) => {
                       const rank = (i % rankedCompanies.length) + 1;
                       const isRise = (company.changeRate ?? 0) > 0;
@@ -211,13 +211,16 @@ const [submitting, setSubmitting] = useState(false);
                         <div
                           key={`${company.id}-${i}`}
                           className="flex shrink-0 items-center gap-10pxr px-14pxr"
-                          style={{ height: ITEM_H }}
-                        >
+                          style={{ height: ITEM_H }}>
                           <span className="w-16pxr shrink-0 text-[11px] font-bold text-text-muted">{rank}</span>
-                          <span className="min-w-0 flex-1 truncate text-[13px] font-bold text-text-primary">{company.name}</span>
+                          <span className="min-w-0 flex-1 truncate text-[13px] font-bold text-text-primary">
+                            {company.name}
+                          </span>
                           {company.changeRate != null && (
-                            <span className={`shrink-0 text-[12px] font-bold ${isRise ? 'text-semantic-red' : isFall ? 'text-semantic-blue' : 'text-text-secondary'}`}>
-                              {isRise ? '+' : ''}{company.changeRate.toFixed(2)}%
+                            <span
+                              className={`shrink-0 text-[12px] font-bold ${isRise ? 'text-semantic-red' : isFall ? 'text-semantic-blue' : 'text-text-secondary'}`}>
+                              {isRise ? '+' : ''}
+                              {company.changeRate.toFixed(2)}%
                             </span>
                           )}
                         </div>
@@ -227,12 +230,10 @@ const [submitting, setSubmitting] = useState(false);
                 )}
               </div>
             </div>
-
           </aside>
 
           {/* Right content */}
-          <section className="rounded-card border border-surface-border bg-surface-white p-24pxr lg:min-h-[560px]">
-
+          <section className="rounded-card border border-surface-border bg-surface-white p-24pxr lg:min-h-560pxr">
             {/* 검색창 */}
             <div ref={searchContainerRef} className="relative mb-24pxr">
               <div className="flex w-full items-center gap-8pxr rounded-input border border-surface-border bg-surface-white px-16pxr py-12pxr">
@@ -289,7 +290,9 @@ const [submitting, setSubmitting] = useState(false);
                   ) : searchResults.length === 0 ? (
                     <p className="py-16pxr text-center text-[13px] text-text-muted">검색 결과가 없어요.</p>
                   ) : (
-                    <ul className="scrollbar-hide divide-y divide-surface-border overflow-y-auto" style={{ maxHeight: 52 * 6.5 }}>
+                    <ul
+                      className="scrollbar-hide divide-y divide-surface-border overflow-y-auto"
+                      style={{ maxHeight: 52 * 6.5 }}>
                       {searchResults.map((company) => {
                         const isRise = (company.changeRate ?? 0) > 0;
                         const isFall = (company.changeRate ?? 0) < 0;
@@ -311,9 +314,7 @@ const [submitting, setSubmitting] = useState(false);
                                   />
                                 ) : (
                                   <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary to-primary-dark">
-                                    <span className="text-[13px] font-black text-white">
-                                      {company.name.charAt(0)}
-                                    </span>
+                                    <span className="text-[13px] font-black text-white">{company.name.charAt(0)}</span>
                                   </div>
                                 )}
                               </div>
@@ -322,8 +323,10 @@ const [submitting, setSubmitting] = useState(false);
                                 <p className="text-[11px] text-text-muted">{company.sector ?? '기타'}</p>
                               </div>
                               {company.changeRate != null && (
-                                <p className={`shrink-0 text-[12px] font-bold ${isRise ? 'text-semantic-red' : isFall ? 'text-semantic-blue' : 'text-text-secondary'}`}>
-                                  {isRise ? '+' : ''}{company.changeRate.toFixed(2)}%
+                                <p
+                                  className={`shrink-0 text-[12px] font-bold ${isRise ? 'text-semantic-red' : isFall ? 'text-semantic-blue' : 'text-text-secondary'}`}>
+                                  {isRise ? '+' : ''}
+                                  {company.changeRate.toFixed(2)}%
                                 </p>
                               )}
                             </button>
@@ -337,7 +340,7 @@ const [submitting, setSubmitting] = useState(false);
             </div>
 
             {/* 선택한 기업 태그 */}
-            <div className="mb-20pxr min-h-36pxr flex flex-wrap gap-6pxr">
+            <div className="mb-20pxr flex min-h-36pxr flex-wrap gap-6pxr">
               {selectedIds.map((id) => (
                 <button
                   key={id}
@@ -345,7 +348,14 @@ const [submitting, setSubmitting] = useState(false);
                   onClick={() => toggle(selected[id])}
                   className="inline-flex items-center gap-4pxr rounded-full border border-primary bg-primary-subtle px-10pxr py-5pxr text-[12px] font-bold text-primary transition-colors hover:bg-primary-light">
                   {selected[id]?.name ?? `#${id}`}
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 10 10"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round">
                     <line x1="1" y1="1" x2="9" y2="9" />
                     <line x1="9" y1="1" x2="1" y2="9" />
                   </svg>
@@ -360,7 +370,7 @@ const [submitting, setSubmitting] = useState(false);
                   <div
                     key={`skeleton-${i}`}
                     className="flex h-80pxr w-full items-center rounded-xl border border-surface-border bg-surface-bg px-16pxr">
-                    <div className="size-[44px] animate-pulse rounded-xl bg-surface-border" />
+                    <div className="size-44pxr animate-pulse rounded-xl bg-surface-border" />
                     <div className="ml-12pxr flex-1 space-y-6pxr">
                       <div className="h-12pxr w-24 animate-pulse rounded bg-surface-border" />
                       <div className="h-10pxr w-16 animate-pulse rounded bg-surface-border" />
@@ -384,7 +394,12 @@ const [submitting, setSubmitting] = useState(false);
                   {extraSelected.map((id) => (
                     <CompanyCard
                       key={id}
-                      company={{ id: Number(id), name: selected[id]?.name ?? '', ticker: selected[id]?.ticker ?? '', logoUrl: selected[id]?.logoUrl ?? '' }}
+                      company={{
+                        id: Number(id),
+                        name: selected[id]?.name ?? '',
+                        ticker: selected[id]?.ticker ?? '',
+                        logoUrl: selected[id]?.logoUrl ?? '',
+                      }}
                       selected={true}
                       onToggle={() => toggle(selected[id])}
                     />
@@ -400,7 +415,15 @@ const [submitting, setSubmitting] = useState(false);
                 disabled={submitting}
                 className="flex h-42pxr w-full items-center rounded-button bg-primary px-16pxr text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
                 <span className="flex-1 text-center">{submitting ? '저장 중…' : '시작하기'}</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round">
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
               </button>

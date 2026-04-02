@@ -23,7 +23,7 @@ export default function ReelSlide({ reel: r, index, activeIndex, isActive, progr
             src={r.thumbnailUrl}
             alt={r.title}
             fill
-            className="object-cover transition-transform duration-700"
+            className="object-contain transition-transform duration-700"
             unoptimized
             priority={isActive}
           />

@@ -68,6 +68,7 @@ export interface NewsItem {
   categories: string[]; // 카테고리 태그
   companies: string[]; // 관련기업 태그
   thumbnailUrl?: string | null;
+  isScraped?: boolean;
 }
 
 export type NewsDetail = {

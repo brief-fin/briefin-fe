@@ -7,6 +7,7 @@ import {
   scrapNews,
   searchNews,
 } from '@/api/newsApi';
+import type { NewsDetailResponse } from '@/api/newsApi';
 
 // 쿼리 키 상수 (오타 방지)
 export const newsKeys = {
@@ -70,7 +71,20 @@ export function useScrapNews() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string | number) => scrapNews(id),
-    onSuccess: (_, id) => {
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: newsKeys.detail(id) });
+      const previous = queryClient.getQueryData<NewsDetailResponse>(newsKeys.detail(id));
+      queryClient.setQueryData<NewsDetailResponse>(newsKeys.detail(id), (old) =>
+        old ? { ...old, isScraped: true } : old,
+      );
+      return { previous };
+    },
+    onError: (_, id, context) => {
+      if (context?.previous !== undefined) {
+        queryClient.setQueryData(newsKeys.detail(id), context.previous);
+      }
+    },
+    onSettled: (_, __, id) => {
       queryClient.invalidateQueries({ queryKey: newsKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: ['user', 'scraps'] });
     },
@@ -82,7 +96,20 @@ export function useDeleteScrapNews() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string | number) => deleteScrapNews(id),
-    onSuccess: (_, id) => {
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: newsKeys.detail(id) });
+      const previous = queryClient.getQueryData<NewsDetailResponse>(newsKeys.detail(id));
+      queryClient.setQueryData<NewsDetailResponse>(newsKeys.detail(id), (old) =>
+        old ? { ...old, isScraped: false } : old,
+      );
+      return { previous };
+    },
+    onError: (_, id, context) => {
+      if (context?.previous !== undefined) {
+        queryClient.setQueryData(newsKeys.detail(id), context.previous);
+      }
+    },
+    onSettled: (_, __, id) => {
       queryClient.invalidateQueries({ queryKey: newsKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: ['user', 'scraps'] });
     },
