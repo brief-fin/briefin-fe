@@ -26,13 +26,8 @@ interface SearchResult {
 export default function OnboardingPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
-<<<<<<< HEAD
   const [selected, setSelected] = useState<Record<string, Pick<CompanyDetail, 'id' | 'name' | 'ticker'>>>({});
   const [submitting, setSubmitting] = useState(false);
-=======
-  const [selected, setSelected] = useState<Record<string, Pick<CompanyDetail, 'id' | 'name' | 'ticker'> & { logoUrl?: string }>>({});
-const [submitting, setSubmitting] = useState(false);
->>>>>>> 5ab24efadd6d2d1b6f80226355ab1650f02cdb35
   const [submitError, setSubmitError] = useState<string | null>(null);
   const didInteractRef = useRef(false);
   const authStatus = useAuthStatus();
@@ -233,7 +228,6 @@ const [submitting, setSubmitting] = useState(false);
                 )}
               </div>
             </div>
-
           </aside>
 
           {/* Right content */}
@@ -398,7 +392,12 @@ const [submitting, setSubmitting] = useState(false);
                   {extraSelected.map((id) => (
                     <CompanyCard
                       key={id}
-                      company={{ id: Number(id), name: selected[id]?.name ?? '', ticker: selected[id]?.ticker ?? '', logoUrl: selected[id]?.logoUrl ?? '' }}
+                      company={{
+                        id: Number(id),
+                        name: selected[id]?.name ?? '',
+                        ticker: selected[id]?.ticker ?? '',
+                        logoUrl: selected[id]?.logoUrl ?? '',
+                      }}
                       selected={true}
                       onToggle={() => toggle(selected[id])}
                     />
@@ -414,7 +413,15 @@ const [submitting, setSubmitting] = useState(false);
                 disabled={submitting}
                 className="flex h-42pxr w-full items-center rounded-button bg-primary px-16pxr text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
                 <span className="flex-1 text-center">{submitting ? '저장 중…' : '시작하기'}</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round">
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
               </button>
