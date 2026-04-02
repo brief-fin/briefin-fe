@@ -254,7 +254,7 @@ export default function Page() {
   };
 
   return (
-    <main className="flex h-full w-full flex-col py-36pxr">
+    <main className="flex min-h-screen w-full flex-col py-36pxr">
       <h1 className="fonts-heading3 pb-16pxr">기업 찾기</h1>
 
       <div className="grid grid-cols-1 gap-16pxr lg:grid-cols-2">
