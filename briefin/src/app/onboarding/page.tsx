@@ -94,7 +94,7 @@ const [submitting, setSubmitting] = useState(false);
   // 온보딩 재진입 시: 서버 watchlist를 초기 선택으로 동기화
   useEffect(() => {
     if (authStatus !== 'authenticated') return;
-    if (!watchlist) return;
+    if (!watchlist || watchlist.length === 0) return;
     if (didInteractRef.current) return;
     if (Object.keys(selected).length > 0) return;
 
@@ -198,7 +198,7 @@ const [submitting, setSubmitting] = useState(false);
                   <div
                     className="flex flex-col"
                     style={{
-                      animation: `scrollUp ${rankedCompanies.length * 1.8}s linear infinite`,
+                      animation: rankedCompanies.length > 0 ? `scrollUp ${rankedCompanies.length * 1.8}s linear infinite` : 'none',
                     }}
                   >
                     {scrollList.map((company, i) => {
@@ -351,23 +351,21 @@ const [submitting, setSubmitting] = useState(false);
             </div>
 
             {/* 선택한 기업 태그 */}
-            {selectedIds.length > 0 && (
-              <div className="mb-20pxr flex flex-wrap gap-6pxr">
-                {selectedIds.map((id) => (
-                  <button
-                    key={id}
-                    type="button"
-                    onClick={() => toggle(selected[id])}
-                    className="inline-flex items-center gap-4pxr rounded-full border border-primary bg-primary-subtle px-10pxr py-5pxr text-[12px] font-bold text-primary transition-colors hover:bg-primary-light">
-                    {selected[id]?.name ?? `#${id}`}
-                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                      <line x1="1" y1="1" x2="9" y2="9" />
-                      <line x1="9" y1="1" x2="1" y2="9" />
-                    </svg>
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="mb-20pxr min-h-36pxr flex flex-wrap gap-6pxr">
+              {selectedIds.map((id) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => toggle(selected[id])}
+                  className="inline-flex items-center gap-4pxr rounded-full border border-primary bg-primary-subtle px-10pxr py-5pxr text-[12px] font-bold text-primary transition-colors hover:bg-primary-light">
+                  {selected[id]?.name ?? `#${id}`}
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                    <line x1="1" y1="1" x2="9" y2="9" />
+                    <line x1="9" y1="1" x2="1" y2="9" />
+                  </svg>
+                </button>
+              ))}
+            </div>
 
             {/* 기업 카드 그리드 */}
             <div className="grid grid-cols-2 gap-12pxr sm:grid-cols-3 lg:grid-cols-3 lg:gap-12pxr">

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { logout as logoutApi } from '@/api/authApi';
 import { markExplicitLogout } from '@/lib/refreshSession';
 import { NAV_ITEMS } from '@/constants/header';
@@ -22,6 +23,7 @@ function getEmailFromToken(token: string): string | null {
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const authSessionVersion = useAuthSessionVersion();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
@@ -46,6 +48,7 @@ export default function Header() {
     } catch {
       /* 서버 오류여도 클라이언트 세션은 종료 */
     } finally {
+      queryClient.clear();
       markExplicitLogout();
       authStore.clear();
       setIsLoggedIn(false);
