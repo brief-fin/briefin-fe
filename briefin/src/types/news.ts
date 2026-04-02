@@ -1,5 +1,3 @@
-import type { MockNewsDetailRaw } from '@/mocks/newsDetail';
-
 // API 응답 타입
 export interface NewsPageResponse {
   content: NewsListItem[];
