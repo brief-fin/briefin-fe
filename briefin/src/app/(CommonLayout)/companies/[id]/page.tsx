@@ -281,7 +281,7 @@ export default function CompanyDetailPage() {
             buttonLabel={isSubscribed ? '알림 해제하기' : '알림 설정하기'}
             onButtonClick={handleAlertClick}
           />
-          <NewsTimeline items={timeline} loading={timelineLoading} />
+          <NewsTimeline items={timeline} loading={timelineLoading} title="기업 히스토리" />
         </div>
       </div>
     </div>

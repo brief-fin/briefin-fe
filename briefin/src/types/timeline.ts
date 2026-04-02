@@ -12,4 +12,5 @@ export interface NewsTimelineItem {
 export interface NewsTimelineProps {
   items: NewsTimelineItem[];
   loading?: boolean;
+  title?: string;
 }
