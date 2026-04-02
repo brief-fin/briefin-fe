@@ -23,6 +23,7 @@ export interface ReelNews {
   highlight: string;
   summaryLines: string[];
   tags: string[];
+  thumbnailUrl: string | null;
   glowColor: string;
   company: ReelNewsCompany;
   relatedNews: ReelNewsRelatedItem[];

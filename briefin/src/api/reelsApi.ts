@@ -10,6 +10,7 @@ export interface ReelsItem {
   press: string;
   publishedAt: string;
   relatedCompanies: string[];
+  thumbnailUrl?: string | null;
 }
 
 const GLOW_COLORS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444'];
@@ -26,6 +27,7 @@ export function toReelNews(item: ReelsItem, index: number): ReelNews {
     highlight: lines[0] ?? '',
     summaryLines: lines,
     tags: item.relatedCompanies ?? [],
+    thumbnailUrl: item.thumbnailUrl ?? null,
     glowColor: GLOW_COLORS[index % GLOW_COLORS.length],
     company: {
       name: item.relatedCompanies?.[0] ?? '',
