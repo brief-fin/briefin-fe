@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useWatchlist } from '@/hooks/useUser';
 import { useAuthStatus } from '@/providers/AuthSessionProvider';
+import { WatchlistIcon } from '@/constants/mypageIcons';
 import type { WatchlistCompany } from '@/types/mypage';
 
 function CompanyLogo({ company }: { company: WatchlistCompany }) {
@@ -71,7 +72,13 @@ export default function HomeWatchlistSection() {
       )}
 
       {status === 'authenticated' && !isLoading && (!watchlist || watchlist.length === 0) && (
-        <p className="py-20pxr text-center text-[13px] text-text-muted">등록된 관심 기업이 없습니다.</p>
+        <div className="flex flex-col items-center gap-8pxr py-24pxr text-center">
+          <div className="flex h-13 w-13 items-center justify-center rounded-full bg-[#E5E7EB]">
+            <WatchlistIcon size={22} stroke="#9CA3AF" />
+          </div>
+          <p className="text-[13px] font-medium text-text-primary">관심 기업이 없어요</p>
+          <p className="text-[12px] text-text-muted">기업 페이지에서 하트 아이콘을 누르면 여기에 저장돼요.</p>
+        </div>
       )}
 
       {status === 'authenticated' && !isLoading && watchlist && watchlist.length > 0 && (
