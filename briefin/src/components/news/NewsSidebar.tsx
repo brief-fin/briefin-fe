@@ -37,21 +37,23 @@ export default function NewsSidebar({ relatedNews, relatedCompanies, relatedNews
         </div>
       ) : null}
 
-      <div className="rounded-card bg-primary p-20pxr shadow-hero-card">
-        <p className="fonts-label mb-8pxr flex items-center gap-6pxr text-white">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+      <div className="rounded-card border border-surface-border bg-surface-white p-20pxr shadow-hero-card">
+        <div className="mb-14pxr flex h-40pxr w-40pxr items-center justify-center rounded-full bg-primary/10">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="10" cy="10" r="8" stroke="#3B82F6" strokeWidth="1.8" />
+            <line x1="10" y1="6" x2="10" y2="14" stroke="#3B82F6" strokeWidth="1.8" strokeLinecap="round" />
+            <line x1="6" y1="10" x2="14" y2="10" stroke="#3B82F6" strokeWidth="1.8" strokeLinecap="round" />
           </svg>
-          {relatedCompanies[0]?.name ?? '기업'} 소식 받기
-        </p>
-        <p className="fonts-bodySmall mb-16pxr text-white opacity-80">
-          이 기업의 새 공시·뉴스를 실시간으로 받아보세요.
+        </div>
+        <p className="text-[14px] font-bold text-text-primary">관심 기업 추가하기</p>
+        <p className="mt-6pxr text-[12px] leading-relaxed text-text-muted">
+          관심 기업을 등록하면 맞춤 뉴스를 피드에서 바로 받아볼 수 있어요.
         </p>
         <Link
-          href="/companies"
-          className="block rounded-button bg-surface-white px-16pxr py-12pxr text-center text-[13px] font-bold text-primary transition-colors hover:bg-primary-light">
-          관심 기업 등록
+          href="/onboarding"
+          className="mt-14pxr flex items-center justify-center rounded-button bg-primary px-16pxr py-8pxr text-[12px] font-semibold text-white transition-opacity hover:opacity-80"
+        >
+          기업 추가하기
         </Link>
       </div>
     </aside>

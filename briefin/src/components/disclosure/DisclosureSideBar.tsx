@@ -75,7 +75,7 @@ export default function DisclosureSidebar({
     <div className="flex w-full flex-col gap-16pxr">
       <div className="overflow-hidden rounded-card border border-surface-border bg-surface-white">
         <h2 className="border-b border-surface-border px-22pxr py-16pxr text-[13px] font-black text-text-primary">
-          📋 최근 공시
+          최근 공시
         </h2>
         {recentDisclosures.length === 0 ? (
           <p className="px-22pxr py-20pxr text-center text-[13px] text-text-muted">해당 기업의 최근 공시가 없습니다.</p>

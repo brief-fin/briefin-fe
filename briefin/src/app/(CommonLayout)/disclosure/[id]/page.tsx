@@ -81,7 +81,7 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
           </article>
         </div>
 
-        <div className="w-full lg:w-96 lg:shrink-0">
+        <div className="w-full lg:w-260pxr lg:shrink-0">
           <div className="sticky top-24pxr">
             <DisclosureSidebar
               companyId={data.companyId}
