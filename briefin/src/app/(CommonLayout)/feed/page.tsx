@@ -48,7 +48,9 @@ export default function FeedPage() {
 
       {data && data.length === 0 && (
         <div className="flex flex-col items-center justify-center gap-12pxr py-60pxr text-center">
-          <span className="text-[48px]">📭</span>
+          <div className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#E5E7EB]">
+            <span className="text-[26px] font-bold leading-none text-[#9CA3AF]">!</span>
+          </div>
           <p className="fonts-body font-medium text-text-primary">아직 관심 기업이 없어요</p>
           <p className="fonts-label text-text-muted">기업을 등록하면 맞춤 뉴스를 받아볼 수 있어요.</p>
           <Link
