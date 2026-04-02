@@ -124,7 +124,7 @@ export interface NewsDetailProps {
 }
 
 export interface NewsHeaderProps {
-  data: Pick<MockNewsDetailRaw, 'category' | 'source' | 'title' | 'isLive'> & {
+  data: Pick<NewsDetail, 'category' | 'source' | 'title' | 'isLive'> & {
     publishedAt: string | null;
   };
   isScrapped?: boolean;
