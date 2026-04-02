@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import AlertBanner from '@/components/common/AlertBanner';
 import { DisclosureSidebarProps } from '@/types/disclosure';
 import { getCategoryLabel } from '@/constants/disclosureCategories';
 import { getSubscriptionStatus, subscribePush, unsubscribePush } from '@/lib/pushNotification';
@@ -73,7 +72,7 @@ export default function DisclosureSidebar({
   };
 
   return (
-    <aside className="flex w-full flex-col gap-20pxr lg:w-340pxr lg:shrink-0">
+    <div className="flex w-full flex-col gap-16pxr">
       <div className="overflow-hidden rounded-card border border-surface-border bg-surface-white">
         <h2 className="border-b border-surface-border px-22pxr py-16pxr text-[13px] font-black text-text-primary">
           📋 최근 공시
@@ -97,29 +96,46 @@ export default function DisclosureSidebar({
           </ul>
         )}
       </div>
-      <AlertBanner
-        title={
-          <span className="flex items-center gap-8pxr">
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-            </svg>
-            공시 알림 받기
-          </span>
-        }
-        description={`${companyName}의 새 공시가 올라오면 즉시 알려드려요.`}
-        loading={loading}
-        buttonLabel={isSubscribed ? '알림 해제하기' : '알림 설정하기'}
-        onButtonClick={handleAlertClick}
-      />
-    </aside>
+
+      {/* 공시 알림 구독 배너 */}
+      <div className="rounded-card border border-surface-border bg-surface-white p-20pxr shadow-hero-card">
+        <div className="mb-14pxr flex h-40pxr w-40pxr items-center justify-center rounded-full bg-primary/10">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#3B82F6"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+        </div>
+
+        <p className="text-[14px] font-bold text-text-primary">공시 알림 받기</p>
+        <p className="mt-6pxr text-[12px] leading-relaxed text-text-muted">
+          {companyName}의 새 공시가 올라오면 즉시 알려드려요.
+        </p>
+
+        {loading ? (
+          <div className="bg-surface-muted mt-14pxr h-34pxr w-full animate-pulse rounded-button" />
+        ) : (
+          <button
+            type="button"
+            onClick={handleAlertClick}
+            className={[
+              'mt-14pxr flex w-full items-center justify-center rounded-button px-16pxr py-8pxr text-[12px] font-semibold transition-opacity hover:opacity-80',
+              isSubscribed
+                ? 'border border-surface-border bg-surface-white text-text-secondary'
+                : 'bg-primary text-white',
+            ].join(' ')}>
+            {isSubscribed ? '알림 해제하기' : '알림 설정하기'}
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
