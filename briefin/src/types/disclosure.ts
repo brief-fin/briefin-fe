@@ -88,6 +88,7 @@ export interface DisclosureHeaderProps {
     source?: string;
     title: string;
     companyName?: string;
+    companyId?: number;
     ticker?: string;
     reportNumber?: string;
   };

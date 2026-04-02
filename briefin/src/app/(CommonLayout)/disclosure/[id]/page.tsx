@@ -60,6 +60,8 @@ export default async function DisclosureDetailPage({ params }: PageProps) {
                 date: data.disclosedAt,
                 title: data.title,
                 companyName: data.companyName,
+                companyId: data.companyId,
+                ticker: data.ticker,
               }}
             />
 
