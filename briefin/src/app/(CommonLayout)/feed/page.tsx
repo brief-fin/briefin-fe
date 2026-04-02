@@ -81,7 +81,9 @@ export default function FeedPage() {
 
       {data && data.length === 0 && (
         <div className="flex flex-col items-center justify-center gap-12pxr py-60pxr text-center">
-          <span className="text-[48px]">📭</span>
+          <div className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#E5E7EB]">
+            <span className="text-[26px] font-bold leading-none text-[#9CA3AF]">!</span>
+          </div>
           <p className="fonts-body font-medium text-text-primary">아직 관심 기업이 없어요</p>
           <p className="fonts-label text-text-muted">기업을 등록하면 맞춤 뉴스를 받아볼 수 있어요.</p>
           <Link
@@ -150,6 +152,16 @@ export default function FeedPage() {
           </div>
         </div>
       )}
+
+      {/* 플로팅 버튼 - 관심 기업 추가 */}
+      <Link
+        href="/onboarding"
+        title="관심 기업 추가하기"
+        className="fixed bottom-24pxr right-24pxr z-50 flex h-56pxr w-56pxr items-center justify-center rounded-full bg-primary shadow-lg transition-opacity hover:opacity-80">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      </Link>
     </main>
   );
 }
