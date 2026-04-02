@@ -26,7 +26,7 @@ export default function CompanyCard({ company, selected, onToggle }: CompanyCard
       onClick={onToggle}
       className={`group relative flex w-full cursor-pointer items-center rounded-xl border px-14pxr py-12pxr text-left transition-shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:h-80pxr sm:min-h-0 sm:px-16pxr sm:py-0 ${
         selected
-          ? 'border-primary bg-primary-light ring-2 ring-primary'
+          ? 'border-primary ring-2 ring-primary'
           : 'border-surface-border bg-surface-white hover:shadow-news-hover'
       }`}
     >
