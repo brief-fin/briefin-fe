@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { FeedItem } from '@/api/feedApi';
 
-export default function FeedGridCard({ item }: { item: FeedItem }) {
+export default function FeedGridCard({ item, logoUrl }: { item: FeedItem; logoUrl?: string | null }) {
+  const [logoError, setLogoError] = useState(false);
+
   return (
     <Link
       href={`/news/${item.newsId}`}
@@ -17,10 +20,20 @@ export default function FeedGridCard({ item }: { item: FeedItem }) {
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             unoptimized
           />
-        ) : (
-          <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary-light to-surface-bg">
-            <span className="text-[32px]">📰</span>
+        ) : logoUrl && !logoError ? (
+          <div className="flex h-full items-center justify-center bg-surface-bg">
+            <Image
+              src={logoUrl}
+              alt={item.relatedCompanies?.[0] ?? ''}
+              width={60}
+              height={60}
+              className="rounded-full object-cover"
+              unoptimized
+              onError={() => setLogoError(true)}
+            />
           </div>
+        ) : (
+          <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary-light to-surface-bg" />
         )}
         {item.category && (
           <span className="absolute left-10pxr top-10pxr rounded-badge bg-black/60 px-8pxr py-3pxr text-[11px] font-bold text-white">
