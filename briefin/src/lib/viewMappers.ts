@@ -77,6 +77,7 @@ export function mapReelsItem(item: ReelsItem, index: number): ReelNews {
     highlight: primaryCompany,
     summaryLines: item.summary ? [item.summary] : [],
     tags: [item.category, ...item.relatedCompanies].filter(Boolean),
+    thumbnailUrl: item.thumbnailUrl ?? null,
     glowColor: index % 2 === 0 ? '#C66B2F' : '#275EFE',
     company: {
       name: primaryCompany,
