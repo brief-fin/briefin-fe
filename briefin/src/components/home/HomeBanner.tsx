@@ -18,9 +18,10 @@ const SLIDES = [
     bullets: ['주요 뉴스를 3줄로 요약', '관심 종목 뉴스만 골라서 보여드려요'],
     href: '/news',
     imageSrc: '/images/disclo.svg',
-    imageStyle: { maxHeight: '400px' },
+    imageStyle: { maxHeight: '350px' },
+    imageClass: 'lg:max-h-[260px]',
     imageContainerClass:
-      'mt-8 flex w-full justify-center lg:absolute lg:bottom-0 lg:right-0 lg:mt-0 lg:w-auto lg:items-end lg:justify-end',
+      'mt-auto flex w-full justify-center lg:absolute lg:bottom-0 lg:right-0 lg:mt-0 lg:w-auto lg:items-end lg:justify-end',
     background: 'linear-gradient(106deg, #F0FDF4 0%, #DCFCE7 60%, #F0FDF4 100%)',
     navColor: '#166534',
     navHoverColor: '#15803D',
@@ -30,9 +31,10 @@ const SLIDES = [
     bullets: ['DART 공시를 쉬운 말로 바꿔드려요', '계약·실적·지분 변동 핵심만 추려드려요'],
     href: '/disclosure',
     imageSrc: '/images/disclosure.svg',
-    imageStyle: { maxHeight: '380px' },
+    imageStyle: {},
+    imageClass: 'max-h-[280px] lg:max-h-[350px]',
     imageContainerClass:
-      'mt-8 flex w-full justify-center lg:absolute lg:bottom-0 lg:right-16 lg:mt-0 lg:w-auto lg:items-end lg:justify-end',
+      'mt-auto flex w-full justify-center lg:absolute lg:bottom-0 lg:right-18 lg:mt-0 lg:w-auto lg:items-end lg:justify-end',
     background: 'linear-gradient(106deg, #FAF5FF 0%, #EDE9FE 60%, #FAF5FF 100%)',
     navColor: '#6B21A8',
     navHoverColor: '#7E22CE',
@@ -42,9 +44,10 @@ const SLIDES = [
     bullets: ['관심 기업 뉴스를 한곳에서', '매일 아침 맞춤 브리핑을 받아보세요'],
     href: '/feed',
     imageSrc: '/images/news.svg',
-    imageStyle: { maxHeight: '450px' },
+    imageStyle: { maxHeight: '400px' },
+    imageClass: 'lg:max-h-[280px]',
     imageContainerClass:
-      'mt-8 flex w-full justify-center lg:absolute lg:bottom-0 lg:right-48 lg:mt-0 lg:w-auto lg:translate-y-40pxr lg:items-end lg:justify-end',
+      'mt-auto flex w-full justify-center lg:absolute lg:bottom-0 lg:right-18 lg:mt-0 lg:w-auto lg:translate-y-40pxr lg:items-end lg:justify-end',
     background: 'linear-gradient(106deg, #FFFBEB 0%, #FEF3C7 60%, #FFFBEB 100%)',
     navColor: '#92400E',
     navHoverColor: '#B45309',
@@ -54,9 +57,10 @@ const SLIDES = [
     bullets: ['숏폼으로 빠르게 읽는 투자 뉴스', '출퇴근길 3분, 오늘의 브리핑 완료'],
     href: '/reels',
     imageSrc: '/images/graph.svg',
-    imageStyle: { maxHeight: '450px' },
+    imageStyle: { maxHeight: '400px' },
+    imageClass: 'lg:max-h-[280px]',
     imageContainerClass:
-      'mt-8 flex w-full justify-center lg:absolute lg:bottom-0 lg:right-48 lg:mt-0 lg:w-auto lg:translate-y-40pxr lg:items-end lg:justify-end',
+      'mt-auto flex w-full justify-center lg:absolute lg:bottom-0 lg:right-18 lg:mt-0 lg:w-auto lg:translate-y-40pxr lg:items-end lg:justify-end',
     background: 'linear-gradient(106deg, #F0FDFA 0%, #CCFBF1 60%, #F0FDFA 100%)',
     navColor: '#134E4A',
     navHoverColor: '#0F766E',
@@ -96,7 +100,7 @@ export default function HomeBanner() {
 
   return (
     <section
-      className="relative min-h-620pxr w-full overflow-hidden lg:min-h-400pxr"
+      className="relative min-h-540pxr w-full overflow-hidden lg:min-h-360pxr"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       style={{ background: slide.background }}>
@@ -107,7 +111,7 @@ export default function HomeBanner() {
         }
       `}</style>
 
-      <div className="mx-auto flex h-full min-h-620pxr w-full max-w-1600pxr flex-col items-start lg:min-h-400pxr lg:flex-row lg:items-center">
+      <div className="mx-auto flex h-full min-h-540pxr w-full max-w-1600pxr flex-col items-start lg:min-h-360pxr lg:flex-row lg:items-center">
         {/* 왼쪽 텍스트 블럭 */}
         <div className="flex w-full shrink-0 flex-col items-center gap-6 px-20pxr py-24pxr text-center sm:px-36pxr lg:ml-8 lg:max-w-[56%] lg:items-start lg:px-80pxr lg:py-16 lg:text-left xl:px-130pxr">
           <h1
@@ -164,13 +168,13 @@ export default function HomeBanner() {
             key={`image-${current}`}
             className={
               slide.imageContainerClass ??
-              'mt-8 flex w-full justify-center lg:absolute lg:bottom-0 lg:right-48 lg:mt-0 lg:w-auto lg:items-end lg:justify-end'
+              'mt-auto flex w-full justify-center lg:absolute lg:bottom-0 lg:right-48 lg:mt-0 lg:w-auto lg:items-end lg:justify-end'
             }
             style={fadeUpStyle(100)}>
             <img
               src={slide.imageSrc}
               alt="BrieFin 서비스 소개"
-              className="h-auto w-[min(84vw,460px)] object-contain md:w-auto"
+              className={`h-auto w-[min(84vw,460px)] object-contain md:w-auto ${slide.imageClass ?? ''}`}
               style={slide.imageStyle}
             />
           </div>
