@@ -17,7 +17,7 @@ export default function NewsSidebar({ relatedNews, relatedCompanies, relatedNews
       ) : relatedNews && relatedNews.length > 0 ? (
         <div className="rounded-card border border-[#E5E7EB] bg-surface-white shadow-hero-card">
           <div className="px-20pxr pt-16pxr">
-            <p className="text-[15px] font-bold text-text-primary">관련 뉴스</p>
+            <p className="text-[15px] font-bold text-text-primary">추천 뉴스</p>
           </div>
           <div className="mt-12pxr border-t border-[#E5E7EB] px-20pxr py-16pxr">
             <div className="flex flex-col gap-12pxr">
