@@ -13,7 +13,7 @@ export default function ReelsClient() {
 
   if (isLoading) {
     return (
-      <div className="flex h-[min(640px,calc(100dvh-240px))] w-full overflow-hidden rounded-card border border-white/5 bg-[#0d1117] shadow-hero-card lg:h-[min(720px,calc(100dvh-200px))]">
+      <div className="flex h-[min(720px,calc(100dvh-160px))] w-full overflow-hidden border border-white/5 bg-[#0d1117] shadow-hero-card lg:h-[min(800px,calc(100dvh-140px))]">
         {/* 슬라이드 영역 */}
         <div className="relative min-w-0 flex-1 animate-pulse bg-[#0d1117]">
           <div className="absolute inset-0 flex flex-col justify-center pl-72pxr pr-120pxr sm:pl-80pxr sm:pr-128pxr">
@@ -86,7 +86,7 @@ export default function ReelsClient() {
   }
 
   return (
-    <div className="flex h-[min(640px,calc(100dvh-240px))] min-h-[min(640px,calc(100dvh-240px))] w-full overflow-hidden rounded-card border border-white/5 bg-[#0d1117] shadow-hero-card lg:h-[min(720px,calc(100dvh-200px))] lg:min-h-[min(720px,calc(100dvh-200px))]">
+    <div className="flex h-[min(720px,calc(100dvh-160px))] min-h-[min(720px,calc(100dvh-160px))] w-full overflow-hidden border border-white/5 bg-[#0d1117] shadow-hero-card lg:h-[min(800px,calc(100dvh-140px))] lg:min-h-[min(800px,calc(100dvh-140px))]">
       <div className="flex h-full w-full min-w-0 items-stretch">
         <ReelFeedPanel
           feedRef={feedRef}
