@@ -2,14 +2,15 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
-import AlertBanner from '@/components/common/AlertBanner';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import FeedHeroCard from '@/components/feed/FeedHeroCard';
 import FeedGridCard from '@/components/feed/FeedGridCard';
 import FeedWatchlistBanner from '@/components/feed/FeedWatchlistBanner';
-import { useFeed } from '@/hooks/useFeed';
+import { fetchFeed, type FeedItem } from '@/api/feedApi';
 import { useWatchlist } from '@/hooks/useUser';
 import { useAuthStatus } from '@/providers/AuthSessionProvider';
+
+const PAGE_SIZE = 20;
 
 function FeedSkeleton() {
   return (
@@ -28,6 +29,23 @@ function FeedSkeleton() {
         ))}
       </div>
     </div>
+  );
+}
+
+function GridSkeleton() {
+  return (
+    <>
+      {[1, 2, 3].map((i) => (
+        <div key={i} className="flex flex-col overflow-hidden rounded-card border border-surface-border">
+          <div className="bg-surface-muted h-140pxr animate-pulse" />
+          <div className="flex flex-col gap-8pxr p-16pxr">
+            <div className="bg-surface-muted h-4 w-full animate-pulse rounded" />
+            <div className="bg-surface-muted h-4 w-3/4 animate-pulse rounded" />
+            <div className="bg-surface-muted mt-4pxr h-3 w-1/2 animate-pulse rounded" />
+          </div>
+        </div>
+      ))}
+    </>
   );
 }
 
@@ -82,12 +100,74 @@ function WatchlistCompanyItem({
 }
 
 export default function FeedPage() {
-  const { data, isLoading, isError } = useFeed();
+  const [items, setItems] = useState<FeedItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const isFetchingRef = useRef(false);
+  const pageRef = useRef(0);
+  const hasMoreRef = useRef(true);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
   const authStatus = useAuthStatus();
   const { data: watchlist, isLoading: watchlistLoading } = useWatchlist({ enabled: authStatus === 'authenticated' });
 
-  const hero = data?.[0];
-  const grid = data?.slice(1) ?? [];
+  // 초기 로드
+  useEffect(() => {
+    const loadInitial = async () => {
+      try {
+        const data = await fetchFeed(0, PAGE_SIZE);
+        setItems(data);
+        pageRef.current = 0;
+        hasMoreRef.current = data.length === PAGE_SIZE;
+      } catch {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadInitial();
+  }, []);
+
+  const loadMore = useCallback(async () => {
+    if (isFetchingRef.current || !hasMoreRef.current) return;
+    isFetchingRef.current = true;
+    setIsLoadingMore(true);
+    try {
+      const nextPage = pageRef.current + 1;
+      const data = await fetchFeed(nextPage, PAGE_SIZE);
+      pageRef.current = nextPage;
+      hasMoreRef.current = data.length === PAGE_SIZE;
+      setItems((prev) => {
+        const existingIds = new Set(prev.map((i) => i.newsId));
+        const newItems = data.filter((i) => !existingIds.has(i.newsId));
+        return [...prev, ...newItems];
+      });
+    } catch {
+      hasMoreRef.current = false;
+    } finally {
+      isFetchingRef.current = false;
+      setIsLoadingMore(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) loadMore();
+      },
+      { threshold: 0.1 },
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [loadMore, items.length]);
+
+  const hero = items[0];
+  const grid = items.slice(1);
 
   return (
     <main className="min-h-screen bg-surface-bg py-36pxr">
@@ -101,7 +181,7 @@ export default function FeedPage() {
 
       {isError && <p className="fonts-label py-40pxr text-center text-text-muted">뉴스를 불러오지 못했습니다.</p>}
 
-      {data && data.length === 0 && (
+      {!isLoading && !isError && items.length === 0 && (
         <div className="flex flex-col items-center justify-center gap-12pxr py-60pxr text-center">
           <div className="h-52px flex w-52pxr items-center justify-center rounded-full bg-[#E5E7EB]">
             <span className="text-[26px] font-bold leading-none text-[#9CA3AF]">!</span>
@@ -116,7 +196,7 @@ export default function FeedPage() {
         </div>
       )}
 
-      {data && data.length > 0 && (
+      {!isLoading && items.length > 0 && (
         <div className="flex flex-col gap-16pxr lg:flex-row">
           {/* 메인 콘텐츠 */}
           <div className="flex flex-1 flex-col gap-14pxr">
@@ -126,8 +206,12 @@ export default function FeedPage() {
                 {grid.map((item) => (
                   <FeedGridCard key={item.newsId} item={item} />
                 ))}
+                {isLoadingMore && <GridSkeleton />}
               </div>
             )}
+
+            {/* sentinel: 뷰포트 진입 시 다음 페이지 로드 */}
+            <div ref={sentinelRef} className="h-1" />
           </div>
 
           {/* 사이드바 */}
