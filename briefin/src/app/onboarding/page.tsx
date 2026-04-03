@@ -6,7 +6,7 @@ import Image from 'next/image';
 import CompanyCard from '@/components/onboarding/company-card';
 import { usePopularCompanies } from '@/hooks/useCompany';
 import type { CompanyDetail } from '@/types/company';
-import { watchCompany } from '@/api/userApi';
+import { watchCompany, unwatchCompany } from '@/api/userApi';
 import { searchCompanies } from '@/api/companyApi';
 import { useWatchlist } from '@/hooks/useUser';
 import { useAuthStatus } from '@/providers/AuthSessionProvider';
@@ -129,12 +129,18 @@ const [submitting, setSubmitting] = useState(false);
     setSubmitting(true);
 
     try {
-      const ids = selectedIds.map((id) => Number(id)).filter((n) => Number.isFinite(n));
-      if (ids.length > 0) {
-        const results = await Promise.allSettled(ids.map((id) => watchCompany(id)));
-        const failed = results.filter((r) => r.status === 'rejected').length;
-        if (failed > 0) throw new Error('failed');
-      }
+      const currentWatchlistIds = new Set((watchlist ?? []).map((c) => String(c.companyId)));
+      const selectedSet = new Set(selectedIds);
+
+      const toAdd = selectedIds.filter((id) => !currentWatchlistIds.has(id)).map(Number).filter(Number.isFinite);
+      const toRemove = [...currentWatchlistIds].filter((id) => !selectedSet.has(id)).map(Number).filter(Number.isFinite);
+
+      const results = await Promise.allSettled([
+        ...toAdd.map((id) => watchCompany(id)),
+        ...toRemove.map((id) => unwatchCompany(id)),
+      ]);
+      const failed = results.filter((r) => r.status === 'rejected').length;
+      if (failed > 0) throw new Error('failed');
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['user', 'watchlist'] }),
         queryClient.invalidateQueries({ queryKey: ['feed'] }),
@@ -408,7 +414,7 @@ const [submitting, setSubmitting] = useState(false);
               <button
                 type="button"
                 onClick={handleLater}
-                className="w-full text-[13px] font-bold text-text-muted transition-colors hover:text-text-secondary focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-surface-border">
+                className="w-full text-center text-[13px] font-bold text-text-muted transition-colors hover:text-text-secondary focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-surface-border">
                 나중에 하기
               </button>
             </div>
