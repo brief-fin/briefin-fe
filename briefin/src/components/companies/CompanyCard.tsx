@@ -13,7 +13,6 @@ interface CompanyCardProps {
 }
 
 export function CompanyCard({ company }: { company: CompanyCardProps }) {
-  const isPositive = (company.changeRate ?? 0) >= 0;
   const router = useRouter();
   const [imgError, setImgError] = useState(false);
   const hasLogo = !imgError && !!company.logoUrl;
@@ -40,11 +39,6 @@ export function CompanyCard({ company }: { company: CompanyCardProps }) {
       <div className="flex flex-col gap-4pxr">
         <div className="fonts-cardTitle">{company.name}</div>
         <div className="fonts-caption">{company.sector ?? '업종 미분류'}</div>
-        <div className={`fonts-subTitle ${isPositive ? 'text-semantic-red' : 'text-semantic-blue'}`}>
-          {company.changeRate != null
-            ? `${isPositive ? '+' : ''}${company.changeRate}%`
-            : '-'}
-        </div>
       </div>
     </div>
   );

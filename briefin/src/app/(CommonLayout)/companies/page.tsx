@@ -32,6 +32,7 @@ interface RecentCompany {
   id: number;
   name: string;
   ticker: string;
+  sector?: string | null;
 }
 const ROW_HEIGHT = 60;
 const VISIBLE_ROWS = 6.5;
@@ -213,9 +214,6 @@ function RecentViewedCompanies({ companies }: { companies: RecentCompany[] }) {
                 )}
               </div>
               <p className="w-80pxr truncate text-center text-[12px] font-bold text-text-primary">{company.name}</p>
-              {company.ticker && (
-                <p className="-mt-6pxr w-80pxr truncate text-center text-[10px] text-text-muted">{company.ticker}</p>
-              )}
             </button>
           );
         })}

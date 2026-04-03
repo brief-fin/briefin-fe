@@ -62,7 +62,7 @@ export default function CompanyDetailPage() {
           try {
             const key = 'company_recent_viewed';
             const prev = JSON.parse(localStorage.getItem(key) ?? '[]');
-            const entry = { id: data.id, name: data.name, ticker: data.ticker };
+            const entry = { id: data.id, name: data.name, ticker: data.ticker, sector: data.sector ?? null };
             const next = [entry, ...prev.filter((c: { id: number }) => c.id !== data.id)].slice(0, 10);
             localStorage.setItem(key, JSON.stringify(next));
           } catch {}
